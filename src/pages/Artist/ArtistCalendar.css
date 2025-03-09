@@ -1,0 +1,65 @@
+/* ✅ Calendar Container */
+.calendar-container {
+  padding: 20px;
+  text-align: center;
+  max-width: 1000px;
+  margin: auto;
+  font-family: "Khula", Helvetica;
+  overflow: hidden;
+}
+
+/* ✅ Full Calendar Grid (Except Title & Navs) */
+.custom-calendar .fc-view-harness {
+  border: 1px solid gray !important;
+}
+
+/* ✅ Individual Day Cells */
+.custom-calendar .fc-daygrid-day {
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.custom-calendar .fc-daygrid-day:hover {
+  background: rgba(125, 178, 58, 0.3);
+  transform: scale(1.1);
+}
+
+/* ✅ Unavailable Dates */
+.custom-calendar .fc-daygrid-day[data-unavailable="true"] {
+  background: rgb(39, 35, 35) !important;
+  color: white !important;
+}
+
+/* ✅ Custom Navigation Buttons */
+.fc-prev-button,
+.fc-next-button {
+  background: none;
+  color: black;
+  font-size: 24px;
+  border: none;
+  cursor: pointer;
+}
+
+.fc-prev-button:hover,
+.fc-next-button:hover {
+  opacity: 0.6;
+}
+
+/* ✅ Hide Scrollbar */
+.custom-calendar {
+  overflow: hidden !important;
+}
+
+.custom-calendar::-webkit-scrollbar {
+  display: none !important;
+}
+
+.custom-calendar {
+  scrollbar-width: none !important;
+}
+
+/* ✅ Today's Date Border Only */
+.custom-calendar .fc-day-today {
+  border: 3px solid black !important; /* Black border for today */
+  background: none !important; /* Remove yellow background */
+}
