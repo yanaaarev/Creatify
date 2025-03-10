@@ -24,6 +24,45 @@ export const ClientLogin = (): JSX.Element => {
     handleCodeInApp: true,
   };
 
+  // ✅ Check if the current URL contains an email sign-in link and complete the login process
+  const handleEmailLinkLogin = async () => {
+    if (isSignInWithEmailLink(auth, window.location.href)) {
+      try {
+        // Retrieve stored email from localStorage
+        let email = window.localStorage.getItem("emailForSignIn");
+        if (!email) {
+          email = prompt("Please enter your email to confirm sign-in:");
+        }
+
+        if (email) {
+          // Complete sign-in with the email link
+          const userCredential = await signInWithEmailLink(
+            auth,
+            email,
+            window.location.href
+          );
+
+          // ✅ Store user info properly after successful login
+          window.localStorage.removeItem("emailForSignIn"); // Cleanup
+          alert("Login successful!");
+
+          // Redirect user to dashboard or desired page
+          window.location.href = "/user-dashboard";
+        } else {
+          throw new Error("Email is required to complete sign-in.");
+        }
+      } catch (error) {
+        console.error("Error signing in with email link:", error);
+        alert("Failed to sign in. Please try again.");
+      }
+    }
+  };
+
+  // Call this function on **app load** to check if the email login link is present
+  useEffect(() => {
+    handleEmailLinkLogin();
+  }, []);
+
   // Validate if input is an email
   const isEmail = (input: string): boolean => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -92,7 +131,7 @@ export const ClientLogin = (): JSX.Element => {
     }
   };
 
-  // Handle Passwordless Login
+  // ✅ Handle Passwordless Login Request
   const handleSendEmailLink = async () => {
     setError("");
     if (!identifier) {
