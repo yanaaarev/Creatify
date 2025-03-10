@@ -32,26 +32,36 @@ export const ClientLogin = (): JSX.Element => {
       try {
         // Retrieve stored email from localStorage
         let email = window.localStorage.getItem("emailForSignIn");
+
         if (!email) {
           email = prompt("Please enter your email to confirm sign-in:");
         }
 
         if (email) {
-          // ✅ Complete sign-in with the email link
-          await signInWithEmailLink(auth, email, window.location.href);
+          // ✅ Complete sign-in with email link
+          const userCredential = await signInWithEmailLink(
+            auth,
+            email,
+            window.location.href
+          );
+
+          // ✅ Ensure authentication state is updated
+          await auth.updateCurrentUser(userCredential.user);
 
           // ✅ Store user info properly after successful login
           window.localStorage.removeItem("emailForSignIn"); // Cleanup
-          alert("Login successful!");
 
-          // Redirect user to dashboard or desired page
-          window.location.href = "/user-dashboard";
+          alert("✅ Login successful!");
+          console.log("User logged in:", userCredential.user);
+
+          // ✅ Redirect user after successful login
+          navigate("/user-dashboard");
         } else {
-          throw new Error("Email is required to complete sign-in.");
+          throw new Error("❌ Email is required to complete sign-in.");
         }
       } catch (error) {
-        console.error("Error signing in with email link:", error);
-        alert("Failed to sign in. Please try again.");
+        console.error("❌ Error signing in with email link:", error);
+        alert("❌ Failed to sign in. Please try again.");
       }
     }
   };
