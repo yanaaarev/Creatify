@@ -33,7 +33,7 @@
             "dest": "/"
         },
         {
-            "src": "/footer/about-us",
+            "src": "/about-us",
             "dest": "/"
         },
         {
