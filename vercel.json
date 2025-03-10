@@ -9,6 +9,10 @@
             "dest": "/"
         },
         {
+            "src": "/artist-login",
+            "dest": "/"
+        },
+        {
             "src": "/auth/client-login",
             "dest": "/"
         },
@@ -21,7 +25,15 @@
             "dest": "/"
         },
         {
+            "src": "/login-options",
+            "dest": "/"
+        },
+        {
             "src": "/auth/client-signin",
+            "dest": "/"
+        },
+        {
+            "src": "/client-signin",
             "dest": "/"
         },
         {
@@ -29,11 +41,23 @@
             "dest": "/"
         },
         {
+            "src": "/signup-options",
+            "dest": "/"
+        },
+        {
             "src": "/auth/signup-email",
             "dest": "/"
         },
         {
+            "src": "/signup-email",
+            "dest": "/"
+        },
+        {
             "src": "/auth/signup-final",
+            "dest": "/"
+        },
+        {
+            "src": "/signup-final",
             "dest": "/"
         },
         {
@@ -65,11 +89,11 @@
             "dest": "/"
         },
         {
-            "src": "/admin/admin-panel",
+            "src": "/admin-panel",
             "dest": "/"
         },
         {
-            "src": "/admin/admin-login",
+            "src": "/admin-login",
             "dest": "/"
         },
         {
