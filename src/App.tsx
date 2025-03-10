@@ -1,4 +1,10 @@
-import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+  Navigate,
+} from "react-router-dom";
 import { lazy, Suspense, useEffect } from "react";
 import { useUser } from "./pages/context/UserContext"; // 🔴 Import UserContext
 import ClientNavBar from "./pages/NavBar/ClientNavBar"; // Client Navbar
@@ -6,20 +12,27 @@ import ArtistNavBar from "./pages/NavBar/ArtistNavBar"; // Artist Navbar
 import Footer from "./pages/Footer/Footer";
 import { logEvent } from "firebase/analytics";
 import { analytics } from "./config/firebaseConfig";
+import { Analytics } from "@vercel/analytics/react";
 
 // Lazy load pages
 const HomePage = lazy(() => import("./pages/Home/HomePage"));
 const LoginOptions = lazy(() => import("./pages/Auth/LoginOptions"));
-const ClientLoginOptions = lazy(() => import("./pages/Auth/ClientLoginOptions"));
+const ClientLoginOptions = lazy(
+  () => import("./pages/Auth/ClientLoginOptions")
+);
 const ClientLogin = lazy(() => import("./pages/Auth/ClientLogin"));
 const SignUpOptions = lazy(() => import("./pages/Auth/SignUpOptions"));
 const SignUpEmail = lazy(() => import("./pages/Auth/SignUpEmail"));
 const SignUpFinal = lazy(() => import("./pages/Auth/SignUpFinal"));
 const About = lazy(() => import("./pages/Footer/About"));
 const FAQs = lazy(() => import("./pages/Footer/FAQs"));
-const TermsAndConditions = lazy(() => import("./pages/Footer/TermsAndConditions"));
+const TermsAndConditions = lazy(
+  () => import("./pages/Footer/TermsAndConditions")
+);
 const CopyrightPolicy = lazy(() => import("./pages/Footer/CopyrightPolicy"));
-const HowToBookAnArtist = lazy(() => import("./pages/Footer/HowToBookAnArtist"));
+const HowToBookAnArtist = lazy(
+  () => import("./pages/Footer/HowToBookAnArtist")
+);
 const PrivacyPolicy = lazy(() => import("./pages/Footer/PrivacyPolicy"));
 const UserDashboard = lazy(() => import("./pages/Client/UserDashboard"));
 const ArtistDashboard = lazy(() => import("./pages/Artist/ArtistDashboard"));
@@ -30,8 +43,12 @@ const AdminLogin = lazy(() => import("./pages/Admin/AdminLogin"));
 const ArtistNote = lazy(() => import("./pages/Booking/ArtistNote"));
 const BookingCalendar = lazy(() => import("./pages/Booking/BookingCalendar"));
 const BookingRequest = lazy(() => import("./pages/Booking/BookingRequest"));
-const BookingConfirmation = lazy(() => import("./pages/Booking/BookingConfirmation"));
-const ClientBookingDetails = lazy(() => import("./pages/Client/ClientBookingDetails"));
+const BookingConfirmation = lazy(
+  () => import("./pages/Booking/BookingConfirmation")
+);
+const ClientBookingDetails = lazy(
+  () => import("./pages/Client/ClientBookingDetails")
+);
 const RequestDashboard = lazy(() => import("./pages/Artist/RequestDashboard"));
 const Messaging = lazy(() => import("./pages/Messaging/Messaging"));
 const ArtistEdit = lazy(async () => {
@@ -42,19 +59,18 @@ const ArtistEdit = lazy(async () => {
 const AppContent = (): JSX.Element => {
   const location = useLocation();
   const { role, loading } = useUser(); // 🔴 Get user role and loading state from context
-  
+
   useEffect(() => {
     const disableRightClick = (event: MouseEvent) => {
       event.preventDefault();
     };
-  
+
     document.addEventListener("contextmenu", disableRightClick);
-  
+
     return () => {
       document.removeEventListener("contextmenu", disableRightClick);
     };
   }, []);
-
 
   useEffect(() => {
     // ✅ Log every page view
@@ -64,7 +80,8 @@ const AppContent = (): JSX.Element => {
     console.log(`📌 Page View Logged: ${location.pathname}`);
   }, [location]);
 
-  if (loading) return <p className="text-center text-white mt-[400px]">Loading...</p>;
+  if (loading)
+    return <p className="text-center text-white mt-[400px]">Loading...</p>;
 
   // ✅ Redirect Artists Away from Homepage
   if (role === "artist" && location.pathname === "/") {
@@ -72,7 +89,18 @@ const AppContent = (): JSX.Element => {
   }
 
   // Hide footer ONLY for artists on artist-dashboard
-  const shouldHideFooter = ["/artist-dashboard", "/artist-edit", "/request-dashboard", "/artist-reviews", "/artist-messages", "/privacy-policy", "/copyright-policy", "/terms-and-conditions", "/faqs"].includes(location.pathname) && role === "artist";
+  const shouldHideFooter =
+    [
+      "/artist-dashboard",
+      "/artist-edit",
+      "/request-dashboard",
+      "/artist-reviews",
+      "/artist-messages",
+      "/privacy-policy",
+      "/copyright-policy",
+      "/terms-and-conditions",
+      "/faqs",
+    ].includes(location.pathname) && role === "artist";
 
   // ✅ Hide Navbar & Footer for Booking Process
   const isBookingProcess = location.pathname.startsWith("/book-artist/");
@@ -94,20 +122,34 @@ const AppContent = (): JSX.Element => {
     "/admin-panel",
     "/admin-login",
   ]);
-  const hideNav = hiddenPaths.has(location.pathname) || isBookingProcess || isClientBooking || isArtistMessaging || isClientMessaging || isMessaging;
+  const hideNav =
+    hiddenPaths.has(location.pathname) ||
+    isBookingProcess ||
+    isClientBooking ||
+    isArtistMessaging ||
+    isClientMessaging ||
+    isMessaging;
 
   return (
     <div className="flex flex-col min-h-screen">
       {/* Conditionally Render Navbar Based on User Role */}
       {!hideNav && (
         <>
-          {role === "client" ? <ClientNavBar /> : role === "artist" ? <ArtistNavBar /> : <ClientNavBar />}
+          {role === "client" ? (
+            <ClientNavBar />
+          ) : role === "artist" ? (
+            <ArtistNavBar />
+          ) : (
+            <ClientNavBar />
+          )}
         </>
       )}
 
       {/* Main Content */}
       <main className="flex-grow">
-        <Suspense fallback={<p className="text-center text-white">Loading...</p>}>
+        <Suspense
+          fallback={<p className="text-center text-white">Loading...</p>}
+        >
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/login-options" element={<LoginOptions />} />
@@ -119,25 +161,54 @@ const AppContent = (): JSX.Element => {
             <Route path="/artist-login" element={<ArtistLogin />} />
             <Route path="/about-us" element={<About />} />
             <Route path="/faqs" element={<FAQs />} />
-            <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
+            <Route
+              path="/terms-and-conditions"
+              element={<TermsAndConditions />}
+            />
             <Route path="/copyright-policy" element={<CopyrightPolicy />} />
-            <Route path="/how-to-book-an-artist" element={<HowToBookAnArtist />} />
+            <Route
+              path="/how-to-book-an-artist"
+              element={<HowToBookAnArtist />}
+            />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="/user-dashboard" element={<UserDashboard />} />
             <Route path="/admin-panel" element={<AdminPanel />} />
             <Route path="/admin-login" element={<AdminLogin />} />
-            <Route path="/artist-dashboard" element={<ArtistDashboard mode="artist" />} />
-            <Route path="/artist-profile/:artistId" element={<ArtistDashboard mode="client" />} />
+            <Route
+              path="/artist-dashboard"
+              element={<ArtistDashboard mode="artist" />}
+            />
+            <Route
+              path="/artist-profile/:artistId"
+              element={<ArtistDashboard mode="client" />}
+            />
             <Route path="/artist-edit" element={<ArtistEdit />} />
             <Route path="/artist-gallery" element={<ArtistGallery />} />
-            <Route path="/book-artist/:artistId/artist-note" element={<ArtistNote />} />
-            <Route path="/book-artist/:artistId/booking-calendar" element={<BookingCalendar />} />
-            <Route path="/book-artist/:artistId/booking-request" element={<BookingRequest />} />
-            <Route path="/book-artist/:artistId/booking-confirmation" element={<BookingConfirmation />} />
-            <Route path="/client-booking/:bookingId" element={<ClientBookingDetails />} />
+            <Route
+              path="/book-artist/:artistId/artist-note"
+              element={<ArtistNote />}
+            />
+            <Route
+              path="/book-artist/:artistId/booking-calendar"
+              element={<BookingCalendar />}
+            />
+            <Route
+              path="/book-artist/:artistId/booking-request"
+              element={<BookingRequest />}
+            />
+            <Route
+              path="/book-artist/:artistId/booking-confirmation"
+              element={<BookingConfirmation />}
+            />
+            <Route
+              path="/client-booking/:bookingId"
+              element={<ClientBookingDetails />}
+            />
             <Route path="/request-dashboard" element={<RequestDashboard />} />
-            <Route path="/client-messages" element={<Messaging />} />  {/* ✅ FIX: Include Messaging as a Route */}
-            <Route path="/artist-messages" element={<Messaging />} />  {/* ✅ Artist Messages Page */}
+            <Route path="/client-messages" element={<Messaging />} />{" "}
+            {/* ✅ FIX: Include Messaging as a Route */}
+            <Route path="/artist-messages" element={<Messaging />} />{" "}
+            {/* ✅ Artist Messages Page */}
             <Route path="/messages/:chatId" element={<Messaging />} />
           </Routes>
         </Suspense>
