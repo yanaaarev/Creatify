@@ -43,13 +43,9 @@ export const ClientLogin = (): JSX.Element => {
           await setPersistence(auth, browserLocalPersistence);
 
           // ✅ Complete sign-in with email link
-          const userCredential = await signInWithEmailLink(
-            auth,
-            email,
-            window.location.href
-          );
+          await signInWithEmailLink(auth, email, window.location.href);
 
-          // ✅ Clear stored email to prevent reuse
+          // ✅ Clear stored email
           window.localStorage.removeItem("emailForSignIn");
 
           // ✅ Wait for Firebase to confirm login before redirecting
