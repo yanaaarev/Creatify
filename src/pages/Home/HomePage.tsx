@@ -84,7 +84,9 @@ export const HomePage = (): JSX.Element => {
         </div>
 
         {/* Join Us Section */}
-        <div className="relative w-screen h-[450px] md:h-screen bg-[url('/images/ww-1.png')] bg-cover bg-center bg-no-repeat flex flex-col items-center justify-center pt-4 md:py-24 md:px-6">
+        <div
+        style={{backgroundImage: "url('/images/ww-1.png')"}}
+        className="relative w-screen h-[450px] md:h-screen bg-cover bg-center bg-no-repeat flex flex-col items-center justify-center pt-4 md:py-24 md:px-6">
           <img className="w-40 md:w-[350px] mb-4 md:mb-6" src={CREATIFYElements131} alt="Creatify Elements" />
           <a
             href="https://docs.google.com/forms/d/e/1FAIpQLScbH3ZaaJ4Jg0BCt9_0Lb9x494b1BAgbvfwwmND2wCC-h0gYg/viewform?fbclid=IwY2xjawIsdtJleHRuA2FlbQIxMAABHedzb_U7flPO_QfStOIIDnKbpHExIzU2j95DnplGb2YCtZH0xde6B0-Pug_aem_O7DnW37x0Dp61xoYWsjBzA"
