@@ -85,7 +85,7 @@
             "dest": "/"
         },
         {
-            "src": "/artist/artist-gallery",
+            "src": "/artist-gallery",
             "dest": "/"
         },
         {
