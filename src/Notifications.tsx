@@ -6,15 +6,15 @@ import { useNavigate } from "react-router-dom";
 import { triggerNotification } from "./utils/triggerNotification";
 import { writeBatch } from "firebase/firestore"; // ✅ Import writeBatch
 
-import creatifyFavicon from "@assets/creatifyadmin.png";
+import creatifyFavicon from "/images/creatifyadmin.png";
 import newMessageIcon from "/images/notificationtype/new_message.png";
-import activeIcon from "@assets/notificationtype/active.png";
-import cancelledIcon from "@assets/notificationtype/cancelled.png";
-import onHoldIcon from "@assets/notificationtype/on-hold.png";
-import bookingRequestIcon from "@assets/notificationtype/booking-request.png";
-import completedIcon from "@assets/notificationtype/completed.png";
-import paymentIcon from "@assets/notificationtype/payment.png";
-import feedbackIcon from "@assets/notificationtype/feedback.png";
+import activeIcon from "/images/notificationtype/active.png";
+import cancelledIcon from "/images/notificationtype/cancelled.png";
+import onHoldIcon from "/images/notificationtype/on-hold.png";
+import bookingRequestIcon from "/images/notificationtype/booking-request.png";
+import completedIcon from "/images/notificationtype/completed.png";
+import paymentIcon from "/images/notificationtype/payment.png";
+import feedbackIcon from "/images/notificationtype/feedback.png";
 
 
 interface Notification {
