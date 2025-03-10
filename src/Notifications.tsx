@@ -7,7 +7,7 @@ import { triggerNotification } from "./utils/triggerNotification";
 import { writeBatch } from "firebase/firestore"; // ✅ Import writeBatch
 
 import creatifyFavicon from "@assets/creatifyadmin.png";
-import newMessageIcon from "@assets/notificationtype/new_message.png";
+import newMessageIcon from "/images/notificationtype/new_message.png";
 import activeIcon from "@assets/notificationtype/active.png";
 import cancelledIcon from "@assets/notificationtype/cancelled.png";
 import onHoldIcon from "@assets/notificationtype/on-hold.png";
