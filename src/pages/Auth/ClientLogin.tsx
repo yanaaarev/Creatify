@@ -7,6 +7,8 @@ import {
   signInWithEmailLink,
   signInWithEmailAndPassword,
   sendPasswordResetEmail,
+  setPersistence,
+  browserLocalPersistence,
 } from "firebase/auth";
 import { getDocs, collection, query, where } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
@@ -38,15 +40,15 @@ export const ClientLogin = (): JSX.Element => {
         }
 
         if (email) {
+          // ✅ Set local persistence before signing in
+          await setPersistence(auth, browserLocalPersistence);
+
           // ✅ Complete sign-in with email link
           const userCredential = await signInWithEmailLink(
             auth,
             email,
             window.location.href
           );
-
-          // ✅ Set user persistence so login state remains after refresh
-          await auth.setPersistence("local");
 
           // ✅ Ensure Firebase authentication state is updated
           window.localStorage.removeItem("emailForSignIn"); // Cleanup
