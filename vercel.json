@@ -89,7 +89,7 @@
             "dest": "/"
         },
         {
-            "src": "/auth/:artistId/artist-note",
+            "src": "/auth/book-artist/:artistId/artist-note",
             "dest": "/"
         },
         {
