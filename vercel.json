@@ -101,7 +101,7 @@
             "dest": "/"
         },
         {
-            "src": "/client/client-booking",
+            "src": "/client-booking",
             "dest": "/"
         },
         {
