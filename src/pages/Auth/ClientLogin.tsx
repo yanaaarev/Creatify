@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { IoChevronBackCircleOutline } from "react-icons/io5";
 import { auth, db } from "../../config/firebaseConfig"; // Adjust path as necessary
 import {
   sendSignInLinkToEmail,
+  isSignInWithEmailLink,
   signInWithEmailAndPassword,
   sendPasswordResetEmail,
 } from "firebase/auth";
@@ -35,12 +36,8 @@ export const ClientLogin = (): JSX.Element => {
         }
 
         if (email) {
-          // Complete sign-in with the email link
-          const userCredential = await signInWithEmailLink(
-            auth,
-            email,
-            window.location.href
-          );
+          // ✅ Complete sign-in with the email link
+          await signInWithEmailLink(auth, email, window.location.href);
 
           // ✅ Store user info properly after successful login
           window.localStorage.removeItem("emailForSignIn"); // Cleanup
@@ -58,7 +55,7 @@ export const ClientLogin = (): JSX.Element => {
     }
   };
 
-  // Call this function on **app load** to check if the email login link is present
+  // ✅ Call this function on **app load** to check if the email login link is present
   useEffect(() => {
     handleEmailLinkLogin();
   }, []);
