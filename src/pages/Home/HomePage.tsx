@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import N1 from "../../assets/senenartwork.png";
 import ARTEORK from "../../assets/ARTEORK.png";
-import CREATIFYElements111 from "../../assets/CREATIFY-ELEMENTS-1-1-1.png";
+import CREATIFYElements111 from "../../assets/faqs.png";
 import WHATWEDO from "../../assets/CREATIFY-ELEMENTS-1-1.png";
 import CREATIFYElements131 from "../../assets/CREATIFY-ELEMENTS-1-3-1.png";
 
