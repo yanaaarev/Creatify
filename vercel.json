@@ -81,6 +81,10 @@
             "dest": "/"
         },
         {
+            "src": "/artist-profile",
+            "dest": "/"
+        },
+        {
             "src": "/artist/artist-edit",
             "dest": "/"
         },
@@ -89,7 +93,11 @@
             "dest": "/"
         },
         {
-            "src": "/auth/book-artist/:artistId/artist-note",
+            "src": "/booking/book-artist/:artistId/artist-note",
+            "dest": "/"
+        },
+        {
+            "src": "/book-artist/:artistId/artist-note",
             "dest": "/"
         },
         {
