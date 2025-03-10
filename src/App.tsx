@@ -42,6 +42,19 @@ const ArtistEdit = lazy(async () => {
 const AppContent = (): JSX.Element => {
   const location = useLocation();
   const { role, loading } = useUser(); // 🔴 Get user role and loading state from context
+  
+  useEffect(() => {
+    const disableRightClick = (event: MouseEvent) => {
+      event.preventDefault();
+    };
+  
+    document.addEventListener("contextmenu", disableRightClick);
+  
+    return () => {
+      document.removeEventListener("contextmenu", disableRightClick);
+    };
+  }, []);
+
 
   useEffect(() => {
     // ✅ Log every page view
