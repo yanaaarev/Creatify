@@ -77,11 +77,7 @@
             "dest": "/"
         },
         {
-            "src": "/artist/artist-profile",
-            "dest": "/"
-        },
-        {
-            "src": "/artist-profile",
+            "src": "/artist-profile/(?<artistId>[^/]+)",
             "dest": "/"
         },
         {
@@ -93,15 +89,23 @@
             "dest": "/"
         },
         {
-            "src": "booking/book-artist/artist-note",
+            "src": "/book-artist/(?<artistId>[^/]+)/artist-note",
             "dest": "/"
         },
         {
-            "src": "/book-artist/artist-note",
+            "src": "/book-artist/(?<artistId>[^/]+)/booking-calendar",
             "dest": "/"
         },
         {
-            "src": "/client-booking",
+            "src": "/book-artist/(?<artistId>[^/]+)/booking-request",
+            "dest": "/"
+        },
+        {
+            "src": "/book-artist/(?<artistId>[^/]+)/booking-confirmation",
+            "dest": "/"
+        },
+        {
+            "src": "/client-booking/(?<bookingId>[^/]+)",
             "dest": "/"
         },
         {
