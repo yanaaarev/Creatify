@@ -236,7 +236,7 @@ const handleNavigate = (path: string) => {
     <div 
   className="absolute inset-0 w-full h-full bg-no-repeat bg-center"
   style={{ 
-    backgroundImage: "url('/src/assets/authp.png')",
+    backgroundImage: "url('/images/authp.png')",
     backgroundSize: "cover", // ✅ Ensures the full image is visible without zooming
     backgroundAttachment: "fixed", // ✅ Keeps the background consistent while scrolling
     backdropFilter: "none",  

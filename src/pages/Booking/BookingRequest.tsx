@@ -5,7 +5,7 @@ import { addDoc, collection, Timestamp, doc, getDoc } from "firebase/firestore";
 import axios from "axios";
 import { IoChevronBackCircleOutline } from "react-icons/io5";
 import { triggerNotification } from "../../utils/triggerNotification"; // Adjust path as needed
-import authp from "../../assets/authp.png";
+import authp from "/images/authp.png";
 import { logEvent } from "firebase/analytics";
 import { analytics } from "../../config/firebaseConfig"; // Import analytics
 

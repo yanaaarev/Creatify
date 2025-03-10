@@ -8,7 +8,7 @@ export const LoginOptions = (): JSX.Element => {
       {/* Background Image (Full Screen Cover) */}
       <div 
         className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: "url('src/assets/authp.png')" }}
+        style={{ backgroundImage: "url('/images/authp.png')" }}
       ></div>
 
       {/* Login Options Container */}

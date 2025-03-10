@@ -26,7 +26,7 @@ interface BookingData {
 }
 
 const admin = {
-  avatar: '@/assets/creatify_favicon.png', // replace with the actual avatar URL
+  avatar: '/images/creatify_favicon.png', // replace with the actual avatar URL
   // other admin properties...
 };
 

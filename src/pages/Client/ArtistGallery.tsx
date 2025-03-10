@@ -4,9 +4,9 @@ import { db } from "../../config/firebaseConfig";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { VscSettings } from "react-icons/vsc";
 import { BsFillCalendarCheckFill } from "react-icons/bs";
-import star1 from "../../assets/star.png";
-import authp from "../../assets/authp.png";
-import sampleVideo from "../../assets/sample-video.mp4"; // Sample video path
+import star1 from "/images/star.png";
+import authp from "/images/authp.png";
+import sampleVideo from "/images/sample-video.mp4"; // Sample video path
 import ArtistCalendar from "../Artist/ArtistCalendar"; // ✅ Import Calendar
 import { limit } from "firebase/firestore";
 import { useSearchParams } from "react-router-dom";

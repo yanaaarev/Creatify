@@ -12,7 +12,7 @@ export const HomePage = (): JSX.Element => {
     <div className="bg-[#1E1E1E] flex flex-col items-center w-full min-h-screen">
       <div className="w-full max-w-[1585px] flex-grow">
         {/* Hero Section */}
-        <div className="relative w-full h-screen md:min-h-screen bg-[url('/src/assets/bg.png')] bg-cover bg-center bg-no-repeat flex flex-col items-center justify-center px-6 py-10 md:px-0 md:py-0 text-center">
+        <div className="relative w-full h-screen md:min-h-screen bg-[url('/images/bg.png')] bg-cover bg-center bg-no-repeat flex flex-col items-center justify-center px-6 py-10 md:px-0 md:py-0 text-center">
           <h1 className="text-white font-bold text-3xl md:text-5xl px-1 leading-snug max-w-[1000px] md:max-w-[1200px] mb-2">
             CREATE WITH OUR OUTSTANDING ARTISTS WHO CAN TURN YOUR IMAGINATION INTO REALITY.
           </h1>

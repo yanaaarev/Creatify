@@ -3,7 +3,7 @@ import { FaSearch } from 'react-icons/fa';
 import { IoFilter } from 'react-icons/io5';
 import { db, auth } from '../../config/firebaseConfig';
 import { collection, query, where, getDocs, doc, getDoc, addDoc } from 'firebase/firestore';
-import authp from '../../assets/authp.png';
+import authp from '/images/authp.png';
 import { useNavigate } from 'react-router-dom';
 import { FaRegEye } from "react-icons/fa";
 import { MdMailOutline } from "react-icons/md";

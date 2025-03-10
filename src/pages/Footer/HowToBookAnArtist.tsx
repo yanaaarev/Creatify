@@ -1,4 +1,4 @@
-import untitled11 from "@assets/authp.png"; // Adjust the path as needed
+import untitled11 from "/images/authp.png"; // Adjust the path as needed
 
 export const HowToBookAnArtist = (): JSX.Element => {
   return (

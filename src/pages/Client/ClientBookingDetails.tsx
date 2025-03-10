@@ -5,7 +5,7 @@ import { doc, getDoc, updateDoc, collection, query, where, getDocs, addDoc } fro
 import { IoChevronBackCircleOutline } from "react-icons/io5";
 import { auth } from "../../config/firebaseConfig"; // Already imported db
 import ArtistCalendar from "../Artist/ArtistCalendar";
-import authp from "../../assets/authp.png";
+import authp from "/images/authp.png";
 import { triggerNotification, NotificationType } from "../../utils/triggerNotification";
 import { BsFillCalendar2WeekFill } from "react-icons/bs";
 import { Timestamp } from "firebase/firestore"; 

@@ -6,7 +6,7 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import { IoChevronBackCircleOutline } from "react-icons/io5";
-import authp from "../../assets/authp.png";
+import authp from "/images/authp.png";
 import "../Artist/ArtistCalendar.css";
 
 const BookingCalendar = () => {

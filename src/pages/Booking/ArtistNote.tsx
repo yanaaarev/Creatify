@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { doc, getDoc } from "firebase/firestore";
 import { IoChevronBackCircleOutline } from "react-icons/io5";
 import { db } from "../../config/firebaseConfig";
-import authp from "../../assets/authp.png";
+import authp from "/images/authp.png";
 
 const ArtistNote = () => {
   const { artistId } = useParams<{ artistId: string }>();

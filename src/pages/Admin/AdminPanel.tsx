@@ -143,7 +143,7 @@ const AdminPanel = (): JSX.Element => {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-4 bg-[#191919] relative">
-      <div className="absolute inset-0 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: "url('../src/assets/authp.png')" }}></div>
+      <div className="absolute inset-0 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: "url('/images/authp.png')" }}></div>
 
       <div className="relative z-10 w-full max-w-[700px] bg-white shadow-lg rounded-[30px] p-6">
         <h1 className="text-3xl font-semibold text-[#191919] text-center mb-6">Admin Panel - Add Artist</h1>

@@ -2,7 +2,7 @@ import { IoCalendarOutline, IoChevronBackCircleOutline } from "react-icons/io5";
 import { BsPersonFill } from "react-icons/bs";
 import { MdHelpOutline } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
-import LOGO from "../../assets/logo.png"; // Adjust path if needed
+import LOGO from "/images/logo.png"; // Adjust path if needed
 
 export const UserDashboardSidebar = (): JSX.Element => {
   const navigate = useNavigate();

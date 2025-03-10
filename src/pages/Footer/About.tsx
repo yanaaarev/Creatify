@@ -1,4 +1,4 @@
-import authp from "../../assets/authp.png"; // Adjust path based on project structure
+import authp from "/images/authp.png"; // Adjust path based on project structure
 
 export const About = (): JSX.Element => {
   return (

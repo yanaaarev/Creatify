@@ -105,7 +105,7 @@ export const SignUpEmail = (): JSX.Element => {
   
     {/* Responsive Background Image */}
     <div className="absolute inset-0 bg-cover bg-center bg-no-repeat" 
-      style={{ backgroundImage: "url('../src/assets/authp.png')" }}></div>
+      style={{ backgroundImage: "url('/images/authp.png')" }}></div>
   
     {/* White Rounded Container (Centered) */}
     <div className="relative z-10 w-screen h-screen md:h-auto md:max-w-[540px] bg-white shadow-[-4px_4px_40px_#00000040] rounded-none md:rounded-[30px] py-20 px-12 md:py-16 md:px-16 flex flex-col items-center gap-6">

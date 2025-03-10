@@ -6,7 +6,7 @@ import { BsFillCalendarCheckFill } from "react-icons/bs";
 import { CiMenuKebab } from "react-icons/ci";
 import { AiFillFilePdf } from "react-icons/ai";
 import { FaExternalLinkAlt } from "react-icons/fa";
-import star1 from "@assets/star.png";
+import star1 from "/images/star.png";
 import ArtistPortfolio from "./ArtistPortfolio";
 import ArtistCalendar from "./ArtistCalendar";
 import ArtistFeedback from "./ArtistFeedback";
@@ -183,7 +183,7 @@ const [currentMonth, setCurrentMonth] = useState<string>(new Date().toISOString(
     <div 
       className="absolute inset-0 bg-center bg-no-repeat h-full w-full bg-fixed md:bg-contain"
       style={{ 
-        backgroundImage: "url('/src/assets/authp.png')",
+        backgroundImage: "url('/images/authp.png')",
         backgroundSize: "cover", // ✅ Default: Fills screen
         backgroundPosition: "top center",
       }} 
