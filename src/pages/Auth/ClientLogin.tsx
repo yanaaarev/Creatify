@@ -3,7 +3,7 @@ import { IoChevronBackCircleOutline } from "react-icons/io5";
 import { auth, db } from "../../config/firebaseConfig"; // Adjust path as necessary
 import {
   sendSignInLinkToEmail,
-  SignInWithEmailLink,
+  isSignInWithEmailLink,
   signInWithEmailAndPassword,
   sendPasswordResetEmail,
 } from "firebase/auth";
