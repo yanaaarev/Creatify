@@ -10,7 +10,11 @@
         },
         {
             "src": "/auth/client-login",
-            "dest": "/client-login"
+            "dest": "/"
+        },
+        {
+            "src": "/client-login",
+            "dest": "/"
         },
         {
             "src": "/auth/login-options",
