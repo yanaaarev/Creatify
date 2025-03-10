@@ -32,7 +32,6 @@ export const ClientLogin = (): JSX.Element => {
   const handleEmailLinkLogin = async () => {
     if (isSignInWithEmailLink(auth, window.location.href)) {
       try {
-        // Retrieve stored email from localStorage
         let email = window.localStorage.getItem("emailForSignIn");
 
         if (!email) {
@@ -40,7 +39,7 @@ export const ClientLogin = (): JSX.Element => {
         }
 
         if (email) {
-          // ✅ Ensure authentication state persists
+          // ✅ Ensure persistence before logging in
           await setPersistence(auth, browserLocalPersistence);
 
           // ✅ Complete sign-in with email link
@@ -50,18 +49,18 @@ export const ClientLogin = (): JSX.Element => {
             window.location.href
           );
 
-          // ✅ Force Firebase to refresh user session
-          await userCredential.user.getIdToken(true);
+          // ✅ Clear stored email to prevent reuse
+          window.localStorage.removeItem("emailForSignIn");
 
-          // ✅ Store user info properly after successful login
-          window.localStorage.removeItem("emailForSignIn"); // Cleanup
-
-          console.log("User logged in:", userCredential.user);
-          alert("✅ Login successful!");
-
-          // ✅ Redirect user after successful login
-          navigate("/user-dashboard");
-          window.location.reload(); // Ensure state updates after login
+          // ✅ Wait for Firebase to confirm login before redirecting
+          auth.onAuthStateChanged((user) => {
+            if (user) {
+              console.log("User logged in successfully:", user);
+              alert("✅ Login successful!");
+              navigate("/user-dashboard");
+              window.location.reload();
+            }
+          });
         } else {
           throw new Error("❌ Email is required to complete sign-in.");
         }
