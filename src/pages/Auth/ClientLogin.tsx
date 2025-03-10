@@ -40,7 +40,7 @@ export const ClientLogin = (): JSX.Element => {
         }
 
         if (email) {
-          // ✅ Set local persistence before signing in
+          // ✅ Ensure authentication state persists
           await setPersistence(auth, browserLocalPersistence);
 
           // ✅ Complete sign-in with email link
@@ -50,7 +50,10 @@ export const ClientLogin = (): JSX.Element => {
             window.location.href
           );
 
-          // ✅ Ensure Firebase authentication state is updated
+          // ✅ Force Firebase to refresh user session
+          await userCredential.user.getIdToken(true);
+
+          // ✅ Store user info properly after successful login
           window.localStorage.removeItem("emailForSignIn"); // Cleanup
 
           console.log("User logged in:", userCredential.user);
@@ -58,6 +61,7 @@ export const ClientLogin = (): JSX.Element => {
 
           // ✅ Redirect user after successful login
           navigate("/user-dashboard");
+          window.location.reload(); // Ensure state updates after login
         } else {
           throw new Error("❌ Email is required to complete sign-in.");
         }
