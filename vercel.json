@@ -73,7 +73,7 @@
             "dest": "/"
         },
         {
-            "src": "/artist/artist-dashboard",
+            "src": "/artist-dashboard",
             "dest": "/"
         },
         {
