@@ -1,9 +1,9 @@
 import { useNavigate } from "react-router-dom";
-import N1 from "../../assets/senenartwork.png";
-import ARTEORK from "../../assets/ARTEORK.png";
-import CREATIFYElements111 from "../../assets/faqs.png";
-import WHATWEDO from "../../assets/whatwedo.png";
-import CREATIFYElements131 from "../../assets/ayaa.png";
+import N1 from "/images/senenartwork.png";
+import ARTEORK from "/images/ARTEORK.png";
+import CREATIFYElements111 from "/images/faqs.png";
+import WHATWEDO from "/images/whatwedo.png";
+import CREATIFYElements131 from "/images/ayaa.png";
 
 export const HomePage = (): JSX.Element => {
   const navigate = useNavigate();
