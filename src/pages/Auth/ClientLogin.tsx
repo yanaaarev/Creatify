@@ -4,6 +4,7 @@ import { auth, db } from "../../config/firebaseConfig"; // Adjust path as necess
 import {
   sendSignInLinkToEmail,
   isSignInWithEmailLink,
+  signInWithEmailLink,
   signInWithEmailAndPassword,
   sendPasswordResetEmail,
 } from "firebase/auth";
