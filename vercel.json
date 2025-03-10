@@ -10,7 +10,7 @@
         },
         {
             "src": "/auth/client-login",
-            "dest": "/"
+            "dest": "/client-login"
         },
         {
             "src": "/auth/login-options",
@@ -37,23 +37,23 @@
             "dest": "/"
         },
         {
-            "src": "/footer/faqs",
+            "src": "/faqs",
             "dest": "/"
         },
         {
-            "src": "/footer/terms-and-conditions",
+            "src": "/terms-and-conditions",
             "dest": "/"
         },
         {
-            "src": "/footer/copyright-policy",
+            "src": "/copyright-policy",
             "dest": "/"
         },
         {
-            "src": "/footer/how-to-book-an-artist",
+            "src": "/how-to-book-an-artist",
             "dest": "/"
         },
         {
-            "src": "/footer/privacy-policy",
+            "src": "/privacy-policy",
             "dest": "/"
         },
         {
