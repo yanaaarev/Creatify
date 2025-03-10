@@ -223,6 +223,7 @@ const AppContent = (): JSX.Element => {
 const App = (): JSX.Element => (
   <Router>
     <AppContent />
+    <Analytics />
   </Router>
 );
 
