@@ -45,14 +45,14 @@ export const ClientLogin = (): JSX.Element => {
             window.location.href
           );
 
-          // ✅ Ensure authentication state is updated
-          await auth.updateCurrentUser(userCredential.user);
+          // ✅ Set user persistence so login state remains after refresh
+          await auth.setPersistence("local");
 
-          // ✅ Store user info properly after successful login
+          // ✅ Ensure Firebase authentication state is updated
           window.localStorage.removeItem("emailForSignIn"); // Cleanup
 
-          alert("✅ Login successful!");
           console.log("User logged in:", userCredential.user);
+          alert("✅ Login successful!");
 
           // ✅ Redirect user after successful login
           navigate("/user-dashboard");
