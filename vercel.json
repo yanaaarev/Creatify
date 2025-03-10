@@ -89,7 +89,7 @@
             "dest": "/"
         },
         {
-            "src": "booking/book-artist",
+            "src": "/auth/:artistId/artist-note",
             "dest": "/"
         },
         {
