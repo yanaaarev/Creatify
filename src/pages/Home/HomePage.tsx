@@ -37,7 +37,7 @@ export const HomePage = (): JSX.Element => {
         {/* Right Text Content with Background Image */}
         <div 
           className="relative w-full min-h-[400px] md:min-h-[900px] flex flex-col justify-center items-start md:items-start text-white text-left md:text-left px-4 md:px-10 bg-cover bg-right md:bg-right bg-no-repeat"
-          style={{ backgroundImage: "url('/src/assets/awd-1.png')", backgroundPosition: "right 2px center", backgroundSize: "165%" }} 
+          style={{ backgroundImage: "url('/images/awd-1.png')", backgroundPosition: "right 2px center", backgroundSize: "165%" }} 
         >
           {/* WHAT WE DO Image */}
           <img 
