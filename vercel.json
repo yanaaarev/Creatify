@@ -1,0 +1,112 @@
+{
+    "routes":[
+        {
+            "src": "/",
+            "dest": "/"
+        },
+        {
+            "src": "/auth/artist-login",
+            "dest": "/"
+        },
+        {
+            "src": "/auth/client-login",
+            "dest": "/"
+        },
+        {
+            "src": "/auth/login-options",
+            "dest": "/"
+        },
+        {
+            "src": "/auth/client-signin",
+            "dest": "/"
+        },
+        {
+            "src": "/auth/signup-options",
+            "dest": "/"
+        },
+        {
+            "src": "/auth/signup-email",
+            "dest": "/"
+        },
+        {
+            "src": "/auth/signup-final",
+            "dest": "/"
+        },
+        {
+            "src": "/footer/about-us",
+            "dest": "/"
+        },
+        {
+            "src": "/footer/faqs",
+            "dest": "/"
+        },
+        {
+            "src": "/footer/terms-and-conditions",
+            "dest": "/"
+        },
+        {
+            "src": "/footer/copyright-policy",
+            "dest": "/"
+        },
+        {
+            "src": "/footer/how-to-book-an-artist",
+            "dest": "/"
+        },
+        {
+            "src": "/footer/privacy-policy",
+            "dest": "/"
+        },
+        {
+            "src": "/client/user-dashboard",
+            "dest": "/"
+        },
+        {
+            "src": "/admin/admin-panel",
+            "dest": "/"
+        },
+        {
+            "src": "/admin/admin-login",
+            "dest": "/"
+        },
+        {
+            "src": "/artist/artist-dashboard",
+            "dest": "/"
+        },
+        {
+            "src": "/artist/artist-profile",
+            "dest": "/"
+        },
+        {
+            "src": "/artist/artist-edit",
+            "dest": "/"
+        },
+        {
+            "src": "/artist/artist-gallery",
+            "dest": "/"
+        },
+        {
+            "src": "/booking/book-artist",
+            "dest": "/"
+        },
+        {
+            "src": "/client/client-booking",
+            "dest": "/"
+        },
+        {
+            "src": "/artist/request-dashboard",
+            "dest": "/"
+        },
+        {
+            "src": "/client-messages",
+            "dest": "/"
+        },
+        {
+            "src": "/artist-messages",
+            "dest": "/"
+        },
+        {
+            "src": "/messages",
+            "dest": "/"
+        }
+    ]
+}
