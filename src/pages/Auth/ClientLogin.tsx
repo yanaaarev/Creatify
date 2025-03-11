@@ -24,7 +24,7 @@ export const ClientLogin = (): JSX.Element => {
   const [showPassword, setShowPassword] = useState(false);
 
   const actionCodeSettings = {
-    url: "https://www.creatify.fyi", // Redirect after email link login
+    url: "https://www.creatify.fyi/user-dashboard", // Redirect after email link login
     handleCodeInApp: true,
   };
 
@@ -133,7 +133,7 @@ export const ClientLogin = (): JSX.Element => {
         role: "client",
       });
 
-      navigate("/user-dashboard"); // Redirect after successful login
+      navigate("/"); // Redirect after successful login
       window.location.reload();
     } catch (err: any) {
       setError("Invalid credentials. Please check your email and password.");
