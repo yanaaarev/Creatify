@@ -34,19 +34,19 @@ const AdminLogin = (): JSX.Element => {
       {/* Background */}
       <div className="absolute inset-0 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: "url('/images/authp.png')" }}></div>
 
-      <div className="w-full max-w-[1536px] flex flex-col items-center p-4 md:p-0 relative z-10">
+      <div className="w-full max-w-[1536px] flex flex-col items-center md:p-0 relative z-10">
         {/* White Container */}
-        <div className="relative w-[90%] max-w-[584px] bg-white shadow-lg rounded-[30px] p-6 flex flex-col items-center mt-11">
+        <div className="relative w-[100%] md:h-auto h-screen max-w-[584px] bg-white md:rounded-[30px] md:p-12 py-40 px-10 flex flex-col items-left md:mt-[120px]">
           
           {/* Back Button */}
           <button 
             onClick={() => navigate(-1)} 
-            className="absolute top-6 left-6 text-[#8C8C8C] text-4xl"
+            className="absolute top-[130px] left-4 md:top-10 md:left-6 text-[#8C8C8C] text-4xl"
           >
             <IoChevronBackCircleOutline />
           </button>
 
-          <h2 className="text-[#191919] text-2xl font-semibold mt-8">Admin Login</h2>
+          <h2 className="text-[#191919] text-2xl font-semibold mt-8 text-center">Admin Login</h2>
 
           {/* Email Input */}
           <label className="text-[#191919] text-[17px] font-semibold mt-8">Email</label>
