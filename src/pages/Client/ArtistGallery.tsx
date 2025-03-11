@@ -325,7 +325,7 @@ const handleOpenCalendar = async (artist: Artist, e: React.MouseEvent) => {
 
           {/* ⭐ Rating */}
           <div className="flex items-center gap-1">
-            <span className="text-white text-lg">
+            <span className="text-white text-lg mt-2">
               {typeof artist.rating === "number" && artist.rating > 0 ? artist.rating.toFixed(1) : "N/A"}
             </span>
             <img src={star1} alt="Star" className="w-5 h-5" />
