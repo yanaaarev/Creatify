@@ -1,14 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { IoChevronBackCircleOutline } from "react-icons/io5";
 import { auth, db } from "../../config/firebaseConfig"; // Adjust path as necessary
 import {
-  sendSignInLinkToEmail,
-  isSignInWithEmailLink,
-  signInWithEmailLink,
   signInWithEmailAndPassword,
   sendPasswordResetEmail,
-  setPersistence,
-  browserLocalPersistence,
 } from "firebase/auth";
 import { getDocs, collection, query, where } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
@@ -22,55 +17,6 @@ export const ClientLogin = (): JSX.Element => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-
-  const actionCodeSettings = {
-    url: "https://www.creatify.fyi/user-dashboard", // Redirect after email link login
-    handleCodeInApp: true,
-  };
-
-  // ✅ Check if the current URL contains an email sign-in link and complete the login process
-  const handleEmailLinkLogin = async () => {
-    if (isSignInWithEmailLink(auth, window.location.href)) {
-      try {
-        let email = window.localStorage.getItem("emailForSignIn");
-
-        if (!email) {
-          email = prompt("Please enter your email to confirm sign-in:");
-        }
-
-        if (email) {
-          // ✅ Ensure persistence before logging in
-          await setPersistence(auth, browserLocalPersistence);
-
-          // ✅ Complete sign-in with email link
-          await signInWithEmailLink(auth, email, window.location.href);
-
-          // ✅ Clear stored email
-          window.localStorage.removeItem("emailForSignIn");
-
-          // ✅ Wait for Firebase to confirm login before redirecting
-          auth.onAuthStateChanged((user) => {
-            if (user) {
-              console.log("User logged in successfully:", user);
-              alert("✅ Login successful!");
-              navigate("/user-dashboard");
-              window.location.reload();
-            }
-          });
-        } else {
-          throw new Error("❌ Email is required to complete sign-in.");
-        }
-      } catch (error) {
-        console.error("❌ Error signing in with email link:", error);
-        alert("❌ Failed to sign in. Please try again.");
-      }
-    }
-  };
-
-  // ✅ Call this function on **app load** to check if the email login link is present
-  useEffect(() => {
-    handleEmailLinkLogin();
-  }, []);
 
   // Validate if input is an email
   const isEmail = (input: string): boolean => {
@@ -137,44 +83,6 @@ export const ClientLogin = (): JSX.Element => {
       window.location.reload();
     } catch (err: any) {
       setError("Invalid credentials. Please check your email and password.");
-    }
-  };
-
-  // ✅ Handle Passwordless Login Request
-  const handleSendEmailLink = async () => {
-    setError("");
-    if (!identifier) {
-      setError("Please enter your email or username.");
-      return;
-    }
-
-    try {
-      let userEmail: string = identifier;
-
-      // Resolve username to email if the identifier is not an email
-      if (!isEmail(identifier)) {
-        const resolvedEmail = await resolveUsernameToEmail(identifier);
-        if (!resolvedEmail) {
-          setError("Username not found. Please try again or sign up.");
-          return;
-        }
-        userEmail = resolvedEmail;
-      }
-
-      // ✅ Log passwordless login request
-      logEvent(analytics, "passwordless_login_request", {
-        method: "passwordless_email",
-        email: userEmail,
-      });
-
-      // Send email link for passwordless login
-      await sendSignInLinkToEmail(auth, userEmail, actionCodeSettings);
-      window.localStorage.setItem("emailForSignIn", userEmail);
-      alert("Email link sent! Check your inbox.");
-    } catch (err: any) {
-      setError(
-        err.message || "An error occurred while sending the email link."
-      );
     }
   };
 
@@ -296,14 +204,6 @@ export const ClientLogin = (): JSX.Element => {
               Sign In
             </span>
           </button>
-
-          {/* Gray Text for Send Email Link */}
-          <p
-            onClick={handleSendEmailLink}
-            className="text-blue-500 mt-[-15px] [font-family:'Khula',Helvetica] text-sm md:text-md cursor-pointer hover:underline"
-          >
-            Send an email link to sign in
-          </p>
         </div>
 
         {/* Terms and Privacy Policy (Smaller for Mobile) */}
