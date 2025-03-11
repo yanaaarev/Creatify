@@ -187,7 +187,8 @@ const [currentMonth, setCurrentMonth] = useState<string>(new Date().toISOString(
         backgroundSize: "cover", // ✅ Default: Fills screen
         backgroundPosition: "top center",
       }} 
-    ></div>
+    ></div> 
+    </div>
 
     {/* ✅ Responsive Background Image for Mobile */}
     <style>
@@ -201,9 +202,6 @@ const [currentMonth, setCurrentMonth] = useState<string>(new Date().toISOString(
       `}
     </style>
 
-    {/* ✅ Gradient Overlay to Blend Image with Background */}
-    <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#1E1E1E]"></div>
-  </div>
 
   {/* ✅ Banner Holder (Fixed Height Issue) */}
   <div className="w-full mt-[93px] md:w-[1250px] md:h-[290px] relative">
@@ -217,7 +215,7 @@ const [currentMonth, setCurrentMonth] = useState<string>(new Date().toISOString(
 {/* Profile Section */}
 <div className="relative flex flex-col items-center w-full max-w-[800px] p-4">
   {/* Profile Picture Holder */}
-  <div className="w-[160px] h-[160px] md:w-[260px] md:h-[260px] rounded-full overflow-hidden  absolute -top-20 md:-top-32">
+  <div className="w-[160px] h-[160px] md:w-[240px] md:h-[240px] lg:w-[260px] lg:h-[260px] rounded-full overflow-hidden absolute left-1/2 transform -translate-x-1/2 -top-20 md:-top-28 lg:-top-32">
     <img
       className="w-full h-full object-cover"
       src={artist?.profilePicture || DEFAULT_AVATAR_URL} // Temporary Default Avatar
@@ -239,7 +237,7 @@ const [currentMonth, setCurrentMonth] = useState<string>(new Date().toISOString(
   </div>
 
   {/* Action Buttons & Ratings Section */}
-  <div className="w-full flex flex-col md:flex-row justify-between items-center md:items-start px-4 md:px-0 md:w-[1250px] mt-6 md:mt-[-240px]">
+  <div className="w-full flex flex-col md:flex-row justify-between items-center md:items-start px-4 xl:px-[150px] md:px-5 md:w-[1000px] xl:w-screen mt-6 md:mt-[-235px]">
   
   <div className="relative w-full md:w-auto -top-[235px] right-7">
       {/* Menu Button for Mobile */}
@@ -363,9 +361,6 @@ const [currentMonth, setCurrentMonth] = useState<string>(new Date().toISOString(
           </div>
         </div>
       )}
-
-
-        
 
   {/* Right Side: Ratings & Starting Rate (Stacked in Mobile) */}
   <div className="flex flex-col items-center md:items-end mt-[-45px] md:mt-0">

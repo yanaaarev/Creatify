@@ -29,7 +29,7 @@ export const UserDashboardSidebar = (): JSX.Element => {
         {/* Logo */}
         <div className="flex justify-center w-full mb-2">
           <img
-            className="w-[140px] md:w-[150px] h-[40px] md:h-full drop-shadow-[0_5px_2px_rgba(128,178,64,0.9)]"
+            className="w-[140px] md:w-[150px] h-[40px] md:h-full"
             alt="Logo"
             src={LOGO}
           />

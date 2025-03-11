@@ -18,7 +18,7 @@ const goBack = () => {
   // ✅ Redirect if not logged in
   useEffect(() => {
     if (!auth.currentUser) {
-      navigate("/client-login");
+      navigate("/login-options");
       window.location.reload();
     }
   }, []);

@@ -32,7 +32,7 @@ const ArtistPortfolio: React.FC<ArtistPortfolioProps> = ({ portfolioImages = [] 
 
   return (
     <div className="w-full flex justify-center -mt-[60px] px-4">
-      <div className="w-full md:w-[1200px] mt-20 relative">
+      <div className="w-full md:w-[900px] xl:w-[1250px] mt-20 relative">
         {/* Scrollable Portfolio Section */}
         <div className="relative">
           {/* Left Scroll Button */}

@@ -53,19 +53,16 @@ export const HomePage = (): JSX.Element => {
             {/* Text Content */}
             <div className="max-w-[790px] px-1 md:px-3">
               <p className="[font-family:'Khula',Helvetica] text-[10px] w-50 h-auto md:text-xl font-light leading-relaxed">
-                <span className="font-bold">Creatify</span> focuses on{" "}
-                <span className="font-bold">connecting people</span> with{" "}
-                <span className="font-bold">artists </span>
-                specializing in{" "}
+                <span className="font-bold">Creatify</span> welcomes and supports{" "}
+                <span className="font-bold">artists</span> providing a platform where{" "}
+                <span className="font-bold">clients can easily discover and connect with creatives </span>
+                across various fields—{" "}
                 <span className="font-bold">
-                  photography, videography, graphic design, video editing, and
-                  traditional art.
+                photography, videography, graphic design, video editing, traditional art, and more. {" "}
                 </span>
-                The platform makes it easy for clients to find the right artist
-                for their needs, ensuring high-quality work with the convenience
-                of
-                <span className="font-bold"> free booking</span> and{" "}
-                <span className="font-bold">direct communication</span>.
+                With
+                <span className="font-bold"> free booking and direct communication, </span> finding the right artist has never been easier.
+                {" "}
               </p>
             </div>
           </div>

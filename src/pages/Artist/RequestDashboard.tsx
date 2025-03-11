@@ -156,7 +156,7 @@ interface Booking {
     };
   
   return (
-    <div className="min-h-screen bg-cover bg-center p-6 md:px-16" style={{ backgroundImage: `url(${authp})` }}>
+    <div className="min-h-screen bg-cover bg-center p-6 md:px-12 xl:px-16" style={{ backgroundImage: `url(${authp})` }}>
   <div className="flex flex-row flex-wrap justify-between items-center mt-20 md:mt-28 p-1 pb-6 space-y-2 md:space-y-0">
   <h1 className="[font-family:'Khula',Helvetica] text-lg font-semibold text-white hidden md:block">
     Request Dashboard
@@ -190,7 +190,7 @@ interface Booking {
   </div>
 </div>
 
-<div className="bg-black bg-opacity-25 rounded-2xl px-2 py-3 md:p-7 overflow-x-auto mx-auto w-full">
+<div className="bg-black bg-opacity-25 rounded-2xl px-2 py-3 md:p-8 xl:p-7 overflow-x-auto mx-auto w-full">
   <div className="md:grid grid-cols-5 gap-0 md:gap-2 md:pb-4 border-b border-gray-500 text-[10px] md:text-sm hidden">
     <p className="[font-family:'Khula',Helvetica] text-white text-opacity-50 font-semibold truncate mt-2">Project Status</p>
     <p className="[font-family:'Khula',Helvetica] text-white text-opacity-50 font-semibold truncate mt-2">Request ID</p>
@@ -225,7 +225,7 @@ interface Booking {
     </p>
 
     {/* Actions - Mobile Icons & Desktop Buttons */}
-    <div className="flex flex-row gap-5 md:gap-0 md:flex-row md:space-x-20 text-xs md:text-sm">
+    <div className="flex flex-row gap-5 xl:gap-5 md:gap-0 md:flex-row md:space-x-5 text-xs md:text-sm">
       {/* Mobile Icons */}
       <button 
         onClick={() => handleNavigate(`/client-booking/${booking.id}`)} 
