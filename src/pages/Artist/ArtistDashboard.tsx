@@ -237,7 +237,7 @@ const [currentMonth, setCurrentMonth] = useState<string>(new Date().toISOString(
   </div>
 
   {/* Action Buttons & Ratings Section */}
-  <div className="w-full flex flex-col md:flex-row justify-between items-center md:items-start px-4 xl:px-[150px] md:px-5 md:w-[1000px] xl:w-screen mt-6 md:mt-[-235px]">
+  <div className="w-full flex flex-col md:flex-row justify-between items-center md:items-start px-4 xl:px-[180px] md:px-5 md:w-[1000px] xl:w-[1600px] mt-6 md:mt-[-235px]">
   
   <div className="relative w-full md:w-auto -top-[235px] right-7">
       {/* Menu Button for Mobile */}
