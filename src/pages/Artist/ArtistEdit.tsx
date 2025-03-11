@@ -562,9 +562,9 @@ const handleSaveChanges = async () => {
       onChange={(e) => { setServiceType(e.target.value); setChangesMade(true); }}
     >
       <option value="" disabled hidden>-- Select Service Type --</option>
-      <option value="Digital-Only Services">Digital Only</option>
-      <option value="Remote-Only Services">On-site Only</option>
-      <option value="Both Services">Both On-site & Digital</option>
+      <option value="Digital-Only">Digital Only</option>
+      <option value="On-site Only">On-site Only</option>
+      <option value="Both On-site & Digital">Both On-site & Digital</option>
     </select>
 
     {/* Custom Arrow */}
