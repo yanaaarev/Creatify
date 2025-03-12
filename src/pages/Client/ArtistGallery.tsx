@@ -7,7 +7,7 @@ import { BsFillCalendarCheckFill } from "react-icons/bs";
 import star1 from "/images/star.png";
 import authp from "/images/authp.png";
 import sampleVideo from "/images/sample-video.mp4"; // Sample video path
-import samplePortfolio from "/images/sample-portfolio-gray.jpg"; // Sample portfolio image path
+import samplePortfolio from "/images/creatifyportfolio.png"; // Sample portfolio image path
 import ArtistCalendar from "../Artist/ArtistCalendar"; // ✅ Import Calendar
 import { limit } from "firebase/firestore";
 import { useSearchParams } from "react-router-dom";
