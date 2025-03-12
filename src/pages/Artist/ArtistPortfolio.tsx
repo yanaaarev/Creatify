@@ -130,12 +130,10 @@ const ArtistPortfolio: React.FC<ArtistPortfolioProps> = ({ portfolioImages = [] 
   Array.from({ length: 5 }).map((_, index) => (
     <div
       key={index}
-      className={`relative flex-shrink-0 snap-start bg-cover bg-center rounded-[30px] ${
-        index === 4 ? "w-[40%]" : "w-[25%]" // ✅ Ensures last thumbnail is half-visible
-      }`}
-      style={{ backgroundImage: `url(${samplePortfolio})`, height: "450px", width: "300px" }}
+     className="relative flex-shrink-0 snap-start bg-cover bg-center rounded-[30px] w-[25%]"
+      style={{ backgroundImage: `url(${samplePortfolio})`, height: "450px", width: "295px" }}
     >
-      <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center text-white text-xl md:text-2xl font-bold">
+      <div className="absolute inset-0 flex items-center justify-center text-white text-opacity-50 text-xl md:text-2xl font-bold">
         CREATIFY
       </div>
     </div>

@@ -8,7 +8,7 @@ import axios from "axios";
 import ArtistCalendar from "./ArtistCalendar"; // Import calendar component
 
 const DEFAULT_AVATAR_URL = "https://res.cloudinary.com/ddjnlhfnu/image/upload/v1740737790/samplepfp_gg1dmq.png";
-const DEFAULT_BANNER_URL = "https://res.cloudinary.com/ddjnlhfnu/image/upload/v1741468141/samplebannerfinal_polxhq.jpg";
+const DEFAULT_BANNER_URL = "https://res.cloudinary.com/ddjnlhfnu/image/upload/v1741784288/creatifybanner_m5gysx.png";
 
 const ArtistEdit = (): JSX.Element => {
   const navigate = useNavigate();

@@ -14,7 +14,7 @@ import { logEvent } from "firebase/analytics";
 import { analytics } from "../../config/firebaseConfig";
 
 const DEFAULT_AVATAR_URL = "https://res.cloudinary.com/ddjnlhfnu/image/upload/v1740737790/samplepfp_gg1dmq.png";
-const DEFAULT_BANNER_URL = "https://res.cloudinary.com/ddjnlhfnu/image/upload/v1741468141/samplebannerfinal_polxhq.jpg";
+const DEFAULT_BANNER_URL = "https://res.cloudinary.com/ddjnlhfnu/image/upload/v1741784288/creatifybanner_m5gysx.png";
 
 interface ArtistDashboardProps {
   mode: "artist" | "client";
