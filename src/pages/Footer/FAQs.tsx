@@ -157,7 +157,7 @@ Paying a little more won’t hurt! The platform fee supports the development and
   Cancellation and Modifications
 </h2>
         <DropdownFaqs FAQS={false} text="Can bookings or dates be adjusted or canceled?">
-        <span className="[font-family:'Khula',Helvetica] font-bold text-sm text-white">Clients:</span> You can cancel within 24 hours before the artist accepts your request without charges. After this, the artist’s terms apply. Adjusting booked dates is possible but requires direct negotiation with the artist. <br></br><br></br>
+        <span className="[font-family:'Khula',Helvetica] font-bold text-sm text-white">Clients:</span> You can cancel within 24 hours before or even after the artist accepts your request without charges. After this, the artist’s terms apply. Adjusting booked dates is possible but requires direct negotiation with the artist. <br></br><br></br>
         <span className="[font-family:'Khula',Helvetica] font-bold text-sm text-white">Artists:</span> You can decline commission requests or set your own cancellation policies for accepted projects.
 </DropdownFaqs>
 
@@ -172,7 +172,7 @@ Paying a little more won’t hurt! The platform fee supports the development and
 </h2>
 
 <DropdownFaqs FAQS={false} text="How do I know if an artist is right for my project?">
-<span className="[font-family:'Khula',Helvetica] font-bold text-sm text-white">Clients:</span> Review the artist’s profile for their style, genre, and past work. For specific questions, wait for the artist to contact you after confirming your booking.
+Review the artist’s profile for their style, genre, and past work. For specific questions, wait for the artist to contact you after confirming your booking.
 </DropdownFaqs>
 
 <DropdownFaqs FAQS={false} text="What if there is a dispute?">
