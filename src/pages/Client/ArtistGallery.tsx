@@ -38,7 +38,7 @@ const ArtistGallery = () => {
   const navigate = useNavigate();
 
   // ✅ Pagination State
-const artistsPerPage = 10;
+const artistsPerPage = 12;
 const [searchParams, setSearchParams] = useSearchParams();
 const currentPage = Number(searchParams.get("page")) || 1;
 
