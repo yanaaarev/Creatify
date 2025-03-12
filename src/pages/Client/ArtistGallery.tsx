@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { db } from "../../config/firebaseConfig";
-import { collection, query, where, getDocs } from "firebase/firestore";
+import { db, auth } from "../../config/firebaseConfig";
+import { collection, query, where, getDocs, doc, getDoc } from "firebase/firestore";
 import { VscSettings } from "react-icons/vsc";
 import { BsFillCalendarCheckFill } from "react-icons/bs";
 import star1 from "/images/star.png";
 import authp from "/images/authp.png";
 import sampleVideo from "/images/sample-video.mp4"; // Sample video path
+import samplePortfolio from "/images/sample-portfolio.jpg"; // Sample portfolio image path
 import ArtistCalendar from "../Artist/ArtistCalendar"; // ✅ Import Calendar
 import { limit } from "firebase/firestore";
 import { useSearchParams } from "react-router-dom";
@@ -142,6 +143,35 @@ const handlePageChange = (newPage: number) => {
   
       fetchArtists();
   }, []);
+
+  useEffect(() => {
+    const checkUserRole = async () => {
+      const user = auth.currentUser;
+      if (!user) {
+        setLoading(false);
+        return; // No user logged in, allow access
+      }
+
+      try {
+        const userRef = doc(db, "artists", user.uid);
+        const userSnap = await getDoc(userRef);
+
+        if (userSnap.exists()) {
+          const userData = userSnap.data();
+          if (userData.role === "artist") {
+            alert("❌ Artists cannot access the Artist Gallery!");
+            navigate("/artist-dashboard");
+          }
+        }
+      } catch (error) {
+        console.error("❌ Error checking user role:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    checkUserRole();
+  }, [navigate]);
 
   useEffect(() => {
     const detectImageOrientation = async () => {
@@ -290,7 +320,7 @@ const handleOpenCalendar = async (artist: Artist, e: React.MouseEvent) => {
             />
           ) : (
             <img
-              src={featuredPortfolio?.url || ""}
+              src={featuredPortfolio?.url || samplePortfolio}
               alt="Artist Work"
               className="w-full h-full object-cover"
             />
