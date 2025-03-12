@@ -157,13 +157,13 @@ Paying a little more won’t hurt! The platform fee supports the development and
   Cancellation and Modifications
 </h2>
         <DropdownFaqs FAQS={false} text="Can bookings or dates be adjusted or canceled?">
-        <span className="[font-family:'Khula',Helvetica] font-bold text-sm text-white">Clients:</span>You can cancel within 24 hours before the artist accepts your request without charges. After this, the artist’s terms apply. Adjusting booked dates is possible but requires direct negotiation with the artist. <br></br><br></br>
-        <span className="[font-family:'Khula',Helvetica] font-bold text-sm text-white">Artists:</span>You can decline commission requests or set your own cancellation policies for accepted projects.
+        <span className="[font-family:'Khula',Helvetica] font-bold text-sm text-white">Clients:</span> You can cancel within 24 hours before the artist accepts your request without charges. After this, the artist’s terms apply. Adjusting booked dates is possible but requires direct negotiation with the artist. <br></br><br></br>
+        <span className="[font-family:'Khula',Helvetica] font-bold text-sm text-white">Artists:</span> You can decline commission requests or set your own cancellation policies for accepted projects.
 </DropdownFaqs>
 
 <DropdownFaqs FAQS={false} text="What happens if I cancel after paying the down payment?">
-<span className="[font-family:'Khula',Helvetica] font-bold text-sm text-white">Clients:</span>Down payments are non-refundable as the artist may have already started the work.<br></br><br></br>
-<span className="[font-family:'Khula',Helvetica] font-bold text-sm text-white">Artists:</span>Your terms apply for cancellations after work has started.
+<span className="[font-family:'Khula',Helvetica] font-bold text-sm text-white">Clients:</span> Down payments are non-refundable as the artist may have already started the work.<br></br><br></br>
+<span className="[font-family:'Khula',Helvetica] font-bold text-sm text-white">Artists:</span> Your terms apply for cancellations after work has started.
 </DropdownFaqs>
 
 {/* Communication and Disputes */}

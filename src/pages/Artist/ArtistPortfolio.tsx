@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { FaArrowLeft, FaArrowRight, FaTimes } from "react-icons/fa";
+import samplePortfolio from "/images/creatifyportfolio.png"; // Sample portfolio image path
 
 interface PortfolioFile {
   url: string;
@@ -132,7 +133,7 @@ const ArtistPortfolio: React.FC<ArtistPortfolioProps> = ({ portfolioImages = [] 
       className={`relative flex-shrink-0 snap-start bg-cover bg-center rounded-lg ${
         index === 4 ? "w-[40%]" : "w-[25%]" // ✅ Ensures last thumbnail is half-visible
       }`}
-      style={{ backgroundImage: `url('images/creatifyportfolio.png')`, height: "450px", width: "300px" }}
+      style={{ backgroundImage: `url(${samplePortfolio})`, height: "450px", width: "300px" }}
     >
       <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center text-white text-xl md:text-2xl font-bold">
         CREATIFY
