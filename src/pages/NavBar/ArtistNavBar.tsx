@@ -92,7 +92,7 @@ export const ArtistNavBar = (): JSX.Element => {
 
   const handleChangePassword = async () => {
     if (!validatePassword(newPassword)) {
-      setPasswordError("Password must be at least 8 characters, include a number and an uppercase letter. Don't include special characters.");
+      setPasswordError("Password must be at least 8 characters, include a number, special character and an uppercase letter.");
       return;
     }
   
