@@ -197,11 +197,15 @@ interface Booking {
     <p className="[font-family:'Khula',Helvetica] text-white text-opacity-50 font-semibold truncate mt-2">Username</p>
     <p className="[font-family:'Khula',Helvetica] text-white text-opacity-50 font-semibold truncate mt-2">Request Date</p>
   </div>
-  {filteredBookings.map((booking) => (
-  <div 
-    key={booking.id} 
-    className="grid grid-cols-4 md:grid-cols-5 gap-3 md:gap-4 py-3 md:py-4 border-b border-gray-500 text-xs md:text-sm px-3 md:px-0 items-center"
-  >
+
+  {filteredBookings.length === 0 ? (
+    <p className="text-center text-white text-opacity-70 font-semibold mt-10">No bookings yet...</p>
+  ) : (
+    filteredBookings.map((booking) => (
+      <div 
+        key={booking.id} 
+        className="grid grid-cols-4 md:grid-cols-5 gap-3 md:gap-4 py-3 md:py-4 border-b border-gray-500 text-xs md:text-sm px-3 md:px-0 items-center"
+      >
     {/* Project Status & Request ID (Mobile grouped together, Desktop remains separate) */}
     <div className="flex items-center gap-2 md:gap-1">
       <span className={`text-3xl md:text-3xl ${getStatusColor(booking.status || 'pending')}`}>●</span>
@@ -255,10 +259,8 @@ interface Booking {
       </button>
     </div>
   </div>
-))}
-
-
-
+ ))
+  )}
 </div>
     </div>
   );
