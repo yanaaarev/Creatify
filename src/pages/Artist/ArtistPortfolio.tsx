@@ -130,7 +130,7 @@ const ArtistPortfolio: React.FC<ArtistPortfolioProps> = ({ portfolioImages = [] 
   Array.from({ length: 5 }).map((_, index) => (
     <div
       key={index}
-      className={`relative flex-shrink-0 snap-start bg-cover bg-center rounded-lg ${
+      className={`relative flex-shrink-0 snap-start bg-cover bg-center rounded-[30px] ${
         index === 4 ? "w-[40%]" : "w-[25%]" // ✅ Ensures last thumbnail is half-visible
       }`}
       style={{ backgroundImage: `url(${samplePortfolio})`, height: "450px", width: "300px" }}
