@@ -199,7 +199,7 @@ interface Booking {
   </div>
 
   {filteredBookings.length === 0 ? (
-    <p className="text-center text-white text-opacity-70 font-semibold mt-10">No bookings yet...</p>
+    <p className="text-center text-white text-opacity-70 font-semibold mt-10">No bookings at the moment.</p>
   ) : (
     filteredBookings.map((booking) => (
       <div 
