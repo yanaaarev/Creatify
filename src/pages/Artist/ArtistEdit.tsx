@@ -190,9 +190,17 @@ const handleRemoveImage = async (type: "pfp" | "banner") => {
 
 // 🔹 Predefined list of common artist genres
 const genreSuggestions = [
-  "Graphic Artist",
+  "Graphic Designer",
+  "Videographer",
+  "Video Editor",
   "Photographer",
   "Traditional Artist",
+  "Traditional Illustrator",
+  "Painter",
+  "3D Artist",
+  "Motion Designer",
+  "Animator",
+  "Digital Artist",
   "Illustrator",
   "Concept Artist",
   "Fine Artist",
@@ -207,6 +215,18 @@ const genreSuggestions = [
   "Graffiti Artist",
   "Fashion Designer",
   "Storyboard Artist",
+  "UI/UX Designer",
+  "Web Developer",
+  "App Developer",
+  "Game Developer",
+  "Game Designer",
+  "Sound Designer",
+  "Music Producer",
+  "Voice Actor",
+  "Songwriter",
+  "Character Designer",
+  "Logo Designer",
+  "Cartoonist",
 ];
 
 // 🔹 Handle Adding Genre (with Suggestion Selection)
