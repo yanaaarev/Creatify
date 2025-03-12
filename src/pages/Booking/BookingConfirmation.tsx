@@ -39,7 +39,7 @@ const BookingConfirmation = () => {
       <div className="bg-white py-[300px] px-[30px] md:px-12 md:py-16 md:rounded-[30px] shadow-lg w-full md:h-auto h-screen md:max-w-3xl text-center">
         {/* ✅ Confirmation Message */}
         <p className="[font-family:'Khula',Helvetica] text-sm font-medium md:pt-0 pt-5 mt-5 text-gray-700">
-        Thank you for booking with Creatify! We have received your request to book <b>{artistName}</b>. You will receive a notification and a message from the artist once they review your booking. Please note that you have <b>24 hours</b> to cancel this booking without any obligation. If you have any questions, feel free to contact us at <b>support.creatify@gmail.com</b>.
+        Thank you for booking with Creatify! We have received your request to book <b>{artistName}</b>. You will receive a notification and a message from the artist once they review your booking. Please note that you have <b>24 hours</b> to cancel this booking without any obligation. If you have any questions, feel free to contact us at <b>ask.creatify@gmail.com</b>.
         </p>
 
         {/* ✅ Back to Homepage Button */}
