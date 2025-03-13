@@ -10,7 +10,7 @@ export const HomePage = (): JSX.Element => {
 
   return (
     <div className="bg-[#1E1E1E] flex flex-col items-center w-full min-h-screen">
-      <div className="w-full max-w-[1585px] flex-grow">
+      <div className="w-full flex-grow">
         {/* Hero Section */}
         <div className="relative w-full h-screen md:min-h-screen bg-[url('/images/bg.png')] bg-cover bg-center bg-no-repeat flex flex-col items-center justify-center px-6 py-10 md:px-0 md:py-0 text-center">
           <h1 className="text-white font-bold text-3xl md:text-5xl px-1 leading-snug max-w-[1000px] md:max-w-[1200px] mb-2">
@@ -29,14 +29,14 @@ export const HomePage = (): JSX.Element => {
         <div className="relative flex flex-row md:flex-row items-center w-full md:py-20 md:px-0 bg-[#1E1E1E]">
           {/* Left Image */}
           <img
-            className="w-full max-w-[220px] md:max-w-[610px] object-cover"
+            className="w-full max-w-[220px] md:max-w-[600px] xl:max-w-full object-cover"
             src={ARTEORK}
             alt="Arteork"
           />
 
           {/* Right Text Content with Background Image */}
           <div
-            className="relative w-full min-h-[400px] md:min-h-[900px] flex flex-col justify-center items-start md:items-start text-white text-left md:text-left px-4 md:px-10 bg-cover bg-right md:bg-right bg-no-repeat"
+            className="relative w-full min-h-[400px] md:min-h-[500px] xl:min-h-screen flex flex-col justify-center items-start md:items-start text-white text-left md:text-left px-4 md:px-10 bg-cover bg-right md:bg-right bg-no-repeat"
             style={{
               backgroundImage: "url('/images/awd-1.png')",
               backgroundPosition: "right 2px center",
@@ -47,11 +47,11 @@ export const HomePage = (): JSX.Element => {
             <img
               src={WHATWEDO}
               alt="What We Do"
-              className="mb-4 mt-7 md:mb-6 w-[180px] md:w-[250px] md:px-3 md:py-2"
+              className="mb-4 mt-7 md:mb-6 w-[130px] md:w-[250px] md:px-3 md:py-2"
             />
 
             {/* Text Content */}
-            <div className="max-w-[790px] px-1 md:px-3">
+            <div className="w-full px-1 md:px-3">
               <p className="[font-family:'Khula',Helvetica] text-[10px] w-50 h-auto md:text-xl font-light leading-relaxed">
                 <span className="font-bold">Creatify</span> welcomes and supports{" "}
                 <span className="font-bold">artists</span> providing a platform where{" "}
@@ -70,7 +70,7 @@ export const HomePage = (): JSX.Element => {
 
         {/* Featured Artwork Section */}
         <div className="relative w-full flex flex-col items-center bg-[#1E1E1E]">
-          <img className="w-full max-w-[1590px]" src={N1} alt="Artwork" />
+          <img className="w-full" src={N1} alt="Artwork" />
           <div className="absolute -bottom-[110px] right-[10px] md:-bottom-[130px] md:right-[90px] bg-[#7db23a] rounded-full shadow-lg p-0 md:p-10 text-center w-[180px] h-[180px] md:w-[420px] md:h-[420px]">
             <p className="absolute top-[7px] left-1 md:top-[120px] md:left-[10px] text-white font-bold text-xs md:text-lg px-4 py-10 md:px-10 md:py-10">
               Creatify showcases artists and their creations, making it easy to
@@ -80,7 +80,7 @@ export const HomePage = (): JSX.Element => {
         </div>
 
         {/* FAQ Section */}
-        <div className="w-full h-[150px] text-center py-[170px] md:py-[200px] px-6 max-w-4xl mx-auto">
+        <div className="w-full h-full text-center py-[170px] md:py-[200px] px-6 max-w-4xl mx-auto">
           <p className="text-white text-lg md:text-xl font-bold mb-4">
             Got questions? We’ve got answers!
           </p>
@@ -101,7 +101,7 @@ export const HomePage = (): JSX.Element => {
         {/* Join Us Section */}
         <div
           style={{ backgroundImage: "url('/images/ww-1.png')" }}
-          className="relative w-screen h-[450px] md:h-screen bg-cover bg-center bg-no-repeat flex flex-col items-center justify-center pt-4 md:py-24 md:px-6"
+          className="relative w-full h-[500px] md:h-screen bg-cover bg-center bg-no-repeat flex flex-col items-center justify-center pt-4 md:py-24 md:px-6"
         >
           <img
             className="w-40 md:w-[350px] mb-4 md:mb-6"

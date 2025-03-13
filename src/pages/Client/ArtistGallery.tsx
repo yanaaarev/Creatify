@@ -30,7 +30,7 @@ const ArtistGallery = () => {
   const [selectedGenre, setSelectedGenre] = useState<string | null>(null);
   const [isCalendarOpen, setIsCalendarOpen] = useState<boolean>(false);
   const [, setSelectedArtistDates] = useState<string[]>([]);
-  const [availableGenres, setAvailableGenres] = useState<string[]>([]);
+  const [, setAvailableGenres] = useState<string[]>([]);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [selectedArtist, setSelectedArtist] = useState<Artist | null>(null); // ✅ Define type explicitly
@@ -207,17 +207,31 @@ const toggleDropdown = () => {
   setIsDropdownOpen(!isDropdownOpen);
 };
 
-// ✅ Handle Genre Selection (Includes "All Categories")
+// ✅ Filter Genres to Exclude "Admin Test Account"
+const uniqueGenres = Array.from(
+  new Set(artists.flatMap((artist) => artist.genres))
+).filter((genre) => genre !== "Admin Test Account"); // ✅ Exclude "Admin Test Account"
+
+// ✅ Handle Genre Selection (Excludes "Admin Test Account")
 const handleFilterByGenre = (genre: string | null) => {
   if (genre === null) {
     setSelectedGenre(null);
-    setFilteredArtists(artists); // ✅ Show all artists when "Category" is selected
+    setFilteredArtists(
+      artists.filter((artist) => !artist.genres.includes("Admin Test Account")) // ✅ Exclude "Admin Test Account"
+    ); 
   } else {
     setSelectedGenre(genre);
-    setFilteredArtists(artists.filter((artist) => artist.genres.includes(genre)));
+    setFilteredArtists(
+      artists.filter(
+        (artist) =>
+          artist.genres.includes(genre) && !artist.genres.includes("Admin Test Account") // ✅ Exclude "Admin Test Account"
+      )
+    );
   }
   setIsDropdownOpen(false); // Close dropdown after selection
 };
+
+
 
 // ✅ Open availability calendar overlay
 const handleOpenCalendar = async (artist: Artist, e: React.MouseEvent) => {
@@ -237,7 +251,7 @@ const handleOpenCalendar = async (artist: Artist, e: React.MouseEvent) => {
 
   return (
     <div 
-  className="min-h-screen bg-contain bg-center bg-no-repeat p-6 md:px-12 md:py-6"
+  className="w-full min-h-screen bg-contain bg-center bg-no-repeat py-5 px-4 md:px-12 md:py-6"
   style={{ backgroundImage: `url(${authp})`, backgroundSize: "cover", backgroundAttachment: "fixed" }}
 >
       {/* 🔹 Category Dropdown Button */}
@@ -262,24 +276,24 @@ const handleOpenCalendar = async (artist: Artist, e: React.MouseEvent) => {
           Category (All)
         </li>
         <hr className="border-gray-300" />
-        {/* ✅ List Available Genres */}
-        {availableGenres.map((genre) => (
-          <li
-            key={genre}
-            className="px-4 py-2 hover:bg-gray-200 cursor-pointer"
-            onClick={() => handleFilterByGenre(genre)}
-          >
-            {genre}
-          </li>
-        ))}
-      </ul>
-    </div>
-  )}
+         {/* ✅ List Available Genres (Excluding "Admin Test Account") */}
+      {uniqueGenres.map((genre) => (
+        <li
+          key={genre}
+          className="px-4 py-2 hover:bg-gray-200 cursor-pointer"
+          onClick={() => handleFilterByGenre(genre)}
+        >
+          {genre}
+        </li>
+      ))}
+    </ul>
+  </div>
+)}
 </div>
 
     {/* 🔹 Artist Containers (Fixed Masonry Layout with Proper Heights) */}
     <div 
-      className="grid gap-4 px-4 md:px-6 lg:px-8"
+      className="w-full grid gap-4 sm:px-4 md:px-6 lg:px-8"
       style={{
         display: "grid",
         gridTemplateColumns: "repeat(auto-fill, minmax(310px, 1fr))",  // ✅ Responsive Columns
@@ -367,25 +381,25 @@ const handleOpenCalendar = async (artist: Artist, e: React.MouseEvent) => {
 </div>
 
 {/* 🔹 Pagination Controls */}
-<div className="flex justify-center items-center gap-4 mt-6">
+<div className="flex justify-center items-center gap-4 mt-8">
   <button
     onClick={() => handlePageChange(Math.max(currentPage - 1, 1))}
-    className="bg-gray-700 text-white px-4 py-2 rounded-full disabled:opacity-50"
+    className="bg-gray-700 text-white px-4 py-2 rounded-full text-sm md:text-lg disabled:opacity-50"
     disabled={currentPage === 1}
   >
-    ← Previous
+    ←
   </button>
 
-  <span className="text-white text-lg font-semibold">
+  <span className="text-white text-sm md:text-lg font-semibold">
     Page {currentPage} of {Math.ceil(filteredArtists.length / artistsPerPage)}
   </span>
 
   <button
     onClick={() => handlePageChange(Math.min(currentPage + 1, Math.ceil(filteredArtists.length / artistsPerPage)))}
-    className="bg-gray-700 text-white px-4 py-2 rounded-full disabled:opacity-50"
+    className="bg-gray-700 text-white px-4 py-2 rounded-full text-sm md:text-lg disabled:opacity-50"
     disabled={indexOfLastArtist >= filteredArtists.length}
   >
-    Next →
+  →
   </button>
 </div>
 
@@ -412,10 +426,14 @@ const handleOpenCalendar = async (artist: Artist, e: React.MouseEvent) => {
                     isReadOnly={true} // ✅ Pass Read-Only Flag
                 />
             )}
+            {/* 📌 Date Indicators */}
+        <div className="[font-family:'Khula',Helvetica] text-xs text-center space-x-2">
+          <span className="text-[#191919] text-opacity-50 text-lg">●</span> Unavailable
+          <span className="text-red-500 text-lg">●</span> Booked
+        </div>
         </div>
     </div>
 )}
-
     </div>
   );
 };

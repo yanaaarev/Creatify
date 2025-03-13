@@ -127,7 +127,7 @@ export const ArtistLogin = (): JSX.Element => {
       
       {/* Title */}
       <h2 className="w-full text-[#191919] text-2xl font-semibold [font-family:'Khula',Helvetica] text-left">
-        Sign in with your Artist ID or email
+        Sign in with your Artist email
       </h2>
 
       {/* Join Us (Redirects to Google Form) */}

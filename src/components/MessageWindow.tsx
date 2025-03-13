@@ -38,6 +38,9 @@ const [showProofOverlay, setShowProofOverlay] = useState(false);
   // ✅ Fetch chat details to properly determine user roles
 const [isArtist, setIsArtist] = useState<boolean>(false);
 const lastMessageRef = useRef<HTMLDivElement | null>(null);
+const [showGcashQR, setShowGcashQR] = useState(false);
+const [showGotymeQR, setShowGotymeQR] = useState(false);
+
 
 useEffect(() => {
   const fetchChatData = async () => {
@@ -105,9 +108,12 @@ const handleRequestPayment = async () => {
   const amount = parseFloat(commissionAmount);
 
   // ✅ Ensure correct fee application
-  let platformFeeRate = amount >= 5000 ? 0.065 : 0.03; // 6.5% for ≥5000, otherwise 3%
-  const platformFee = amount * platformFeeRate;
-  const totalAmount = amount + platformFee;
+  // ✅ Apply a fixed platform fee of ₱50
+const platformFee = 50;
+const totalAmount = amount + platformFee;
+
+// ✅ Calculate platform fee as a percentage of the amount (for reference, not applied)
+const platformFeeRate = (platformFee / amount) * 100;
 
   try {
     // ✅ Retrieve Client ID from Firestore Chat Document
@@ -155,7 +161,8 @@ const bookingId = bookingSnap.docs[0].id; // ✅ Fetch first matched booking ID
       clientId, 
       bookingId: bookingId,
       commissionAmount: amount,
-      platformFee: platformFeeRate * 100, 
+      platformFee: platformFee,  // ✅ Store the fixed ₱50 fee
+      platformFeeRate: platformFeeRate.toFixed(2), // ✅ Store calculated % for reference
       totalAmount,
       paymentType,
       paymentDueDate,
@@ -192,6 +199,7 @@ console.log("✅ Payment ID stored in booking:", paymentRef.id);
     });
 
     setShowPaymentForm(false);
+    window.location.reload(); // ✅ Refresh the page to reflect changes
     alert("✅ Payment request sent successfully!");
 
   } catch (error) {
@@ -311,6 +319,7 @@ const handleUploadProof = async () => {
         // 🔹 Ensure the button updates correctly
         alert("✅ Proof of payment submitted successfully!");
         setShowProofForm(false);
+        window.location.reload(); // ✅ Refresh the page to reflect changes
       } else {
         console.error("❌ Updated payment document not found!");
         alert("❌ Payment confirmation update failed. Please refresh and check.");
@@ -433,7 +442,7 @@ const handleViewPayment = async (paymentId: string) => {
       {/* ✅ Payment Request Form Overlay */}
       {showPaymentForm && (
         <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
-          <div className="bg-white p-20 md:p-[90px] md:py-20 rounded-[30px] shadow-lg w-full max-w-sm md:max-w-lg md:h-[720px] h-full max-h-[730px] relative">
+          <div className="bg-white md:p-[90px] py-16 sm:py-[60px] px-12 md:py-20 md:rounded-[30px] w-full md:max-w-lg md:h-[720px] h-full relative">
             <button className="absolute top-4 right-4 text-gray-600 p-3" onClick={() => setShowPaymentForm(false)}>
               <IoClose size={24} />
             </button>
@@ -508,7 +517,7 @@ const handleViewPayment = async (paymentId: string) => {
       {/* ✅ Payment Request Details Overlay */}
         {showPaymentDetails && selectedPayment ? (
           <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50">
-            <div className="bg-white p-6 md:p-16 rounded-[30px] shadow-lg w-full max-w-lg relative">
+            <div className="bg-white py-20 px-10 md:p-16 md:rounded-[30px] shadow-lg w-full max-w-lg md:h-auto h-full relative">
 
               {/* ❌ Close Button */}
               <button className="absolute top-4 right-4 text-gray-600" onClick={() => setShowPaymentDetails(false)}>
@@ -516,34 +525,56 @@ const handleViewPayment = async (paymentId: string) => {
               </button>
 
               {/* 📝 Payment Details */}
-              <h2 className="text-xl font-bold mb-8 text-center">Request for Payment</h2>
+              <h2 className="text-lg font-bold mb-8 text-center">Request for Payment</h2>
 
               {selectedPayment ? (
                 <>
                   {/* ✅ Ensure correct Firestore field names */}
-                  <p className="text-gray-700 text-center">
+                  <p className="text-gray-700 text-sm text-center">
                     Your commission amount is <strong>₱{(selectedPayment.commissionAmount ?? 0).toLocaleString()}</strong>. 
-                    A platform fee of <strong>{selectedPayment.platformFee ?? 0}%</strong> is applied, bringing the total to 
+                    A fixed platform fee of <strong>₱{selectedPayment.platformFee ?? 0}</strong> is applied, bringing the total to 
                     <strong> ₱{(selectedPayment.totalAmount ?? 0).toLocaleString()}</strong>.
                   </p>
 
-                  <p className="text-gray-700 mt-3 text-center mb-10">
+                  <p className="text-gray-700 text-sm mt-3 text-center mb-5">
                     The payment type is <strong>{selectedPayment.paymentType || "N/A"}</strong>, and you can make the payment via the following methods:
                   </p>
 
-                  <p className="text-gray-700 mt-3 text-center mb-10">
-                    <strong>GCash</strong> <br></br> 09123456789 <br></br> <strong>Bank Transfer</strong> <br></br> 034-098-000-123
-                  </p>
+                  {/* ✅ GCash Payment Details */}
+              <div className="text-center mb-6">
+                <p className="text-black font-semibold">GCash</p>
+                <p className="text-sm italic">Nathalie Shayne B. Sarmiento</p>
+                <p className="text-gray-700">+63 921 748 5562</p>
+                <button 
+                  onClick={() => setShowGcashQR(true)} 
+                  className="mt-1 text-blue-600 text-sm hover:underline"
+                >
+                  View QR Code
+                </button>
+              </div>
 
-                  <p className="text-gray-700 mt-3 text-center mb-10 leading-loose">
+              {/* ✅ GOTYME Bank Transfer Details */}
+              <div className="text-center">
+                <p className="text-black font-semibold">GOTYME Bank Transfer</p>
+                <p className="text-sm italic">Reannah Mara Tecson Revellame</p>
+                <p className="text-gray-700">0176 4991 6186</p>
+                <button 
+                  onClick={() => setShowGotymeQR(true)} 
+                  className="mt-1 text-blue-600 text-sm hover:underline"
+                >
+                  View QR Code
+                </button>
+                </div>
+
+                  <p className="text-gray-700 mt-3 text-sm text-center leading-loose">
                     <strong>Note from the Artist:<br></br></strong> {selectedPayment.paymentNote || "N/A"}
                   </p>
 
-                  <p className="text-gray-700 mt-3 text-center mb-5 leading-loose">
+                  <p className="text-gray-700 mt-3 text-center text-sm mb-3 leading-loose">
                     Your payment due date is on <strong>{selectedPayment.paymentDueDate || "N/A"}</strong>
                   </p>
 
-                  <p className="text-gray-600 text-xs mt-3 text-center">
+                  <p className="text-gray-600 text-xs text-center">
                     Please note that the work will not begin until the down payment is received, and the final work will not be sent until the full payment is completed.
                   </p>
 
@@ -598,10 +629,41 @@ const handleViewPayment = async (paymentId: string) => {
   </div>
 ) : null}
 
+{showGcashQR && (
+  <div className="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50">
+    
+      <button 
+        onClick={() => setShowGcashQR(false)} 
+        className="absolute top-5 right-5 text-white text-2xl"
+      >
+        ✕
+      </button>
+      <div className="w-96 relative">
+      <img src="/images/gcashqr.JPG" alt="GCash QR Code" className="w-full md:h-screen rounded-[30px]" />
+    </div>
+  </div>
+)}
+
+{showGotymeQR && (
+  <div className="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50">
+    
+      <button 
+        onClick={() => setShowGotymeQR(false)} 
+        className="absolute top-5 right-5 text-white text-2xl"
+      >
+        ✕
+      </button>
+      <div className="w-96 relative">
+      <img src="/images/gotymeqr.JPG" alt="GOTYME QR Code" className="w-full h-auto rounded-[30px]" />
+    </div>
+  </div>
+)}
+
+
 {/* ✅ Payment Proof Submission & View Overlay */}
 {showProofForm && selectedPayment && (
   <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50">
-    <div className="bg-white p-16 md:p-20 rounded-[30px] shadow-lg w-full max-w-lg relative">
+    <div className="bg-white py-20 px-10 md:p-20 md:rounded-[30px] w-full max-w-lg md:h-auto h-full relative">
       
       {/* ❌ Close Button */}
       <button className="absolute top-4 right-4 text-gray-600" onClick={() => setShowProofForm(false)}>
@@ -742,9 +804,9 @@ const handleViewPayment = async (paymentId: string) => {
         </>
       ) : (
         <>
-          {/* ✅ Artist Viewing Proof of Payment */}
+          {/* ✅ Viewing Proof of Payment */}
           <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50">
-            <div className="bg-white p-16 rounded-[30px] shadow-lg w-full max-w-lg relative">
+            <div className="bg-white p-16 md:rounded-[30px] shadow-lg w-full max-w-lg h-full md:h-auto relative">
               
               {/* ❌ Close Button */}
               <button className="absolute top-4 right-4 text-gray-600" onClick={() => setShowProofForm(false)}>
@@ -791,27 +853,28 @@ const handleViewPayment = async (paymentId: string) => {
 {/* ✅ Proof of Payment Overlay (For Image Preview) */}
 {showProofOverlay && selectedProof && (
   <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50">
-    <div className="p-1 rounded-lg shadow-lg w-full max-w-md relative">
-      
-      {/* ❌ Close Button */}
-      <button
-        className="absolute top-3 right-0 bg-red-500 text-white text-sm p-2 px-3 rounded-full"
-        onClick={() => setShowProofOverlay(false)}
-      >
-        ✕
-      </button>
+    
+    {/* ❌ Close Button on Outer Right */}
+    <button
+      className="absolute top-5 right-5 text-white text-2xl"
+      onClick={() => setShowProofOverlay(false)}
+    >
+      ✕
+    </button>
 
+    <div className="p-1 rounded-lg shadow-lg w-full max-w-md relative">
       {/* ✅ View Proof Image */}
-      <div className="mt-4 flex justify-center">
+      <div className="flex justify-center">
         <img
           src={selectedProof}
           alt="Proof of Payment"
-          className="max-w-full h-auto rounded-lg"
+          className="max-w-full h-[700px] rounded-lg"
         />
       </div>
     </div>
   </div>
 )}
+
     {/* ✅ Image Overlay */}
     {selectedImage && (
         <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">

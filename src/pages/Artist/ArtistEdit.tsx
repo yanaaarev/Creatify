@@ -229,19 +229,28 @@ const genreSuggestions = [
   "Cartoonist",
 ];
 
-// 🔹 Handle Adding Genre (with Suggestion Selection)
+// 🔹 Handle Adding Genre (with Case-Sensitive Standardization)
 const handleAddGenre = (e: React.KeyboardEvent<HTMLInputElement>) => {
   if (e.key === "Enter" && genre.trim() !== "") {
     e.preventDefault();
 
-    if (artistGenres.length < 3 && !artistGenres.includes(genre.trim())) {
-      setArtistGenres([...artistGenres, genre.trim()]);
+    // ✅ Convert genre to Title Case (First Letter Capitalized)
+    const formattedGenre =
+      genre
+        .trim()
+        .toLowerCase()
+        .replace(/\b\w/g, (char) => char.toUpperCase()); // Capitalize first letter of each word
+
+    // ✅ Prevent duplicates (case insensitive)
+    if (artistGenres.length < 3 && !artistGenres.some(g => g.toLowerCase() === formattedGenre.toLowerCase())) {
+      setArtistGenres([...artistGenres, formattedGenre]);
       setGenre(""); // Clear input
       setFilteredSuggestions([]); // Clear suggestions
       setChangesMade(true);
     }
   }
 };
+
 
 // 🔹 Handle Removing Genre
 const handleRemoveGenre = (index: number) => {
@@ -252,7 +261,7 @@ const handleRemoveGenre = (index: number) => {
 // 🔹 State for filtered suggestions
 const [filteredSuggestions, setFilteredSuggestions] = useState<string[]>([]);
 
-// 🔹 Handle Genre Input Change (Filters Suggestions)
+// 🔹 Handle Genre Input Change (Ensures Case Sensitivity in Suggestions)
 const handleGenreChange = (e: React.ChangeEvent<HTMLInputElement>) => {
   const input = e.target.value;
   setGenre(input);
@@ -260,23 +269,31 @@ const handleGenreChange = (e: React.ChangeEvent<HTMLInputElement>) => {
   if (input.trim() === "") {
     setFilteredSuggestions([]);
   } else {
-    // Filter matching suggestions
-    const filtered = genreSuggestions.filter((suggestion) =>
-      suggestion.toLowerCase().includes(input.toLowerCase())
-    );
+    // ✅ Ensure suggestions are shown in Title Case
+    const filtered = genreSuggestions
+      .map((g) => g.trim().toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase()))
+      .filter((suggestion) => suggestion.includes(input.trim().toLowerCase()));
+
     setFilteredSuggestions(filtered);
   }
 };
 
-// 🔹 Handle Suggestion Click (Sets the Genre)
+// 🔹 Handle Suggestion Click (Ensures Case Sensitivity)
 const handleSuggestionClick = (suggestion: string) => {
-  if (artistGenres.length < 3 && !artistGenres.includes(suggestion)) {
-    setArtistGenres([...artistGenres, suggestion]);
+  // ✅ Convert to Title Case
+  const formattedGenre = suggestion
+    .trim()
+    .toLowerCase()
+    .replace(/\b\w/g, (char) => char.toUpperCase());
+
+  if (artistGenres.length < 3 && !artistGenres.some(g => g.toLowerCase() === formattedGenre.toLowerCase())) {
+    setArtistGenres([...artistGenres, formattedGenre]);
     setGenre(""); // Clear input
     setFilteredSuggestions([]); // Clear suggestions
     setChangesMade(true);
   }
 };
+
 
 
 const [isUploading, setIsUploading] = useState(false);
