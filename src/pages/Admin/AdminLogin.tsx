@@ -3,12 +3,16 @@ import { useNavigate } from "react-router-dom";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../config/firebaseConfig";
 import { IoChevronBackCircleOutline } from "react-icons/io5";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+
 
 const AdminLogin = (): JSX.Element => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [passwordVisible, setPasswordVisible] = useState(false);
+
 
   const handleLogin = async () => {
     try {
@@ -58,13 +62,25 @@ const AdminLogin = (): JSX.Element => {
           />
 
           {/* Password Input */}
-          <label className="text-[#191919] text-[17px] font-semibold mt-6">Password</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full h-[52px] border border-[#19191980] rounded-[30px] p-3 mt-2"
-          />
+<label className="text-[#191919] text-[17px] font-semibold mt-6">Password</label>
+<div className="relative w-full">
+  <input
+    type={passwordVisible ? "text" : "password"} // Toggle between text & password
+    value={password}
+    onChange={(e) => setPassword(e.target.value)}
+    className="w-full h-[52px] border border-[#19191980] rounded-[30px] p-3 mt-2 pr-12"
+  />
+  
+  {/* Show/Hide Password Button */}
+  <button
+    type="button"
+    onClick={() => setPasswordVisible(!passwordVisible)}
+    className="absolute inset-y-0 right-4 flex items-center text-gray-500 mt-2"
+  >
+    {passwordVisible ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
+  </button>
+</div>
+
 
           {/* Error Message */}
           {error && <p className="text-red-500 text-center mt-2">{error}</p>}
