@@ -45,7 +45,7 @@ const AdminSidebar = () => {
 
         {/* Sidebar */}
   <aside
-    className={`h-screen bg-white text-white fixed top-0 ${
+    className={`h-screen min-h-screen bg-white text-white fixed top-0 ${
       isOpen ? "w-[400px]" : "w-[150px]"
     } transition-all duration-300 flex flex-col shadow-lg 
     ${isOpen ? "left-0" : "-left-[400px] md:left-0"} md:"w-[400px]" : "w-[150px]"`}
@@ -100,14 +100,14 @@ const AdminSidebar = () => {
     </nav>
 
     {/* 🔹 Logout Button (Centered when Sidebar is Collapsed) */}
-    <div className={`px-4 pb-6 ${isOpen ? "" : "flex justify-center"}`}>
+    <div className={`px-4 pb-16 md:pb-6 ${isOpen ? "" : "flex justify-center"}`}>
       <button
         onClick={handleLogout}
         className={`flex items-center py-3 px-4 text-black text-xl transition ${
           isOpen ? "gap-3" : "justify-center"
         }`}
       >
-        <MdLogout className="text-[30px] mb-1" />
+        <MdLogout className="text-[30px] md:mb-1" />
         {isOpen && <span>Logout</span>}
       </button>
     </div>
