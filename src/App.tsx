@@ -40,6 +40,8 @@ const ArtistGallery = lazy(() => import("./pages/Client/ArtistGallery"));
 const ArtistLogin = lazy(() => import("./pages/Auth/ArtistLogin"));
 const AdminPanel = lazy(() => import("./pages/Admin/AdminPanel"));
 const AdminLogin = lazy(() => import("./pages/Admin/AdminLogin"));
+const RegisteredArtist = lazy(() => import("./pages/Admin/RegisteredArtist"));
+const PaymentVerifier = lazy(() => import("./pages/Admin/PaymentVerifier"));
 const ArtistNote = lazy(() => import("./pages/Booking/ArtistNote"));
 const BookingCalendar = lazy(() => import("./pages/Booking/BookingCalendar"));
 const BookingRequest = lazy(() => import("./pages/Booking/BookingRequest"));
@@ -121,6 +123,8 @@ const AppContent = (): JSX.Element => {
     "/user-dashboard",
     "/admin-panel",
     "/admin-login",
+    "/admin-artists",
+    "/admin-payments",
   ]);
   const hideNav =
     hiddenPaths.has(location.pathname) ||
@@ -172,6 +176,8 @@ const AppContent = (): JSX.Element => {
             />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="/user-dashboard" element={<UserDashboard />} />
+            <Route path="/admin-artists" element={<RegisteredArtist />} />
+            <Route path="/admin-payments" element={<PaymentVerifier />} />
             <Route path="/admin-panel" element={<AdminPanel />} />
             <Route path="/admin-login" element={<AdminLogin />} />
             <Route

@@ -1,7 +1,10 @@
 import { useState, useEffect } from 'react';
-import { collection, getDocs, updateDoc, doc, query, orderBy, getDoc, Timestamp } from 'firebase/firestore';
+import { collection, getDocs, updateDoc, doc, query, orderBy, getDoc, Timestamp, where } from 'firebase/firestore';
 import { auth,db } from '../../config/firebaseConfig';
 import { triggerNotification } from '../../utils/triggerNotification';
+import AdminSidebar from './AdminSidebar';
+import { FaCircleMinus,FaCircleCheck } from "react-icons/fa6";
+
 
 interface Payment {
     id: string;
@@ -22,205 +25,271 @@ interface Payment {
   const PaymentVerifier = () => {
     const [payments, setPayments] = useState<Payment[]>([]);
     const [selectedProof, setSelectedProof] = useState<string | null>(null);
+    const [verifiedPayments, setVerifiedPayments] = useState<{ [key: string]: boolean }>({});
   
     useEffect(() => {
       const fetchPayments = async () => {
         try {
           const q = query(collection(db, "payments"), orderBy("createdAt", "desc"));
           const snapshot = await getDocs(q);
-  
-          const paymentsData: Payment[] = await Promise.all(
-            snapshot.docs.map(async (docSnap) => {
-              const data = docSnap.data();
-  
-              // Ensure all fields are properly structured
-              const commissionAmount = typeof data.commissionAmount === "number" ? data.commissionAmount : 0;
-              const paymentStatus = typeof data.paymentStatus === "string" ? data.paymentStatus : "pending";
-  
-              // Fetch artist name
-              let artistName = "Unknown Artist";
-              if (data.artistId) {
-                const artistRef = doc(db, "artists", data.artistId);
-                const artistSnap = await getDoc(artistRef);
-                if (artistSnap.exists()) {
-                  artistName = artistSnap.data().fullName || "Unknown Artist";
-                }
-              }
-  
-              // Fetch client username
-              let clientUsername = "Unknown Client";
-              if (data.clientId) {
-                const clientRef = doc(db, "users", data.clientId);
-                const clientSnap = await getDoc(clientRef);
-                if (clientSnap.exists()) {
-                  clientUsername = clientSnap.data().username || "Unknown Client";
-                }
-              }
-  
-              return {
-                id: docSnap.id,
-                artistName,
-                clientUsername,
-                commissionAmount,
-                paymentStatus,
-                totalAmount: data.totalAmount || 0,
-                createdAt: data.createdAt || Timestamp.now(),
-                dueDate: data.dueDate || Timestamp.now(),
-                paymentType: data.paymentType || "N/A",
-                platformFee: data.platformFee || 0,
-                proofOfDate: data.proofOfDate || Timestamp.now(),
-                proofOfPayment: data.proofOfPayment || "",
-                referenceNumber: data.referenceNumber || "N/A",
-              };
-            })
-          );
-  
+    
+          if (snapshot.empty) {
+            setPayments([]);
+            return;
+          }
+    
+          // Fetch all artist and client details in a batch
+          const artistIds = new Set<string>();
+          const clientIds = new Set<string>();
+    
+          snapshot.docs.forEach((docSnap) => {
+            const data = docSnap.data();
+            if (data.artistId) artistIds.add(data.artistId);
+            if (data.clientId) clientIds.add(data.clientId);
+          });
+    
+          const artistDocs = await getDocs(query(collection(db, "artists"), where("__name__", "in", [...artistIds])));
+          const clientDocs = await getDocs(query(collection(db, "users"), where("__name__", "in", [...clientIds])));
+    
+          const artistMap = artistDocs.docs.reduce((acc, doc) => {
+            acc[doc.id] = doc.data().fullName || "Unknown Artist";
+            return acc;
+          }, {} as Record<string, string>);
+    
+          const clientMap = clientDocs.docs.reduce((acc, doc) => {
+            acc[doc.id] = doc.data().username || "Unknown Client";
+            return acc;
+          }, {} as Record<string, string>);
+    
+          const paymentsData: Payment[] = snapshot.docs.map((docSnap) => {
+            const data = docSnap.data();
+    
+            return {
+              id: docSnap.id,
+              artistName: artistMap[data.artistId] || "Unknown Artist",
+              clientUsername: clientMap[data.clientId] || "Unknown Client",
+              commissionAmount: typeof data.commissionAmount === "number" ? data.commissionAmount : 0,
+              paymentStatus: typeof data.paymentStatus === "string" ? data.paymentStatus : "pending",
+              totalAmount: data.totalAmount || 0,
+              createdAt: data.createdAt || Timestamp.now(),
+              dueDate: data.dueDate || Timestamp.now(),
+              paymentType: data.paymentType || "N/A",
+              platformFee: data.platformFee || 0,
+              proofOfDate: data.proofOfDate || Timestamp.now(),
+              proofOfPayment: data.proofOfPayment || "",
+              referenceNumber: data.referenceNumber || "N/A",
+            };
+          });
+    
           setPayments(paymentsData);
+    
+          // ✅ Initialize verifiedPayments state with already verified payments
+          const verifiedState = paymentsData.reduce((acc, payment) => {
+            acc[payment.id] = payment.paymentStatus === "verified";
+            return acc;
+          }, {} as Record<string, boolean>);
+    
+          setVerifiedPayments(verifiedState);
         } catch (error) {
           console.error("Error fetching payments:", error);
         }
       };
-  
+    
       fetchPayments();
     }, []);
-  
-  
-    const verifyPayment = async (paymentId: string) => {
+    
+    const handleVerify = async (paymentId: string) => {
       try {
-          const paymentRef = doc(db, 'payments', paymentId);
-          const paymentSnap = await getDoc(paymentRef);
-  
-          if (!paymentSnap.exists()) {
-              alert("Payment not found.");
-              return;
-          }
-  
-          const paymentData = paymentSnap.data();
-  
-          if (paymentData.paymentStatus === "verified") {
-              alert("This payment is already verified.");
-              return;
-          }
-  
-          // Fetch artist details
-          const artistRef = doc(db, 'artists', paymentData.artistId);
-          const artistSnap = await getDoc(artistRef);
-          const artistDetails = artistSnap.exists() ? artistSnap.data() : null;
-  
-          // Fetch client details
-          const clientRef = doc(db, 'users', paymentData.clientId);
-          const clientSnap = await getDoc(clientRef);
-          const clientDetails = clientSnap.exists() ? clientSnap.data() : null;
-  
-          if (!artistDetails || !clientDetails) {
-              console.error("Artist or Client data missing");
-              alert("Error retrieving payment details.");
-              return;
-          }
-  
-          // ✅ Update payment status in Firestore
-          await updateDoc(paymentRef, { paymentStatus: 'verified' });
-  
-          // ✅ Update local state to reflect changes
-          setPayments(prev => prev.map(p => p.id === paymentId ? { ...p, paymentStatus: 'verified' } : p));
-  
-          alert('Payment Verified Successfully!');
-  
-          // ✅ Trigger notification for "payment-verified"
-          await triggerNotification("payment-verified", {
-              artistId: paymentData.artistId,
-              clientId: paymentData.clientId,
-              artistName: artistDetails.fullName || "Unknown Artist",
-              clientUsername: clientDetails.username || "Unknown Client",
-              bookingId: paymentData.bookingId || "",
-              senderId: auth.currentUser?.uid || "",
-              timestamp: Timestamp.now(),
-          });
-  
+        const paymentRef = doc(db, "payments", paymentId);
+        const paymentSnap = await getDoc(paymentRef);
+    
+        if (!paymentSnap.exists()) {
+          alert("Payment not found.");
+          return;
+        }
+    
+        const paymentData = paymentSnap.data();
+    
+        if (paymentData.paymentStatus === "verified") {
+          alert("This payment is already verified.");
+          return;
+        }
+    
+        // Fetch artist details
+        const artistRef = doc(db, "artists", paymentData.artistId);
+        const artistSnap = await getDoc(artistRef);
+        const artistDetails = artistSnap.exists() ? artistSnap.data() : null;
+    
+        // Fetch client details
+        const clientRef = doc(db, "users", paymentData.clientId);
+        const clientSnap = await getDoc(clientRef);
+        const clientDetails = clientSnap.exists() ? clientSnap.data() : null;
+    
+        if (!artistDetails || !clientDetails) {
+          console.error("Artist or Client data missing");
+          alert("Error retrieving payment details.");
+          return;
+        }
+    
+        // ✅ Update payment status in Firestore
+        await updateDoc(paymentRef, { paymentStatus: "verified" });
+    
+        // ✅ Update local state to reflect changes
+        setPayments((prev) =>
+          prev.map((p) => (p.id === paymentId ? { ...p, paymentStatus: "verified" } : p))
+        );
+    
+        alert("Payment Verified Successfully!");
+    
+        // ✅ Trigger notification for "payment-verified"
+        await triggerNotification("payment-verified", {
+          artistId: paymentData.artistId,
+          clientId: paymentData.clientId,
+          artistName: artistDetails.fullName || "Unknown Artist",
+          clientUsername: clientDetails.username || "Unknown Client",
+          bookingId: paymentData.bookingId || "",
+          senderId: auth.currentUser?.uid || "",
+          timestamp: Timestamp.now(),
+        });
+        window.location.reload();
       } catch (error) {
-          console.error('Error verifying payment:', error);
-          alert('Failed to verify payment. Please try again.');
+        console.error("Error verifying payment:", error);
+        alert("Failed to verify payment. Please try again.");
       }
-  };
+    };
+
+    // 🔹 State for Pagination
+const [currentPage, setCurrentPage] = useState(1);
+const itemsPerPage = 10;
+
+// 🔹 Calculate the total pages
+const totalPages = Math.ceil(payments.length / itemsPerPage);
+
+// 🔹 Get the payments for the current page
+const indexOfLastItem = currentPage * itemsPerPage;
+const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+const currentPayments = payments.slice(indexOfFirstItem, indexOfLastItem);
+
+    
   
   return (
-    <div className="p-5 overflow-x-auto w-full">
-  <table className="min-w-full border-collapse border border-gray-200 text-xs">
-    <thead>
-      <tr className="bg-gray-100">
-        <th className="border p-1">Payment ID</th>
-        <th className="border p-1">Artist</th>
-        <th className="border p-1">Client</th>
-        <th className="border p-1">Amount</th>
-        <th className="border p-1">Total Amount</th>
-        <th className="border p-1">Payment Type</th>
-        <th className="border p-1">Platform Fee</th>
-        <th className="border p-1">Due Date</th>
-        <th className="border p-1">Proof Date</th>
-        <th className="border p-1">Reference #</th>
-        <th className="border p-1">Status</th>
-        <th className="border p-1">Proof</th>
-        <th className="border p-1">Action</th>
-      </tr>
-    </thead>
-    <tbody>
-      {payments.map((payment) => (
-        <tr key={payment.id}>
-          <td className="border p-1">{payment.id}</td>
-          <td className="border p-1">{payment.artistName}</td>
-          <td className="border p-1">{payment.clientUsername}</td>
-          <td className="border p-1">₱{payment.commissionAmount.toFixed(2)}</td>
-          <td className="border p-1">₱{payment.totalAmount.toFixed(2)}</td>
-          <td className="border p-1">{payment.paymentType}</td>
-          <td className="border p-1">{payment.platformFee === 6.5 ? "6.5%" : "3%"}</td>
-          <td className="border p-1">
-            {payment.dueDate ? new Date(payment.dueDate.toDate()).toLocaleDateString() : "N/A"}
-          </td>
-          <td className="border p-1">
-            {payment.proofOfDate ? new Date(payment.proofOfDate.toDate()).toLocaleDateString() : "N/A"}
-          </td>
-          <td className="border p-1">{payment.referenceNumber}</td>
-          <td className="border p-1">{payment.paymentStatus}</td>
-          <td className="border p-1">
-            {payment.proofOfPayment ? (
-              <button
-                className="text-blue-500 underline"
-                onClick={() => setSelectedProof(payment.proofOfPayment)}
-              >
-                View Attachment
-              </button>
-            ) : (
-              "No Proof"
-            )}
-          </td>
-          <td className="border p-1">
-            {payment.paymentStatus !== 'verified' && (
-              <button
-                className="bg-green-500 text-white px-2 py-1 rounded text-xs"
-                onClick={() => verifyPayment(payment.id)}
-              >
-                Verify
-              </button>
-            )}
-          </td>
-        </tr>
-      ))}
-    </tbody>
-  </table>
-  {selectedProof && (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-        <div className="bg-white p-4 rounded-lg shadow-lg max-w-[90%] max-h-[90%] overflow-auto">
-            <img src={selectedProof} alt="Proof of Payment" className="max-w-full h-auto mx-auto rounded" onError={(e) => e.currentTarget.src = "/placeholder-proof.png"} />
-            <button 
-                className="mt-2 bg-red-500 text-white px-3 py-1 rounded w-full"
-                onClick={() => setSelectedProof(null)}
-            >
-                Close
-            </button>
-        </div>
+    <div className="flex">
+      {/* 🔹 Sidebar */}
+      <AdminSidebar />
+
+      {/* 🔹 Main Content */}
+      <div className="flex w-full justify-center items-center min-h-screen bg-white">
+        {/* 🔹 Payment Verification Table (Centered & Bordered) */}
+        <div className="md:ml-[150px] border border-gray-300 text-[#191919] md:rounded-[30px] md:shadow-lg max-w-[1320px] py-40 px-10 md:py-10 md:px-5 md:h-auto h-full w-full">
+          <h2 className="text-2xl font-semibold mb-0 text-center">Payment Verification</h2>
+
+          {/* 🔹 Table Container */}
+          <div className="p-5 overflow-x-auto w-full">
+            <table className="min-w-full border-collapse border border-white text-sm">
+              <thead>
+                <tr className="bg-[#7db23a] text-white text-center">
+                  <th className="border p-2">Payment ID</th>
+                  <th className="border p-2">Artist</th>
+                  <th className="border p-2">Client</th>
+                  <th className="border p-2">Amount</th>
+                  <th className="border p-2">Total Amount</th>
+                  <th className="border p-2">Payment Type</th>
+                  <th className="border p-2">Platform Fee</th>
+                  <th className="border p-2">Due Date</th>
+                  <th className="border p-2">Reference #</th>
+                  <th className="border p-2">Status</th>
+                  <th className="border p-2">Proof</th>
+                  <th className="border p-2">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {currentPayments.map((payment) => (
+                  <tr key={payment.id} className="border-b text-center">
+                    <td className="border p-2">{payment.id}</td>
+                    <td className="border p-2">{payment.artistName}</td>
+                    <td className="border p-2">{payment.clientUsername}</td>
+                    <td className="border p-2">₱{payment.commissionAmount.toFixed(2)}</td>
+                    <td className="border p-2">₱{payment.totalAmount.toFixed(2)}</td>
+                    <td className="border p-2">{payment.paymentType}</td>
+                    <td className="border p-2">₱{payment.platformFee}</td>
+                    <td className="border p-2">{payment.dueDate ? new Date(payment.dueDate.toDate()).toLocaleDateString() : "N/A"}</td>
+                    <td className="border p-2">{payment.referenceNumber}</td>
+                    <td className="border p-2">{payment.paymentStatus}</td>
+                    <td className="border p-2">
+                      {payment.proofOfPayment ? (
+                        <button className="text-[#7db23a] hover:underline" onClick={() => setSelectedProof(payment.proofOfPayment)}>
+                          View
+                        </button>
+                      ) : (
+                        "N/A"
+                      )}
+                    </td>
+                    <td className="border p-2 text-center">
+                      <button onClick={() => handleVerify(payment.id)} className="text-2xl">
+                        {verifiedPayments[payment.id] ? (
+                          <FaCircleCheck className="text-[#7db23a]" />
+                        ) : (
+                          <FaCircleMinus className="text-gray-500 hover:text-gray-700" />
+                        )}
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          
+    {/* 🔹 Pagination Controls (Only Show When More than 10 Payments) */}
+    {totalPages > 1 && (
+      <div className="flex justify-center mt-4">
+        <button
+          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+          className={`px-4 py-2 mx-1 rounded ${currentPage === 1 ? "bg-gray-300 cursor-not-allowed" : "bg-[#7db23a] text-white"}`}
+          disabled={currentPage === 1}
+        >
+          Previous
+        </button>
+
+        <span className="px-4 py-2 bg-gray-200 rounded">{currentPage}/{totalPages}</span>
+
+        <button
+          onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+          className={`px-4 py-2 mx-1 rounded ${currentPage === totalPages ? "bg-gray-300 cursor-not-allowed" : "bg-[#7db23a] text-white"}`}
+          disabled={currentPage === totalPages}
+        >
+          Next
+        </button>
+      </div>
+    )}
+
+          {/* 🔹 Proof of Payment Overlay */}
+          {selectedProof && (
+  <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+    <div className="relative rounded-[30px] w-full h-auto max-w-[600px]">
+      
+      {/* Close Button (Positioned at Top Right Outside the White Background) */}
+      <button 
+        className="absolute -top-4 -right-4 text-white"
+        onClick={() => setSelectedProof(null)}
+      >
+        ✖
+      </button>
+
+      {/* Proof of Payment Image */}
+      <img 
+        src={selectedProof} 
+        alt="Proof of Payment" 
+        className="max-w-full h-auto mx-auto rounded"
+        onError={(e) => e.currentTarget.src = "/placeholder-proof.png"} 
+      />
     </div>
+  </div>
 )}
+
         </div>
+      </div>
+    </div>
   );
 };
 

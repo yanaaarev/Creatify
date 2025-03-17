@@ -97,6 +97,14 @@
             "dest": "/"
         },
         {
+            "src": "/admin-artists",
+            "dest": "/"
+        },
+        {
+            "src": "/admin-payments",
+            "dest": "/"
+        },
+        {
             "src": "/artist-dashboard",
             "dest": "/"
         },
