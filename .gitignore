@@ -24,6 +24,8 @@ dist-ssr
 *.sw?
 
 *.env
-/config/firebaseServiceAccount.json
+config/firebaseServiceAccount.json
 .vercel
-config/creatify-e0a9b-firebase-adminsdk-fbsvc-4f964d8ff4.json
+src/config/creatify-e0a9b-firebase-adminsdk-fbsvc-4f964d8ff4.json
+src/config/creatify-e0a9b-firebase-adminsdk-fbsvc-83ea9bcd35.json
+

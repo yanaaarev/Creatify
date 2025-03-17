@@ -1,5 +1,5 @@
 import admin from "firebase-admin";
-import serviceAccount from "./creatify-e0a9b-firebase-adminsdk-fbsvc-4f964d8ff4.json"; // Adjust path if needed
+import serviceAccount from "./creatify-e0a9b-firebase-adminsdk-fbsvc-83ea9bcd35.json"; // Adjust path if needed
 
 // Initialize Firebase Admin SDK
 if (!admin.apps.length) {

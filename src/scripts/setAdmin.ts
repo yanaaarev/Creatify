@@ -16,4 +16,4 @@ const makeAdmin = async (email: string): Promise<void> => {
   }
 };
 
-makeAdmin("yannahrevellame@gmail.com");
+makeAdmin("yulkervin@gmail.com");
