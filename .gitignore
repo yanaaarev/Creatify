@@ -28,8 +28,6 @@ src/config/firebaseServiceAccount.json
 .vercel
 src/config/creatify-e0a9b-firebase-adminsdk-fbsvc-4f964d8ff4.json
 creatify-e0a9b-firebase-adminsdk-fbsvc-4f964d8ff4.json
-src/config/creatify-e0a9b-firebase-adminsdk-fbsvc-83ea9bcd35.json
-creatify-e0a9b-firebase-adminsdk-fbsvc-83ea9bcd35.json
 src/config/firebaseAdmin.ts
 src/config/firebaseAdmin.js
 
