@@ -49,6 +49,23 @@ const AdminPanel = (): JSX.Element => {
     checkAdminStatus();
   }, [navigate]);
 
+  useEffect(() => {
+    const handleUnload = async () => {
+      try {
+        await auth.signOut(); // Sign out admin when tab is closed
+      } catch (error) {
+        console.error("Error during auto logout:", error);
+      }
+    };
+  
+    window.addEventListener("beforeunload", handleUnload);
+  
+    return () => {
+      window.removeEventListener("beforeunload", handleUnload);
+    };
+  }, []);
+  
+
   // 🔹 Handle Artist Submission
   const handleSubmit = async () => {
     if (!fullName || !email) {
