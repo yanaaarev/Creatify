@@ -175,11 +175,17 @@ const AdminPanel = (): JSX.Element => {
                     className="w-full mb-4 p-3 border border-gray-400 rounded-[30px] bg-gray-200" 
                   />
         </div>
-          <button 
-            onClick={handleSubmit} 
-            className="w-full bg-[#7db23a] text-white py-3 rounded-[30px] font-semibold transition hover:bg-green-600">
-            Add Artist
-          </button>
+        <button 
+          onClick={handleSubmit} 
+          disabled={!fullName.trim() || !email.trim()} 
+          className={`w-full py-3 rounded-[30px] font-semibold transition ${
+            !fullName.trim() || !email.trim() 
+              ? "bg-gray-400 cursor-not-allowed"  // Disabled state
+              : "bg-[#7db23a] text-white hover:bg-green-600"
+          }`}
+        >
+          Add Artist
+        </button>
         </div>
       </div>
     </div>
