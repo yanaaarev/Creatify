@@ -179,13 +179,16 @@ export const ArtistLogin = (): JSX.Element => {
         </button>
       </div>  
 
-      {/* Forgot Password Button */}
-      <button 
-        className="text-[#19191980] text-[15px] hover:underline text-right mt-[10px] w-full cursor-pointer [font-family:'Khula',Helvetica]"
-        onClick={handleForgotPassword}
-      >
-        Forgot password?
-      </button>
+     {/* Forgot Password Button (Right-Aligned & Clickable Only on Text) */}
+      <div className="w-full flex justify-end mt-[10px]">
+        <button 
+          className="text-[#19191980] text-[15px] hover:underline cursor-pointer [font-family:'Khula',Helvetica] text-right"
+          onClick={handleForgotPassword}
+        >
+          Forgot password?
+        </button>
+      </div>
+
 
       {/* Error Message */}
       {error && <p className="text-red-500 text-center mt-2">{error}</p>}
