@@ -33,7 +33,7 @@ const ChatInput = ({ chatId }: { chatId: string }) => {
   };
 
   return (
-    <div className="flex flex-grow items-center p-5 w-[60px] max-w-[837px] md:w-full h-[50px] bg-gray-200 rounded-full">
+    <div className="flex flex-grow justify-center items-center p-6 w-full md:max-w-[837px] md:w-full h-[50px] bg-gray-200 rounded-full">
       {/* ✅ File Upload Button (Triggers Auto Send) */}
       <button className="text-gray-600 p-1 cursor-pointer" disabled={uploading}>
         <label>

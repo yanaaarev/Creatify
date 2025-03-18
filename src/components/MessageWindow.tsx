@@ -423,7 +423,7 @@ const handleViewPayment = async (paymentId: string) => {
       </div>
 
         {/* ✅ Chat Input & Payment Button Wrapper */}
-        <div className="flex items-center w-full pt-3">
+        <div className="flex justify-center items-center w-full pt-3 mx-auto">
             {/* ✅ Payment Button (Visible for Artists Only) */}
             {isArtist && (
             <button
