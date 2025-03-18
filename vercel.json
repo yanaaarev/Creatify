@@ -141,6 +141,10 @@
             "dest": "/"
         },
         {
+            "src": "/messages/(?<chatId>[^/]+)",
+            "dest": "/"
+        },
+        {
             "src": "/request-dashboard",
             "dest": "/"
         },

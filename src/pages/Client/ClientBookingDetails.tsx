@@ -344,7 +344,7 @@ const handleCancelBooking = async () => {
   return (
     <div className="min-h-screen bg-cover bg-center flex items-center justify-center md:p-6"
       style={{ backgroundImage: `url(${authp})` }}>
-      <div className="bg-white px-16 py-[120px] md:px-16 md:py-20 md:rounded-[30px] h-screen md:h-auto shadow-lg w-full max-w-3xl">
+      <div className="bg-white px-10 py-[120px] md:px-16 md:py-20 md:rounded-[30px] h-screen md:h-auto shadow-lg w-full max-w-3xl">
         {/* 🔙 Back Button */}
         <button className="text-[#8C8C8C] text-4xl mb-6 -mt-5" onClick={() => navigate(-1)}>
           <IoChevronBackCircleOutline />
@@ -447,7 +447,8 @@ const handleCancelBooking = async () => {
 {/* 🎨 Artist Actions vs Client Actions */}
 {auth.currentUser?.uid === booking?.artistId ? (
   booking?.status === "pending" ? (
-    <div className="flex justify-between space-x-4 mt-6">
+    <div className="flex justify-center mx-auto">
+    <div className="flex justify-between md:space-x-4 space-x-3 mt-8">
       <button className="bg-[#7db23a] text-white px-6 py-2 rounded-full flex-1" onClick={() => handleUpdateStatus("active")}>
         Accept
       </button>
@@ -457,6 +458,7 @@ const handleCancelBooking = async () => {
       <button className="bg-[#00E1FF] text-white px-6 py-2 rounded-full flex-1" onClick={() => navigate(`/message/${booking?.clientId}`)}>
         Message
       </button>
+    </div>
     </div>
     
   ) : booking?.status === "cancelled" || booking?.status === "completed" ? ( 
@@ -496,9 +498,6 @@ const handleCancelBooking = async () => {
     </div>
   )
 )}
-
-
-
 
 {showStatusMenu && (
   <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
