@@ -454,7 +454,7 @@ const handleCancelBooking = async () => {
       <button className="border border-gray-500 text-gray-500 px-2 py-2 rounded-full flex-1" onClick={() => handleUpdateStatus("cancelled")}>
         Cancel
       </button>
-      <button className="bg-[#00E1FF] text-white px-2 py-2 rounded-full flex-1" onClick={() => navigate(`/message/${booking?.clientId}`)}>
+      <button className="bg-[#00E1FF] text-white px-2 py-2 rounded-full flex-1" onClick={() => navigate(`/messages/${booking?.clientId}`)}>
         Message
       </button>
     </div>
