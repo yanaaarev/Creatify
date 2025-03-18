@@ -447,18 +447,16 @@ const handleCancelBooking = async () => {
 {/* 🎨 Artist Actions vs Client Actions */}
 {auth.currentUser?.uid === booking?.artistId ? (
   booking?.status === "pending" ? (
-    <div className="flex justify-center mx-auto">
-    <div className="flex justify-between md:space-x-4 space-x-3 mt-8">
-      <button className="bg-[#7db23a] text-white px-6 py-2 rounded-full flex-1" onClick={() => handleUpdateStatus("active")}>
+    <div className="flex justify-center md:justify-between md:space-x-4 space-x-3 mt-8">
+      <button className="bg-[#7db23a] text-white px-2 py-2 rounded-full flex-1" onClick={() => handleUpdateStatus("active")}>
         Accept
       </button>
-      <button className="border border-gray-500 text-gray-500 px-6 py-2 rounded-full flex-1" onClick={() => handleUpdateStatus("cancelled")}>
+      <button className="border border-gray-500 text-gray-500 px-2 py-2 rounded-full flex-1" onClick={() => handleUpdateStatus("cancelled")}>
         Cancel
       </button>
-      <button className="bg-[#00E1FF] text-white px-6 py-2 rounded-full flex-1" onClick={() => navigate(`/message/${booking?.clientId}`)}>
+      <button className="bg-[#00E1FF] text-white px-2 py-2 rounded-full flex-1" onClick={() => navigate(`/message/${booking?.clientId}`)}>
         Message
       </button>
-    </div>
     </div>
     
   ) : booking?.status === "cancelled" || booking?.status === "completed" ? ( 
