@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { auth, db } from "../../config/firebaseConfig";
 import { setDoc, doc } from "firebase/firestore";
 import { createUserWithEmailAndPassword } from "firebase/auth";
+import { ClipLoader } from "react-spinners";
 import AdminSidebar from "./AdminSidebar"; // Adjust path based on folder structure
 
 const AdminPanel = (): JSX.Element => {
@@ -15,6 +16,7 @@ const AdminPanel = (): JSX.Element => {
   const [isActive, setIsActive] = useState<boolean>(true);
   const [artists, setArtists] = useState<any[]>([]);
   const [, setError] = useState("");
+  const [buttonLoading, setButtonLoading] = useState(false);
 
   // 🔹 Function to Generate a Random Default Password
   function generateRandomPassword(): string {
@@ -72,7 +74,7 @@ const AdminPanel = (): JSX.Element => {
       setError("All fields are required.");
       return;
     }
-
+    setButtonLoading(true);
     try {
       console.log("🟢 Attempting to add artist:", fullName, email);
 
@@ -100,12 +102,14 @@ const AdminPanel = (): JSX.Element => {
       setArtists([...artists, { id: artistUID, fullName, email, password, active: isActive }]);
 
       // Reset Form
+      setButtonLoading(false);
       setFullName("");
       setEmail("");
       setPassword(generateRandomPassword());
       setIsActive(true);
       setError("");
     } catch (error) {
+      setButtonLoading(false);
       console.error("❌ Failed to add artist:", error);
       setError("Failed to add artist. Try again.");
     }
@@ -177,14 +181,14 @@ const AdminPanel = (): JSX.Element => {
         </div>
         <button 
           onClick={handleSubmit} 
-          disabled={!fullName.trim() || !email.trim()} 
+          disabled={!fullName.trim() || !email.trim() || buttonLoading} 
           className={`w-full py-3 rounded-[30px] font-semibold transition ${
             !fullName.trim() || !email.trim() 
               ? "bg-gray-400 cursor-not-allowed"  // Disabled state
               : "bg-[#7db23a] text-white hover:bg-green-600"
           }`}
         >
-          Add Artist
+          {buttonLoading ? <ClipLoader size={20} color="white" /> : "Add Artist"}
         </button>
         </div>
       </div>

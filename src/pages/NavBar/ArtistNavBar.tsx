@@ -20,6 +20,8 @@ import { FaEye, FaEyeSlash, FaChevronRight } from "react-icons/fa";
 import NotificationComponent from "../../Notifications";
 const DEFAULT_AVATAR_URL = "https://res.cloudinary.com/ddjnlhfnu/image/upload/v1740737790/samplepfp_gg1dmq.png";
 import LOGO from "/images/logo.png";
+import { ClipLoader } from "react-spinners";
+
 
 export const ArtistNavBar = (): JSX.Element => {
   const [user, setUser] = useState<any>(null);
@@ -32,7 +34,8 @@ export const ArtistNavBar = (): JSX.Element => {
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showHelpOverlay, setShowHelpOverlay] = useState(false);
   const [passwordError, setPasswordError] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [, setLoading] = useState(false);
+  const [buttonLoading, setButtonLoading] = useState(false);
   const navigate = useNavigate();
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -101,6 +104,7 @@ export const ArtistNavBar = (): JSX.Element => {
       return;
     }
   
+    setButtonLoading(true);
     setLoading(true);
     setPasswordError("");
   
@@ -122,9 +126,11 @@ export const ArtistNavBar = (): JSX.Element => {
       setNewPassword("");
       alert("Password changed successfully!");
     } catch (error) {
+      setButtonLoading(false);
       console.error("❌ Error changing password:", error);
       setPasswordError("Incorrect old password or something went wrong.");
     } finally {
+      setButtonLoading(false);
       setLoading(false);
     }
   };
@@ -381,9 +387,9 @@ export const ArtistNavBar = (): JSX.Element => {
       <button 
         className="bg-[#7db23a] text-white px-4 py-2 rounded-[30px] w-full mt-2"
         onClick={handleChangePassword} 
-        disabled={loading}
-      >
-        {loading ? "Updating..." : "Update Password"}
+        disabled={buttonLoading}
+        >
+      {buttonLoading ? <ClipLoader size={20} color="white" /> : "Update Password"}
       </button>
     </div>
   </div>

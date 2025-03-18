@@ -9,12 +9,14 @@ import authp from "/images/authp.png";
 import { triggerNotification, NotificationType } from "../../utils/triggerNotification";
 import { BsFillCalendar2WeekFill } from "react-icons/bs";
 import { Timestamp } from "firebase/firestore"; 
+import { ClipLoader } from "react-spinners";
 
 const ClientBookingDetails = () => {
   const { bookingId } = useParams();
   const navigate = useNavigate();
   const [booking, setBooking] = useState<any>(null);
   const [, setLoading] = useState(true);
+  const [buttonLoading, setButtonLoading] = useState(false);
   const [showAttachment, setShowAttachment] = useState(false);
   const [showStatusMenu, setShowStatusMenu] = useState(false);
   const [canCancel, setCanCancel] = useState(false);
@@ -155,7 +157,7 @@ const getArtistDetails = async (artistId: string): Promise<{ fullName: string; a
 
 const handleConfirmUpdateStatus = async (newStatus: string) => {
   if (!bookingId) return;
-
+  
   // 🔹 Prevent "Completed" if payment is not verified
   if (newStatus === "completed") {
     try {
@@ -206,6 +208,8 @@ const handleConfirmUpdateStatus = async (newStatus: string) => {
         return;
       }
 
+      setButtonLoading(true);
+
       console.log("✅ Payment verified! Allowing completion.");
     } catch (error) {
       console.error("❌ Error checking payment verification:", error);
@@ -245,8 +249,10 @@ const handleConfirmUpdateStatus = async (newStatus: string) => {
       timestamp: Timestamp.now(),
     });
 
+    setButtonLoading(false);
     window.location.reload();
   } catch (error) {
+    setButtonLoading(false);
     console.error("❌ Error updating status:", error);
     alert("Failed to update booking status. Please try again.");
   }
@@ -254,6 +260,8 @@ const handleConfirmUpdateStatus = async (newStatus: string) => {
 
 const handleUpdateStatus = async (newStatus: string) => {
   if (!bookingId) return;
+
+  setButtonLoading(true);
 
   try {
     const bookingRef = doc(db, "bookings", bookingId);
@@ -280,8 +288,10 @@ const handleUpdateStatus = async (newStatus: string) => {
       timestamp: Timestamp.now(),
     });
 
+    setButtonLoading(false);
     window.location.reload();
   } catch (error) {
+    setButtonLoading(false);
     console.error("Error updating status:", error);
     alert("Failed to update booking status. Please try again.");
   }
@@ -316,7 +326,7 @@ const handleCancelBooking = async () => {
       alert("Cancellation is only allowed within 24 hours.");
       return;
     }
-
+    setButtonLoading(true);
     await updateDoc(bookingRef, { status: "cancelled", updatedAt: Timestamp.now() });
     alert("Booking cancelled successfully.");
 
@@ -334,8 +344,10 @@ const handleCancelBooking = async () => {
       timestamp: Timestamp.now(),
     });
 
+    setButtonLoading(false);
     navigate("/user-dashboard");
   } catch (error) {
+    setButtonLoading(false);
     console.error("Error cancelling booking:", error);
     alert("Something went wrong. Please try again.");
   }
@@ -448,14 +460,20 @@ const handleCancelBooking = async () => {
 {auth.currentUser?.uid === booking?.artistId ? (
   booking?.status === "pending" ? (
     <div className="flex justify-center md:justify-between md:space-x-4 space-x-3 mt-8">
-      <button className="bg-[#7db23a] text-white px-2 py-2 rounded-full flex-1" onClick={() => handleUpdateStatus("active")}>
-        Accept
+      <button className="bg-[#7db23a] text-white px-2 py-2 rounded-full flex-1" onClick={() => handleUpdateStatus("active")}
+        disabled={buttonLoading}
+        >
+        {buttonLoading ? <ClipLoader size={18} color="white" /> : "Accept"}
       </button>
-      <button className="border border-gray-500 text-gray-500 px-2 py-2 rounded-full flex-1" onClick={() => handleUpdateStatus("cancelled")}>
-        Cancel
+      <button className="border border-gray-500 text-gray-500 px-2 py-2 rounded-full flex-1" onClick={() => handleUpdateStatus("cancelled")}
+        disabled={buttonLoading}
+        >
+        {buttonLoading ? <ClipLoader size={18} color="white" /> : "Cancel"}
       </button>
-      <button className="bg-[#00E1FF] text-white px-2 py-2 rounded-full flex-1" onClick={() => startChatWithClient(booking.clientId)}>
-        Message
+      <button className="bg-[#00E1FF] text-white px-2 py-2 rounded-full flex-1" onClick={() => startChatWithClient(booking.clientId)}
+        disabled={buttonLoading}
+        >
+        {buttonLoading ? <ClipLoader size={18} color="white" /> : "Message"}
       </button>
     </div>
     
@@ -470,6 +488,7 @@ const handleCancelBooking = async () => {
       <button className="bg-[#7db23a] text-white px-6 py-2 rounded-full flex-1" onClick={() => setShowStatusMenu(!showStatusMenu)}>
         Update Status
       </button>
+
       <button className="bg-[#00E1FF] text-white px-6 py-2 rounded-full flex-1" onClick={() => startChatWithClient(booking.clientId)}>
         Message
       </button>
@@ -489,9 +508,9 @@ const handleCancelBooking = async () => {
           !canCancel ? "bg-gray-400 text-gray-300 cursor-not-allowed" : "bg-red-500 text-white"
         }`}
         onClick={handleCancelBooking}
-        disabled={!canCancel}
+        disabled={!canCancel || buttonLoading}
       >
-        Cancel Booking
+        {buttonLoading ? <ClipLoader size={18} color="white" /> : "Cancel Booking"}
       </button>
     </div>
   )
@@ -516,23 +535,26 @@ const handleCancelBooking = async () => {
           <button 
             className="w-full py-2 text-sm bg-[#191919] bg-opacity-30 text-white rounded-full mb-2" 
             onClick={() => handleConfirmUpdateStatus("active")}
+            disabled={buttonLoading}
           >
-            In Progress
+            {buttonLoading ? <ClipLoader size={18} color="white" /> : "In Progress"}
           </button>
         ) : (
           <button 
             className="w-full py-2 text-sm bg-[#191919] bg-opacity-30 text-white rounded-full mb-2" 
             onClick={() => handleConfirmUpdateStatus("on-hold")}
+            disabled={buttonLoading}
           >
-            Put on-hold
+            {buttonLoading ? <ClipLoader size={18} color="white" /> : "Put on-hold"}
           </button>
         )}
         
         <button 
           className="w-full py-2 text-sm border border-gray-500 text-gray-500 rounded-full mb-2" 
           onClick={() => handleConfirmUpdateStatus("cancelled")}
+          disabled={buttonLoading}
         >
-          Cancel
+          {buttonLoading ? <ClipLoader size={18} color="gray" /> : "Cancel"}
         </button>
         <button 
         className={`w-full py-2 text-sm ${
@@ -541,9 +563,9 @@ const handleCancelBooking = async () => {
             : "bg-[#191919] bg-opacity-30 text-white"
         } rounded-full mb-2`}
         onClick={() => handleConfirmUpdateStatus("completed")}
-        disabled={booking?.paymentType === "Full Payment" && !booking?.paymentVerified}
+        disabled={booking?.paymentType === "Full Payment" && !booking?.paymentVerified || buttonLoading}
       >
-        Completed
+        {buttonLoading ? <ClipLoader size={18} color="white" /> : "Completed"}
       </button>
       </div>
     </div>

@@ -182,8 +182,8 @@ const BookingCalendar = () => {
     return;
   }
 
-  if (selectedDates.length < (artistData?.minBookingDays || 1)) {
-    alert(`You must select at least ${artistData?.minBookingDays || 1} days.`);
+  if (selectedDates.length < (artistData?.minBookingDays || 5)) {
+    alert(`You must select at least ${artistData?.minBookingDays || 5} days.`);
     return;
   }
 

@@ -5,6 +5,7 @@ import { auth, db } from "../../config/firebaseConfig";
 import { getDoc, doc, updateDoc } from "firebase/firestore";
 import { IoChevronBackCircleOutline } from "react-icons/io5";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { ClipLoader } from "react-spinners";
 import { logEvent } from "firebase/analytics";
 import { analytics } from "../../config/firebaseConfig";
 
@@ -14,6 +15,8 @@ export const ArtistLogin = (): JSX.Element => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [buttonLoading, setButtonLoading] = useState(false);
+
   // Handle Artist Login
   const handleLogin = async () => {
     try {
@@ -34,7 +37,7 @@ export const ArtistLogin = (): JSX.Element => {
       }
   
       console.log("✅ Found email:", emailToUse);
-  
+      setButtonLoading(true);
       await signInWithEmailAndPassword(auth, emailToUse, password);
       console.log("✅ Firebase Auth Success!");
 
@@ -44,10 +47,11 @@ export const ArtistLogin = (): JSX.Element => {
       user_id: auth.currentUser?.uid || "unknown",
       role: "artist",
     });
-      
+      setButtonLoading(false);
       navigate("/artist-dashboard");
       window.location.reload();
     } catch (err) {
+      setButtonLoading(false);
       console.error("❌ Login Error:", err);
       setError("Invalid credentials. Please try again.");
     }
@@ -189,14 +193,14 @@ export const ArtistLogin = (): JSX.Element => {
       {/* Sign In Button */}
       <button
         onClick={handleLogin}
-        disabled={!artistIdOrEmail || !password}
+        disabled={!artistIdOrEmail || !password || buttonLoading}
         className={`w-full h-[52px] text-2xl font-semibold rounded-[30px] mt-5 ${
           !artistIdOrEmail || !password
             ? "bg-gray-400 text-white cursor-not-allowed"
             : "bg-[#7db23a] text-white"
         }`}
       >
-        Sign in
+        {buttonLoading ? <ClipLoader size={20} color="white" /> : "Sign In"}
       </button>
 
     </div>

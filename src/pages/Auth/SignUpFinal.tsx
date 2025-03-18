@@ -3,6 +3,7 @@ import { IoChevronBackCircleOutline } from "react-icons/io5";
 import { useLocation, useNavigate } from "react-router-dom";
 import { auth, db } from "../../config/firebaseConfig"; // Import Firebase config
 import { doc, updateDoc, getDoc, setDoc } from "firebase/firestore";
+import { ClipLoader } from "react-spinners";
 import { onAuthStateChanged } from "firebase/auth";
 import { logEvent } from "firebase/analytics";
 import { analytics } from "../../config/firebaseConfig";
@@ -19,6 +20,7 @@ export const SignUpFinal = (): JSX.Element => {
   const location = useLocation();
   const state = location.state as LocationState; // Explicitly type location.state
   const { email } = state || {};
+  const [buttonLoading, setButtonLoading] = useState(false);
 
   // Validate if the user is authenticated
   useEffect(() => {
@@ -54,6 +56,8 @@ export const SignUpFinal = (): JSX.Element => {
         throw new Error("Authentication error. Please log in again.");
       }
 
+    setButtonLoading(true);
+
       const userDocRef = doc(db, "users", uid);
 
       // Check if the document exists
@@ -82,9 +86,11 @@ export const SignUpFinal = (): JSX.Element => {
       role: "client",
     });
     
+    setButtonLoading(false);
       navigate("/"); // Redirect to the homepage after successful registration
       window.location.reload();
     } catch (err: any) {
+      setButtonLoading(false);
       setError(err.message || "An error occurred during account creation.");
       console.error("Error updating user profile:", err);
     }
@@ -145,12 +151,14 @@ export const SignUpFinal = (): JSX.Element => {
           <div className="w-full flex justify-center">
             <button
               onClick={handleCreateAccount}
-              disabled={!username}
+              disabled={!username || buttonLoading}
               className={`w-full max-w-[442px] h-[52px] rounded-[30px] flex items-center justify-center ${
                 username ? "bg-[#7db23a] cursor-pointer" : "bg-[#c4c4c4] cursor-not-allowed"
               }`}
             >
-              <span className="font-semibold text-white text-2xl mt-1">Create my account</span>
+              <span className="font-semibold text-white text-2xl mt-1">
+                {buttonLoading ? <ClipLoader size={20} color="white" /> : "Create Account"}
+              </span>
             </button>
           </div>
 

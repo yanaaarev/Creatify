@@ -8,6 +8,7 @@ import {
 import { getDocs, collection, query, where } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { ClipLoader } from "react-spinners";
 import { logEvent } from "firebase/analytics";
 import { analytics } from "../../config/firebaseConfig";
 
@@ -17,6 +18,8 @@ export const ClientLogin = (): JSX.Element => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const [buttonLoading, setButtonLoading] = useState(false);
+
 
   // Validate if input is an email
   const isEmail = (input: string): boolean => {
@@ -55,7 +58,6 @@ export const ClientLogin = (): JSX.Element => {
       setError("Please enter your email/username and password.");
       return;
     }
-
     try {
       let userEmail: string = identifier;
 
@@ -68,7 +70,7 @@ export const ClientLogin = (): JSX.Element => {
         }
         userEmail = resolvedEmail;
       }
-
+      setButtonLoading(true);
       await signInWithEmailAndPassword(auth, userEmail, password);
       console.log("✅ Login Successful!");
 
@@ -79,9 +81,11 @@ export const ClientLogin = (): JSX.Element => {
         role: "client",
       });
 
+      setButtonLoading(false);
       navigate("/"); // Redirect after successful login
       window.location.reload();
     } catch (err: any) {
+      setButtonLoading(false);
       setError("Invalid credentials. Please check your email and password.");
     }
   };
@@ -193,7 +197,7 @@ export const ClientLogin = (): JSX.Element => {
           {/* Sign In Button */}
           <button
             onClick={handleSignInWithPassword}
-            disabled={!identifier || !password}
+            disabled={!identifier || !password || buttonLoading}
             className={`w-full max-w-[440px] h-[48px] md:h-[52px] rounded-[30px] flex items-center justify-center mb-3 ${
               !identifier || !password
                 ? "bg-gray-400 cursor-not-allowed"
@@ -201,7 +205,7 @@ export const ClientLogin = (): JSX.Element => {
             }`}
           >
             <span className="[font-family:'Khula',Helvetica] font-semibold text-white text-xl md:text-2xl mt-2">
-              Sign In
+            {buttonLoading ? <ClipLoader size={20} color="white" /> : "Sign In"}
             </span>
           </button>
         </div>

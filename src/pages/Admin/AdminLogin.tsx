@@ -4,6 +4,7 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../config/firebaseConfig";
 import { IoChevronBackCircleOutline } from "react-icons/io5";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { ClipLoader } from "react-spinners";
 
 
 const AdminLogin = (): JSX.Element => {
@@ -12,9 +13,11 @@ const AdminLogin = (): JSX.Element => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const [buttonLoading, setButtonLoading] = useState(false);
 
 
   const handleLogin = async () => {
+    setButtonLoading(true);
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
@@ -24,11 +27,14 @@ const AdminLogin = (): JSX.Element => {
 
       if (idTokenResult.claims.admin) {
         console.log("✅ Admin Verified!");
+        setButtonLoading(false);
         navigate("/admin-panel"); // Redirect to Admin Panel
       } else {
+        setButtonLoading(false);
         setError("❌ Access Denied: You are not an admin.");
       }
     } catch (err) {
+      setButtonLoading(false);
       setError("❌ Invalid credentials. Please try again.");
     }
   };
@@ -62,24 +68,24 @@ const AdminLogin = (): JSX.Element => {
           />
 
           {/* Password Input */}
-<label className="text-[#191919] text-[17px] font-semibold mt-6">Password</label>
-<div className="relative w-full">
-  <input
-    type={passwordVisible ? "text" : "password"} // Toggle between text & password
-    value={password}
-    onChange={(e) => setPassword(e.target.value)}
-    className="w-full h-[52px] border border-[#19191980] rounded-[30px] p-3 mt-2 pr-12"
-  />
-  
-  {/* Show/Hide Password Button */}
-  <button
-    type="button"
-    onClick={() => setPasswordVisible(!passwordVisible)}
-    className="absolute inset-y-0 right-4 flex items-center text-gray-500 mt-2"
-  >
-    {passwordVisible ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
-  </button>
-</div>
+          <label className="text-[#191919] text-[17px] font-semibold mt-6">Password</label>
+          <div className="relative w-full">
+            <input
+              type={passwordVisible ? "text" : "password"} // Toggle between text & password
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full h-[52px] border border-[#19191980] rounded-[30px] p-3 mt-2 pr-12"
+            />
+            
+            {/* Show/Hide Password Button */}
+            <button
+              type="button"
+              onClick={() => setPasswordVisible(!passwordVisible)}
+              className="absolute inset-y-0 right-4 flex items-center text-gray-500 mt-2"
+            >
+              {passwordVisible ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
+            </button>
+          </div>
 
 
           {/* Error Message */}
@@ -91,9 +97,9 @@ const AdminLogin = (): JSX.Element => {
             className={`w-full h-[52px] bg-[#7db23a] text-white text-2xl font-semibold rounded-[30px] mt-8 ${
               !email || !password ? "opacity-50 cursor-not-allowed" : ""
             }`}
-            disabled={!email || !password}
+            disabled={!email || !password || buttonLoading}
           >
-            Sign in
+            {buttonLoading ? <ClipLoader size={20} color="white" /> : "Sign In"}
           </button>
         </div>
       </div>

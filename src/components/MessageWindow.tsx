@@ -7,6 +7,7 @@ import ChatInput from "./ChatInput";
 import { IoClose } from "react-icons/io5"; // ✅ Close Button Icon
 import { triggerNotification} from "../utils/triggerNotification";
 import { MdPayments } from "react-icons/md"; // ✅ Payment Icon
+import { ClipLoader } from "react-spinners";
 
 interface Message {
   id: string;
@@ -34,6 +35,7 @@ const MessageWindow = ({ chatId }: { chatId: string }) => {
   const [referenceNumber, setReferenceNumber] = useState("");
   const [selectedProof, setSelectedProof] = useState<string | null>(null);
 const [showProofOverlay, setShowProofOverlay] = useState(false);
+const [buttonLoading, setButtonLoading] = useState(false);
   const [proofDate, setProofDate] = useState("");
   // ✅ Fetch chat details to properly determine user roles
 const [isArtist, setIsArtist] = useState<boolean>(false);
@@ -104,6 +106,8 @@ const handleRequestPayment = async () => {
     alert("❌ Please enter all required fields.");
     return;
   }
+
+setButtonLoading(true);
 
   const amount = parseFloat(commissionAmount);
 
@@ -198,6 +202,7 @@ console.log("✅ Payment ID stored in booking:", paymentRef.id);
       timestamp: Timestamp.now(),
     });
 
+    setButtonLoading(false);
     setShowPaymentForm(false);
     window.location.reload(); // ✅ Refresh the page to reflect changes
     alert("✅ Payment request sent successfully!");
@@ -233,7 +238,7 @@ const handleUploadProof = async () => {
       alert("❌ Invalid file format. Please select an image file.");
       return;
     }
-
+    setButtonLoading(true);
     // 🔹 Retrieve the most recent Payment Request from Firestore instead of `messages`
     let paymentId = selectedPayment?.paymentId;
 
@@ -318,6 +323,7 @@ const handleUploadProof = async () => {
 
         // 🔹 Ensure the button updates correctly
         alert("✅ Proof of payment submitted successfully!");
+        setButtonLoading(false);
         setShowProofForm(false);
         window.location.reload(); // ✅ Refresh the page to reflect changes
       } else {
@@ -506,9 +512,9 @@ const handleViewPayment = async (paymentId: string) => {
             <button
   className="[font-family: 'Khula', Helvetica] font-semibold bg-[#0099D0] text-xl text-white px-4 py-3 rounded-full mt-6 w-full disabled:opacity-50 disabled:cursor-not-allowed"
   onClick={handleRequestPayment}
-  disabled={!commissionAmount || parseFloat(commissionAmount) <= 0}
+  disabled={!commissionAmount || parseFloat(commissionAmount) <= 0 || buttonLoading}
 >
-  Submit
+{buttonLoading ? <ClipLoader size={20} color="white" /> : "Submit"}
 </button>
           </div>
         </div>
@@ -639,7 +645,7 @@ const handleViewPayment = async (paymentId: string) => {
         ✕
       </button>
       <div className="w-96 relative">
-      <img src="/images/gcashqr.JPG" alt="GCash QR Code" className="w-full md:h-screen rounded-[30px]" />
+      <img src="/images/gcashqr.JPG" alt="GCash QR Code" className="w-full h-full rounded-[30px]" />
     </div>
   </div>
 )}
@@ -654,7 +660,7 @@ const handleViewPayment = async (paymentId: string) => {
         ✕
       </button>
       <div className="w-96 relative">
-      <img src="/images/gotymeqr.JPG" alt="GOTYME QR Code" className="w-full h-auto rounded-[30px]" />
+      <img src="/images/gotymeqr.JPG" alt="GOTYME QR Code" className="w-full h-full rounded-[30px]" />
     </div>
   </div>
 )}
@@ -797,9 +803,9 @@ const handleViewPayment = async (paymentId: string) => {
           <button
             className="bg-[#0099D0] text-white px-5 py-2 rounded-full w-full mt-6 text-lg font-semibold"
             onClick={handleUploadProof}
-            disabled={!proofAttachment || !referenceNumber || !proofDate}
+            disabled={!proofAttachment || !referenceNumber || !proofDate || buttonLoading}
           >
-            Submit
+            {buttonLoading ? <ClipLoader size={20} color="white" /> : "Submit"}
           </button>
         </>
       ) : (

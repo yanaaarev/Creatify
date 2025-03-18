@@ -4,6 +4,7 @@ import { IoChevronBackCircleOutline } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 import { auth, db } from "../../config/firebaseConfig";
 import { doc, getDoc, updateDoc, collection, query, where, getDocs } from "firebase/firestore";
+import { ClipLoader } from "react-spinners";
 import axios from "axios";
 import ArtistCalendar from "./ArtistCalendar"; // Import calendar component
 
@@ -14,6 +15,7 @@ const ArtistEdit = (): JSX.Element => {
   const navigate = useNavigate();
   const [artist, setArtist] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [buttonLoading, setButtonLoading] = useState(false);
   const [changesMade, setChangesMade] = useState(false);
    // 🔹 Form Fields
    const [bio, setBio] = useState("");
@@ -383,6 +385,8 @@ const handleRemovePortfolioFile = (index: number) => {
 const handleSaveChanges = async () => {
   if (!changesMade) return;
 
+  setButtonLoading(true);
+
   try {
     const user = auth.currentUser;
     if (user) {
@@ -409,11 +413,13 @@ const handleSaveChanges = async () => {
 
       console.log("✅ Changes saved successfully!");
       setChangesMade(false);
+      setButtonLoading(false);
 
       // ✅ Redirect to Artist Dashboard
       navigate("/artist-dashboard");
     }
   } catch (error) {
+    setButtonLoading(false);
     console.error("❌ Error saving changes:", error);
   }
 };
@@ -830,16 +836,15 @@ const handleSaveChanges = async () => {
           setChangesMade={setChangesMade}
         />
 
-            {/* ✅ Save Changes Button (Gray when disabled) */}
+          {/* ✅ Save Changes Button with Loading Animation */}
       <button
         onClick={handleSaveChanges}
-        className={`mt-6 text-white px-6 py-2 rounded-[30px] w-full transition 
+        className={`mt-6 text-white px-6 py-2 rounded-[30px] w-full transition flex items-center justify-center gap-2
           ${changesMade ? "bg-[#7db23a] hover:bg-[#689e2f]" : "bg-gray-400 cursor-not-allowed"}`}
-        disabled={!changesMade}
+        disabled={!changesMade || buttonLoading} // Disable when loading
       >
-        Save Changes
+        {buttonLoading ? <ClipLoader size={20} color="white" /> : "Save Changes"}
       </button>
-
       </div>
     </div>
   </div>

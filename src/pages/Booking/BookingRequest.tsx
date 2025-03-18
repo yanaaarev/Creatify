@@ -3,6 +3,7 @@ import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { db, auth } from "../../config/firebaseConfig";
 import { addDoc, collection, Timestamp, doc, getDoc } from "firebase/firestore";
 import axios from "axios";
+import { ClipLoader } from "react-spinners";
 import { IoChevronBackCircleOutline } from "react-icons/io5";
 import { triggerNotification } from "../../utils/triggerNotification"; // Adjust path as needed
 import authp from "/images/authp.png";
@@ -26,6 +27,7 @@ const BookingRequest = () => {
   const [, setIsUploading] = useState(false);
   const [agreeToTerms, setAgreeToTerms] = useState(false);
   const [showAttachment, setShowAttachment] = useState(false);
+  const [buttonLoading, setButtonLoading] = useState(false);
 
   useEffect(() => {
     if (!selectedDates.length) {
@@ -113,6 +115,8 @@ const BookingRequest = () => {
       alert("You must agree to the Terms of Service and Copyright Policy.");
       return;
     }
+
+  setButtonLoading(true);
   
     try {
       const nextRequestId = Math.floor(1000 + Math.random() * 9000);
@@ -154,8 +158,10 @@ const BookingRequest = () => {
       // ✅ Clear stored dates after successful booking
       sessionStorage.removeItem("selectedDates");
   
+      setButtonLoading(false);
       navigate(`/book-artist/${artistId}/booking-confirmation`);
     } catch (error) {
+      setButtonLoading(false);
       console.error("❌ Error submitting booking request:", error);
       alert("Something went wrong. Please try again.");
     }
@@ -273,8 +279,10 @@ const BookingRequest = () => {
         {/* ✅ Confirm Booking Button */}
         <div className="flex justify-center mt-3">
         <button className={`bg-[#7db23a] text-white px-5 py-2 rounded-full w-[350px] md:w-[660px] mb-3 ${!agreeToTerms ? "opacity-50 cursor-not-allowed" : ""}`}
-          onClick={handleConfirmBooking} disabled={!agreeToTerms}>
-          Confirm Booking
+          onClick={handleConfirmBooking} 
+          disabled={!agreeToTerms || buttonLoading}
+          >
+          {buttonLoading ? <ClipLoader size={20} color="white" /> : "Confirm Booking"}
         </button>
         </div>
 

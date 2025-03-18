@@ -5,6 +5,7 @@ import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/
 import { auth, db } from "../../config/firebaseConfig"; // Firebase config import
 import { doc, setDoc } from "firebase/firestore";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { ClipLoader } from "react-spinners";
 
 export const SignUpEmail = (): JSX.Element => {
   const [email, setEmail] = useState("");
@@ -15,6 +16,7 @@ export const SignUpEmail = (): JSX.Element => {
   const [error, setError] = useState("");
   const [message, setMessage] = useState(""); // For status messages
   const [isVerificationPending, setIsVerificationPending] = useState(false); // Verification state
+  const [buttonLoading, setButtonLoading] = useState(false);
   const navigate = useNavigate();
 
   // 🔄 Handle Input Changes
@@ -50,6 +52,8 @@ export const SignUpEmail = (): JSX.Element => {
       return;
     }
 
+  setButtonLoading(true);
+
     try {
       // ✅ Create User Account
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
@@ -66,12 +70,16 @@ export const SignUpEmail = (): JSX.Element => {
       });
 
       setIsVerificationPending(true);
+      setButtonLoading(false);
     } catch (err: any) {
+      setButtonLoading(false);
       console.error("Error saving user info:", err);
 
       if (err.code === "auth/email-already-in-use") {
+        setButtonLoading(false);
         alert("This email is already in use. Please log in instead.");
       } else {
+        setButtonLoading(false);
         alert(err.message || "An error occurred. Please try again.");
       }
     }
@@ -81,21 +89,25 @@ export const SignUpEmail = (): JSX.Element => {
   const handleVerificationCheck = async () => {
     setError("");
     setMessage("");
-
+    setButtonLoading(true);
     try {
       if (auth.currentUser) {
         await auth.currentUser.reload(); // Refresh user data
         if (auth.currentUser.emailVerified) {
           setMessage("Email verified successfully! Proceeding...");
+          setButtonLoading(false);
           navigate("/signup-final", { state: { email, password } });
           window.location.reload();
         } else {
+          setButtonLoading(false);
           setError("Your email is not verified yet. Please check your inbox.");
         }
       } else {
+        setButtonLoading(false);
         setError("No user found. Please sign up again.");
       }
     } catch (err: any) {
+      setButtonLoading(false);
       setError(err.message || "An error occurred. Please try again.");
     }
   };
@@ -176,14 +188,14 @@ export const SignUpEmail = (): JSX.Element => {
           <div className="w-full flex justify-center">
             <button 
               onClick={handleContinue} 
-              disabled={!email || !password || !confirmPassword} // ✅ Disable button when fields are empty
+              disabled={!email || !password || !confirmPassword || buttonLoading} // ✅ Disable button when fields are empty
               className={`font-semibold py-3 text-xl w-full max-w-[450px] h-[45px] rounded-[30px] ${
                 !email || !password || !confirmPassword 
                   ? "bg-gray-400 text-white cursor-not-allowed" // 🔥 Disabled state
                   : "bg-[#7db23a] text-white" // ✅ Enabled state
               }`}
             >
-              Continue
+              {buttonLoading ? <ClipLoader size={20} color="white" /> : "Continue"}
             </button>
           </div>
 
@@ -191,8 +203,10 @@ export const SignUpEmail = (): JSX.Element => {
           {/* ✅ Check Verification Button (FIXED) */}
           {isVerificationPending && (
             <div className="w-full flex justify-center mt-[-15px]">
-              <button onClick={handleVerificationCheck} className="w-full py-2 max-w-[450px] h-[40px] font-semibold border border-solid border-[#7db23a] text-lg text-[#7db23a] rounded-[30px]">
-                Verify Email
+              <button onClick={handleVerificationCheck} className="w-full py-2 max-w-[450px] h-[40px] font-semibold border border-solid border-[#7db23a] text-lg text-[#7db23a] rounded-[30px]"
+              disabled={buttonLoading} // ✅ Disable button when loading
+              >
+              {buttonLoading ? <ClipLoader size={20} color="white" /> : "Verify Email"}
               </button>
             </div>
           )}

@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { IoBanOutline } from "react-icons/io5";
 import { IoChevronBackCircleOutline } from "react-icons/io5"; // ✅ Import Back Icon
 import { updateProfile, sendPasswordResetEmail, deleteUser, signOut, onAuthStateChanged, updateEmail, updatePassword, reauthenticateWithCredential, EmailAuthProvider } from "firebase/auth";
+import { ClipLoader } from "react-spinners";
 
 // ✅ Use Cloudinary URLs for default avatars
 const defaultAvatars = [
@@ -25,6 +26,7 @@ export const UserDashboard = (): JSX.Element => {
   const [bookings, setBookings] = useState<any[]>([]);
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [buttonLoading, setButtonLoading] = useState(false);
   const [showAllBookings, setShowAllBookings] = useState(false);
   const [selectedAvatar, setSelectedAvatar] = useState<string | null>(null);
   const [showAvatarOverlay, setShowAvatarOverlay] = useState(false); // ✅ Overlay state
@@ -126,6 +128,7 @@ export const UserDashboard = (): JSX.Element => {
 
   const handleUpdate = async () => {
     if (!inputValue) return;
+    setButtonLoading(true);
     try {
       const userDoc = doc(db, "users", user.uid);
       if (showOverlay === "username") {
@@ -139,22 +142,27 @@ export const UserDashboard = (): JSX.Element => {
         setUser((prev: any) => ({ ...prev, email: inputValue }));
       }
       setShowOverlay(null);
+      setButtonLoading(false);
       window.location.reload();
     } catch (error) {
+      setButtonLoading(false);
       console.error("Update failed:", error);
     }
   };
 
   const handlePasswordChange = async () => {
     if (!oldPassword || !newPassword) return alert("Both fields are required.");
+    setButtonLoading(true);
     try {
       const credential = EmailAuthProvider.credential(auth.currentUser!.email!, oldPassword);
       await reauthenticateWithCredential(auth.currentUser!, credential);
       await updatePassword(auth.currentUser!, newPassword);
       alert("Password updated successfully.");
       setShowOverlay(null);
+      setButtonLoading(false);
       window.location.reload();
     } catch (error) {
+      setButtonLoading(false);
       console.error("Password change failed:", error);
       alert("Incorrect old password or another issue occurred.");
     }
@@ -442,8 +450,10 @@ const handleNavigate = (path: string) => {
     </div>
 
     <div className="flex gap-4 w-full">
-      <button className="bg-[#7db23a] text-white px-4 py-2 rounded-[30px] flex-1" onClick={handlePasswordChange}>
-        Save
+      <button className="bg-[#7db23a] text-white px-4 py-2 rounded-[30px] flex-1" onClick={handlePasswordChange}
+      disabled={buttonLoading}
+      >
+        {buttonLoading ? <ClipLoader size={20} color="white" /> : "Save"}
       </button>
       <button className="bg-gray-400 text-white px-4 py-2 rounded-[30px] flex-1" onClick={() => setShowOverlay(null)}>
         Cancel
@@ -459,8 +469,10 @@ const handleNavigate = (path: string) => {
               className="w-full p-2 border rounded-[30px] mb-4"
             />
             <div className="flex gap-4 w-full">
-              <button className="bg-[#7db23a] text-white px-4 py-2 rounded-[30px] flex-1" onClick={handleUpdate}>
-                Save
+              <button className="bg-[#7db23a] text-white px-4 py-2 rounded-[30px] flex-1" onClick={handleUpdate}
+              disabled={buttonLoading}
+              >
+                {buttonLoading ? <ClipLoader size={20} color="white" /> : "Save"}
               </button>
               <button className="bg-gray-400 text-white px-4 py-2 rounded-[30px] flex-1" onClick={() => setShowOverlay(null)}>
                 Cancel
