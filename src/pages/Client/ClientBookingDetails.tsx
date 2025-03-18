@@ -212,12 +212,14 @@ const handleConfirmUpdateStatus = async (newStatus: string) => {
 
       console.log("✅ Payment verified! Allowing completion.");
     } catch (error) {
+      setButtonLoading(false);
       console.error("❌ Error checking payment verification:", error);
       alert("Something went wrong. Please try again.");
       return;
     }
   }
-
+  
+  setButtonLoading(true);
   // 🔹 Confirm before updating status
   const userConfirmed = window.confirm(`Are you sure you want to update the booking status to ${newStatus.toUpperCase()}?`);
   if (!userConfirmed) return;
