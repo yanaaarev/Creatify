@@ -203,7 +203,8 @@ const currentPayments = payments.slice(indexOfFirstItem, indexOfLastItem);
                 </tr>
               </thead>
               <tbody>
-                {currentPayments.map((payment) => (
+              {currentPayments.length > 0 ? (
+                currentPayments.map((payment) => (
                   <tr key={payment.id} className="border-b text-center">
                     <td className="border p-2">{payment.id}</td>
                     <td className="border p-2">{payment.artistName}</td>
@@ -234,8 +235,16 @@ const currentPayments = payments.slice(indexOfFirstItem, indexOfLastItem);
                       </button>
                     </td>
                   </tr>
-                ))}
-              </tbody>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={12} className="border p-4 text-center text-gray-500">
+                    No payments available yet.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+
             </table>
           </div>
 
