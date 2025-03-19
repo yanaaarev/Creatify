@@ -7,7 +7,7 @@ import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { auth, db } from "../../config/firebaseConfig";
 import { onAuthStateChanged, signOut } from "firebase/auth";
-import { doc, onSnapshot } from "firebase/firestore";
+import { doc, onSnapshot, getDoc } from "firebase/firestore";
 import NotificationComponent from "../../Notifications";
 import LOGO from "/images/logo.png";
 const DEFAULT_AVATAR_URL = "https://res.cloudinary.com/ddjnlhfnu/image/upload/v1740737790/samplepfp_gg1dmq.png";
@@ -24,24 +24,51 @@ export const NavBar = (): JSX.Element => {
   useEffect(() => {
     const unsubscribeAuth = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
+  
       if (currentUser) {
+        // ✅ Check if the user is an admin first
         const userRef = doc(db, "users", currentUser.uid);
-        
-        // Listen for real-time updates in Firestore
-        const unsubscribeSnapshot = onSnapshot(userRef, (snapshot) => {
+        const adminRef = doc(db, "admins", currentUser.uid);
+  
+        // ✅ First check if the user exists in the "admins" collection
+        getDoc(adminRef).then((adminSnap) => {
+          if (adminSnap.exists()) {
+            setUserData(adminSnap.data()); // ✅ Fetch admin credentials
+          } else {
+            // ✅ If not an admin, check the "users" collection
+            getDoc(userRef).then((userSnap) => {
+              if (userSnap.exists()) {
+                setUserData(userSnap.data()); // ✅ Fetch user credentials
+              }
+            });
+          }
+        });
+  
+        // ✅ Listen for real-time updates in Firestore
+        const unsubscribeUser = onSnapshot(userRef, (snapshot) => {
           if (snapshot.exists()) {
             setUserData(snapshot.data());
           }
         });
-
-        return () => unsubscribeSnapshot(); // Unsubscribe when component unmounts
+  
+        const unsubscribeAdmin = onSnapshot(adminRef, (snapshot) => {
+          if (snapshot.exists()) {
+            setUserData(snapshot.data());
+          }
+        });
+  
+        return () => {
+          unsubscribeUser();
+          unsubscribeAdmin();
+        };
       } else {
         setUserData(null);
       }
     });
-
+  
     return () => unsubscribeAuth();
   }, []);
+  
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -153,7 +180,11 @@ export const NavBar = (): JSX.Element => {
                     className="w-12 h-12 rounded-full border border-gray-300" 
                   />
                   <div className="flex flex-col">
-                    <p className="text-[#191919] font-semibold text-sm">{userData?.username || "Username"}</p>
+                  <p className="text-[#191919] font-semibold text-sm">
+                    {userData?.username || "Username"}
+                    {userData?.role === "admin" && <span className="ml-1 text-gray-500 font-semibold">(ADMIN)</span>}
+                  </p>
+
                     <p className="text-[#19191980] text-xs truncate max-w-[140px]">{userData?.email || user?.email}</p>
                   </div>
                 </div>

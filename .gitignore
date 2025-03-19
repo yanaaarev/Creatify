@@ -26,8 +26,11 @@ dist-ssr
 *.env
 src/config/firebaseServiceAccount.json
 .vercel
-src/config/creatify-e0a9b-firebase-adminsdk-fbsvc-4f964d8ff4.json
-creatify-e0a9b-firebase-adminsdk-fbsvc-4f964d8ff4.json
 src/config/firebaseAdmin.ts
+firebaseAdmin.ts
 src/config/firebaseAdmin.js
-
+firebaseAdmin.js
+src/config/creatify-e0a9b-firebase-adminsdk-fbsvc-7421c99c62.json
+creatify-e0a9b-firebase-adminsdk-fbsvc-7421c99c62.json
+src/scripts/setAdmin.ts
+src/scripts/setAdmin.js

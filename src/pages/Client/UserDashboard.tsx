@@ -129,8 +129,12 @@ export const UserDashboard = (): JSX.Element => {
   const handleUpdate = async () => {
     if (!inputValue) return;
     setButtonLoading(true);
+  
     try {
-      const userDoc = doc(db, "users", user.uid);
+      const isAdmin = user?.role === "admin"; // ✅ Check if the user is an admin
+      const userCollection = isAdmin ? "admins" : "users"; // ✅ Use the correct collection
+      const userDoc = doc(db, userCollection, user.uid); // ✅ Reference the correct document
+  
       if (showOverlay === "username") {
         await updateProfile(auth.currentUser!, { displayName: inputValue });
         await updateDoc(userDoc, { username: inputValue });
@@ -141,6 +145,7 @@ export const UserDashboard = (): JSX.Element => {
         alert("A confirmation email has been sent to your previous email.");
         setUser((prev: any) => ({ ...prev, email: inputValue }));
       }
+  
       setShowOverlay(null);
       setButtonLoading(false);
       window.location.reload();
@@ -149,6 +154,7 @@ export const UserDashboard = (): JSX.Element => {
       console.error("Update failed:", error);
     }
   };
+  
 
   const handlePasswordChange = async () => {
     if (!oldPassword || !newPassword) return alert("Both fields are required.");
