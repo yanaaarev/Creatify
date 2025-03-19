@@ -274,12 +274,12 @@ const currentPayments = payments.slice(indexOfFirstItem, indexOfLastItem);
 
           {/* 🔹 Proof of Payment Overlay */}
           {selectedProof && (
-  <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-    <div className="relative rounded-[30px] w-full h-auto max-w-[600px]">
+  <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 py-10">
+    <div className="relative w-full h-full max-w-[360px]">
       
       {/* Close Button (Positioned at Top Right Outside the White Background) */}
       <button 
-        className="absolute -top-4 -right-4 text-white"
+        className="absolute -top-4 -right-10 text-white"
         onClick={() => setSelectedProof(null)}
       >
         ✖
@@ -289,7 +289,7 @@ const currentPayments = payments.slice(indexOfFirstItem, indexOfLastItem);
       <img 
         src={selectedProof} 
         alt="Proof of Payment" 
-        className="max-w-full h-auto mx-auto rounded"
+        className="max-w-full h-full"
         onError={(e) => e.currentTarget.src = "/placeholder-proof.png"} 
       />
     </div>
