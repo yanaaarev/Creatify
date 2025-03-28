@@ -73,8 +73,9 @@ const AppContent = (): JSX.Element => {
       event.preventDefault();
     };
   
-    document.addEventListener("contextmenu", disableRightClick); // Prevent right-click
-    document.addEventListener("touchstart", disableLongPress, { passive: false }); // Prevent long-press
+    // Add event listeners
+    document.addEventListener("contextmenu", disableRightClick);
+    document.addEventListener("touchstart", disableLongPress, { passive: false });
     document.addEventListener("touchend", disableLongPress, { passive: false });
   
     return () => {
@@ -83,6 +84,7 @@ const AppContent = (): JSX.Element => {
       document.removeEventListener("touchend", disableLongPress);
     };
   }, []);
+  
   
 
   useEffect(() => {

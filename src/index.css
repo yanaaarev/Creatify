@@ -30,3 +30,11 @@ html, body {
   background-color: rgba(0, 0, 0, 0.2); 
   border-radius: 10px; 
 }
+
+img {
+  pointer-events: none;  /* Disables interactions with images */
+  -webkit-touch-callout: none;  /* Disables long-press menu on iOS */
+  -webkit-user-select: none; /* Prevents text selection */
+  user-select: none;
+}
+
