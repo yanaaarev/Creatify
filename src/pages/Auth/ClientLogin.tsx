@@ -119,6 +119,13 @@ export const ClientLogin = (): JSX.Element => {
     }
   };
 
+  const handleNavigate = (path: string) => {
+    navigate(path);
+    setTimeout(() => {
+      window.location.reload(); // ✅ Ensures page reload
+    }, 0); // Small delay to prevent unnecessary fast triggers
+  };
+
   return (
     <div className="bg-[#191919] flex items-center justify-center w-full min-h-screen relative">
       {/* Responsive Background Image */}
@@ -214,15 +221,15 @@ export const ClientLogin = (): JSX.Element => {
         <p className="[font-family:'Khula',Helvetica] font-normal text-[#19191980] text-[11px] md:text-[13px] tracking-[0] leading-[15.6px] text-left">
           By joining <span className="font-semibold">Creatify</span>, you agree
           to our{" "}
-          <span className="[font-family:'Khula',Helvetica] font-semibold">
+          <button className="[font-family:'Khula',Helvetica] font-semibold hover:underline" onClick={() => handleNavigate("/terms-and-conditions")}>
             Terms of Service
-          </span>{" "}
+          </button>{" "}
           and acknowledge that you may occasionally receive emails from us. For
           details on how we protect and use your personal information, please
           review our{" "}
-          <span className="[font-family:'Khula',Helvetica] font-semibold">
+          <button className="[font-family:'Khula',Helvetica] font-semibold hover:underline" onClick={() => handleNavigate("/privacy-policy")}>
             Privacy Policy
-          </span>
+          </button>
           .
         </p>
 

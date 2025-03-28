@@ -63,16 +63,27 @@ const AppContent = (): JSX.Element => {
   const { role, loading } = useUser(); // 🔴 Get user role and loading state from context
 
   useEffect(() => {
+    // Disable right-click (desktop)
     const disableRightClick = (event: MouseEvent) => {
       event.preventDefault();
     };
-
-    document.addEventListener("contextmenu", disableRightClick);
-
+  
+    // Disable long-press (mobile)
+    const disableLongPress = (event: TouchEvent) => {
+      event.preventDefault();
+    };
+  
+    document.addEventListener("contextmenu", disableRightClick); // Prevent right-click
+    document.addEventListener("touchstart", disableLongPress, { passive: false }); // Prevent long-press
+    document.addEventListener("touchend", disableLongPress, { passive: false });
+  
     return () => {
       document.removeEventListener("contextmenu", disableRightClick);
+      document.removeEventListener("touchstart", disableLongPress);
+      document.removeEventListener("touchend", disableLongPress);
     };
   }, []);
+  
 
   useEffect(() => {
     // ✅ Log every page view

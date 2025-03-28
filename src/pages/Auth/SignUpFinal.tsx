@@ -96,6 +96,13 @@ export const SignUpFinal = (): JSX.Element => {
     }
   };
 
+  const handleNavigate = (path: string) => {
+    navigate(path);
+    setTimeout(() => {
+      window.location.reload(); // ✅ Ensures page reload
+    }, 0); // Small delay to prevent unnecessary fast triggers
+  };
+
   return (
     <div className="relative w-full min-h-screen flex justify-center items-center">
       {/* Background Image */}
@@ -162,15 +169,21 @@ export const SignUpFinal = (): JSX.Element => {
             </button>
           </div>
 
-          {/* Terms and Privacy Policy */}
-          <p className="font-normal text-[#19191980] text-[13px] tracking-[0] leading-[15.6px] text-left">
-            By joining{" "}
-            <span className="font-semibold">Creatify</span>, you agree to our{" "}
-            <span className="font-semibold">Terms of Service</span> and acknowledge that you may
-            occasionally receive emails from us. For details on how we protect and use your personal
-            information, please review our{" "}
-            <span className="font-semibold">Privacy Policy</span>.
-          </p>
+          {/* Terms and Privacy Policy (Smaller for Mobile) */}
+        <p className="[font-family:'Khula',Helvetica] font-normal text-[#19191980] text-[11px] md:text-[13px] tracking-[0] leading-[15.6px] text-left">
+          By joining <span className="font-semibold">Creatify</span>, you agree
+          to our{" "}
+          <button className="[font-family:'Khula',Helvetica] font-semibold hover:underline" onClick={() => handleNavigate("/terms-and-conditions")}>
+            Terms of Service
+          </button>{" "}
+          and acknowledge that you may occasionally receive emails from us. For
+          details on how we protect and use your personal information, please
+          review our{" "}
+          <button className="[font-family:'Khula',Helvetica] font-semibold hover:underline" onClick={() => handleNavigate("/privacy-policy")}>
+            Privacy Policy
+          </button>
+          .
+        </p>
 
           {/* Error Message */}
           {error && <p className="text-red-500 text-sm">{error}</p>}

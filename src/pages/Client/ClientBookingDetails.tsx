@@ -10,6 +10,8 @@ import { triggerNotification, NotificationType } from "../../utils/triggerNotifi
 import { BsFillCalendar2WeekFill } from "react-icons/bs";
 import { Timestamp } from "firebase/firestore"; 
 import { ClipLoader } from "react-spinners";
+import { FaFileDownload } from "react-icons/fa";
+
 
 const ClientBookingDetails = () => {
   const { bookingId } = useParams();
@@ -574,18 +576,34 @@ const handleCancelBooking = async () => {
   </div>
 )}
 
-{/* 📎 Attachment Overlay (Now Has a Close Button) */}
+{/* 📎 Attachment Overlay (Now Has a Close Button & Download Option) */}
 {showAttachment && booking?.attachment && (
   <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-10">
-    <div className="p-6 rounded-lg shadow-lg w-full max-w-xl relative">
-      {/* ❌ Close Button */}
-      <button className="absolute top-4 right-2 bg-black text-white p-2 rounded-full" onClick={() => setShowAttachment(false)}>
-        ❌
-      </button>
+    
+    {/* ❌ Close Button - Positioned at the Outer Right */}
+    <button 
+      className="absolute top-4 right-4 text-4xl text-white hover:text-gray-300"
+      onClick={() => setShowAttachment(false)}
+    >
+      ✖
+    </button>
 
+    {/* ⬇️ Download Button - Positioned at the Outer Left (Visible Only to Artist) */}
+    {auth.currentUser?.uid === booking.artistId && (
+      <a 
+        href={booking.attachment} 
+        download 
+        className="absolute top-4 left-4 text-3xl text-white hover:text-gray-300"
+      >
+        <FaFileDownload />
+      </a>
+    )}
+
+    <div className="w-full max-w-[460px] relative flex flex-col items-center">
+      
       {/* 📎 Display Image or File Link */}
       {booking.attachment.match(/\.(jpeg|jpg|gif|png)$/) ? (
-        <img src={booking.attachment} alt="Attachment" className="w-full h-auto rounded-lg" />
+        <img src={booking.attachment} alt="Attachment" className="w-full h-auto" />
       ) : (
         <a href={booking.attachment} target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">
           View Attached File
