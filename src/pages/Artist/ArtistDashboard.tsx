@@ -204,7 +204,7 @@ const [currentMonth, setCurrentMonth] = useState<string>(new Date().toISOString(
 
 
   {/* ✅ Banner Holder (Fixed Height Issue) */}
-  <div className="w-full mt-[93px] md:w-[1250px] md:h-[290px] relative">
+  <div className="w-full mt-[93px] h-[200px] md:w-[1250px] md:h-[290px] relative">
     <img
       className="w-full h-full object-cover"
       src={artist?.bannerImage || DEFAULT_BANNER_URL} // Temporary Default Banner
