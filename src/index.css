@@ -32,9 +32,11 @@ html, body {
 }
 
 img {
-  pointer-events: none;  /* Disables interactions with images */
-  -webkit-touch-callout: none;  /* Disables long-press menu on iOS */
-  -webkit-user-select: none; /* Prevents text selection */
+  filter: brightness(0); /* Turns image completely black */
+  pointer-events: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
   user-select: none;
 }
+
 
