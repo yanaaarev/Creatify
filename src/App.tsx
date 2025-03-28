@@ -63,21 +63,28 @@ const AppContent = (): JSX.Element => {
   const { role, loading } = useUser(); // 🔴 Get user role and loading state from context
 
   useEffect(() => {
+    const disableRightClick = (event: MouseEvent) => {
+      event.preventDefault();
+    };
+  
     const disableLongPress = (event: TouchEvent) => {
       const target = event.target as HTMLElement;
   
       // Apply only to images and background elements
-      if (target.tagName === "IMG" || target.classList.contains("bg-no-save")) {
+      if (target.tagName === "img" || target.classList.contains("bg-no-save")) {
         event.preventDefault();
       }
     };
   
-    document.addEventListener("touchstart", disableLongPress, { passive: false });
+    document.addEventListener("contextmenu", disableRightClick); // Disable right-click
+    document.addEventListener("touchstart", disableLongPress, { passive: false }); // Disable long-press
   
     return () => {
+      document.removeEventListener("contextmenu", disableRightClick);
       document.removeEventListener("touchstart", disableLongPress);
     };
   }, []);
+  
   
 
   useEffect(() => {

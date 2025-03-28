@@ -39,22 +39,23 @@ img {
 }
 
 .bg-no-save {
-  pointer-events: none;  /* Disables interactions */
-  -webkit-touch-callout: none;  /* Disables long-press menu on iOS */
-  -webkit-user-select: none; /* Prevents text selection */
-  user-select: none;
   position: relative;
 }
 
-/* Adds an invisible overlay to prevent background save */
 .bg-no-save::after {
   content: "";
   position: absolute;
   inset: 0;
-  background: black;
-  opacity: 0;
+  background: transparent; /* Invisible overlay */
+  pointer-events: auto; /* Ensures background cannot be saved */
   z-index: 1;
 }
+
+.bg-no-save * {
+  position: relative;
+  z-index: 2; /* Keeps content above the overlay */
+}
+
 
 
 
