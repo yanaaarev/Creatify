@@ -51,15 +51,30 @@ img {
   position: absolute;
   inset: 0;
   background: rgba(0, 0, 0, 0); /* Transparent */
-  pointer-events: auto; /* Allows interactions below */
-}
-
-/* Make sure buttons inside .bg-no-save remain clickable */
-.bg-no-save button,
-.bg-no-save a {
-  position: relative;
-  z-index: 2; /* Places buttons above the overlay */
-  pointer-events: auto; /* Enables clicking */
+  .bg-no-save {
+    -webkit-touch-callout: none; /* Disables long-press menu on iOS */
+    -webkit-user-select: none; /* Prevents text selection */
+    user-select: none;
+    position: relative;
+  }
+  
+  /* Adds an invisible overlay to prevent background image save */
+  .bg-no-save::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0); /* Transparent */
+    pointer-events: none; /* 🔹 Allows scrolling */
+  }
+  
+  /* Make sure buttons inside .bg-no-save remain clickable */
+  .bg-no-save button,
+  .bg-no-save a {
+    position: relative;
+    z-index: 2; /* Places buttons above the overlay */
+    pointer-events: auto; /* Enables clicking */
+  }
+  
 }
 
 
