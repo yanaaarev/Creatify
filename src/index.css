@@ -38,6 +38,33 @@ img {
   user-select: none;
 }
 
+.bg-no-save {
+  -webkit-touch-callout: none; /* Disables long-press menu on iOS */
+  -webkit-user-select: none; /* Prevents text selection */
+  user-select: none;
+  position: relative;
+  touch-action: pan-y; /* ✅ Allows vertical scrolling */
+}
+
+/* Invisible overlay to block saving but allow scrolling */
+.bg-no-save::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0); /* Fully transparent */
+  pointer-events: none; /* ✅ Ensures scrolling is unaffected */
+}
+
+/* Ensure buttons and links remain interactive */
+.bg-no-save button,
+.bg-no-save a {
+  position: relative;
+  z-index: 2;
+  pointer-events: auto; /* ✅ Ensures they are clickable */
+}
+
+
+
 
 
 

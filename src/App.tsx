@@ -66,27 +66,14 @@ const AppContent = (): JSX.Element => {
     const disableRightClick = (event: MouseEvent) => {
       event.preventDefault();
     };
-  
-    const disableLongPress = (event: TouchEvent) => {
-      const target = event.target as HTMLElement;
-  
-      // Apply only to images and background elements
-      if (target.tagName === "img" || target.classList.contains("bg-no-save")) {
-        event.preventDefault();
-      }
-    };
-  
-    document.addEventListener("contextmenu", disableRightClick); // Disable right-click
-    document.addEventListener("touchstart", disableLongPress, { passive: false }); // Disable long-press
-  
+
+    document.addEventListener("contextmenu", disableRightClick);
+
     return () => {
       document.removeEventListener("contextmenu", disableRightClick);
-      document.removeEventListener("touchstart", disableLongPress);
     };
   }, []);
   
-  
-
   useEffect(() => {
     // ✅ Log every page view
     logEvent(analytics, "page_view", {
