@@ -43,6 +43,7 @@ img {
   -webkit-user-select: none; /* Prevents text selection */
   user-select: none;
   position: relative;
+  touch-action: pan-y; /* ✅ Allows vertical scrolling */
 }
 
 /* Invisible overlay to block saving but allow scrolling */
@@ -51,17 +52,17 @@ img {
   position: absolute;
   inset: 0;
   background: rgba(0, 0, 0, 0); /* Fully transparent */
-  pointer-events: none; /* ✅ Allows scrolling */
-  touch-action: pan-y; /* ✅ Enables vertical scrolling */
+  pointer-events: none; /* ✅ Ensures scrolling is unaffected */
 }
 
 /* Ensure buttons and links remain interactive */
 .bg-no-save button,
 .bg-no-save a {
   position: relative;
-  z-index: 2; /* Keeps them above the overlay */
+  z-index: 2;
   pointer-events: auto; /* ✅ Ensures they are clickable */
 }
+
 
 
 
