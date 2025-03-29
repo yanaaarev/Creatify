@@ -22,19 +22,25 @@ export const SignUpFinal = (): JSX.Element => {
   const { email } = state || {};
   const [buttonLoading, setButtonLoading] = useState(false);
 
-  // Validate if the user is authenticated
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
-        setUid(user.uid); // Set the user's UID if authenticated
+        setUid(user.uid);
+        const userDocRef = doc(db, "users", user.uid);
+        const userDoc = await getDoc(userDocRef);
+  
+        if (!userDoc.exists() || !userDoc.data().agreedToTerms) {
+          setError("You must agree to the terms before proceeding.");
+          navigate("/signup-options"); // Redirect if agreement is missing
+        }
       } else {
         setError("You need to log in to complete registration.");
-        navigate("/signup-options"); // Redirect to options if not authenticated
+        navigate("/signup-options");
       }
     });
-
+  
     return () => unsubscribe();
-  }, [navigate]);
+  }, [navigate]);  
 
   useEffect(() => {
     if (!email) {

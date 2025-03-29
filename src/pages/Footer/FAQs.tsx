@@ -99,7 +99,7 @@ export const FAQs = (): JSX.Element => {
       </DropdownFaqs>
 
       <DropdownFaqs FAQS={false} text="How do I know I won’t get scammed?">
-    Creatify implements a 50-50% payment structure: clients pay 50% before the artist begins work, and the remaining 50% is due before the final work is delivered. We thoroughly screen all artists to ensure they meet our standards. In case of issues, we have their personal information on file to hold them accountable. Clients can report problems to our support email for assistance.
+      Creatify implements a 50-50% payment structure: clients pay 50% before the artist begins work, and the remaining 50% is due before the final work is delivered. We thoroughly screen all artists to ensure they meet our standards. The first payment (50%) is only released to the artist once substantial progress has been confirmed (e.g., an initial draft or progress update). The final payment (remaining 50%) is only transferred once the client confirms the final deliverables. In case of issues, we have their personal information on file to hold them accountable. Clients can report problems to our support email for assistance.
     </DropdownFaqs>
 
         </div>
@@ -132,14 +132,14 @@ export const FAQs = (): JSX.Element => {
           </DropdownFaqs>
 
           <DropdownFaqs FAQS={false} text="Is there a platform fee?">
-          Yes, a platform fee applies: <br></br> <br></br>
-          • 3% for commissions below ₱5,000 <br></br>
-          • 6.5% for commissions ₱6,000 and above
+          Yes, a platform fee applies, but instead of percentage-based fees, a flat ₱50 fee is charged per invoice. This ensures a seamless transaction without cutting into the artist’s earnings.
 
 </DropdownFaqs>
 
 <DropdownFaqs FAQS={false} text="When do i make the payment?">
-Clients make a 50% down payment to start the work, with the remaining 50% due before the final commission is delivered. Artists receive their full payment promptly after the client's payment is confirmed, as the platform fee is paid by the client. Payments are processed through Creatify's bank account or e-wallet. Once the platform fee is deducted from the client's payment, the artist's full payment is immediately transferred.
+Clients make a 50% down payment to start the work, with the remaining 50% due before the final commission is delivered.
+ The first 50% payment is transferred to the artist only after proof of substantial progress (e.g., an initial draft or progress update) is confirmed. The final 50% payment is transferred once the client approves the completed work.<br></br><br></br>
+Artists receive their full payment promptly after the client’s payment is confirmed, as the platform fee is paid by the client. Payments are processed through Creatify’s bank account or e-wallet. Once the platform fee is deducted from the client’s payment, the artist’s full payment is immediately transferred.
 </DropdownFaqs>
 
 <DropdownFaqs FAQS={false} text="What am I paying for when I book an artist?">
@@ -232,6 +232,11 @@ Intellectual property rights remain with the artist unless agreed otherwise in w
         </h1>
 
         <div className="[font-family:'Khula',Helvetica] space-y-6">
+
+        <DropdownFaqs FAQS={false} text="Contracts & Agreements">
+        Creatify has a contract with verified Creatify Artists to ensure professionalism, security, and smooth transactions. Clients, upon proceeding with a booking, agree to the platform’s Terms of Service as part of their commitment to fair and respectful engagement.
+          </DropdownFaqs>
+
           <DropdownFaqs FAQS={false} text="Changes to Commission or Project">
           Once a commission request is submitted, the scope of work is fixed. Any changes should be discussed with the artist.
           </DropdownFaqs>

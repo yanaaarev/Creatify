@@ -82,7 +82,7 @@ export const TermsAndConditions = (): JSX.Element => {
           </DropdownTerms>
 
           <DropdownTerms FAQS={false} className="" text="Payments and Fees">
-          Payments are facilitated through Creatify for security and transparency. A 3% platform fee applies to commissions below ₱5,000, and 6.5% for commissions ₱6,000 and above; this fee is added to the client's total cost. The payment structure requires a 50% down payment upon finalizing details before work begins, with the remaining 50% due upon delivery of the completed commission.<br></br><br></br> Proof of payment will be provided to both parties once Creatify receives the funds. Full payment must be made before receiving the final artwork. Artists will not begin work until the down payment is confirmed. The platform fee is deducted by Creatify before the remaining funds are transferred to the artist.
+          Payments are facilitated through Creatify for security and transparency. <span className="font-semibold"> Instead of a percentage-based platform fee, a fixed ₱50 platform fee is applied only when an invoice is sent, ensuring a seamless transaction.</span> This is the only amount charged outside of the commission price. The payment structure requires a <span className="font-semibold">50% down payment</span> upon finalizing details before work begins, with the remaining 50% due upon delivery of the completed commission.<br></br><br></br>  Proof of payment will be provided to both parties once Creatify receives the funds. Full payment must be made before receiving the final artwork. Artists will not begin work until the down payment is confirmed. <span className="font-semibold">Creatify acts as a payment intermediary but does not take a cut from the artist’s commission.</span>
           </DropdownTerms>
 
           <DropdownTerms FAQS={false} className="" text="Scheduling and Availability">
@@ -99,6 +99,10 @@ export const TermsAndConditions = (): JSX.Element => {
 
           <DropdownTerms FAQS={false} className="" text="Intellectual Property">
           The artist retains intellectual property rights unless explicitly agreed otherwise. Clients receive a license to use the commissioned work for its intended purpose.
+          </DropdownTerms>
+
+          <DropdownTerms FAQS={false} className="" text="Contracts & Agreements">
+          Creatify has a <span className="font-semibold">contract with verified Creatify Artists</span> to ensure professionalism, security, and smooth transactions. Clients, upon proceeding with a booking, <span className="font-semibold">agree to the platform’s Terms of Service</span> as part of their commitment to fair and respectful engagement.
           </DropdownTerms>
 
           <DropdownTerms FAQS={false} className="" text="Reporting Issues">

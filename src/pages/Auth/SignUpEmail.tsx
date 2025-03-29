@@ -67,6 +67,7 @@ export const SignUpEmail = (): JSX.Element => {
       await setDoc(doc(db, "users", user.uid), {
         email,
         createdAt: new Date().toISOString(),
+        agreedToTerms: true, // ✅ Store agreement status
       });
 
       setIsVerificationPending(true);
