@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { MdLogout } from "react-icons/md";
 import { HiOutlineBadgeCheck } from "react-icons/hi";
 import { BsPersonFillCheck, BsPersonFillAdd } from "react-icons/bs";
+import { FaCalendarDays } from "react-icons/fa6";
 import { CiMenuKebab } from "react-icons/ci";
 import { auth } from "../../config/firebaseConfig"; // Adjust path
 import { signOut } from "firebase/auth";
@@ -45,7 +46,7 @@ const AdminSidebar = () => {
 
         {/* Sidebar */}
   <aside
-    className={`h-full bg-white text-white fixed top-0 ${
+    className={`z-50 h-full bg-white text-white fixed top-0 ${
       isOpen ? "w-[400px]" : "w-[150px]"
     } transition-all duration-300 flex flex-col shadow-lg 
     ${isOpen ? "left-0" : "-left-[400px] md:left-0"} md:"w-[400px]" : "w-[150px]"`}
@@ -86,6 +87,16 @@ const AdminSidebar = () => {
       >
         <BsPersonFillCheck className="text-[30px]" />
         {isOpen && <span>Registered Artists</span>}
+      </button>
+
+      <button
+        onClick={() => navigate("/admin-booking-history")}
+        className={`flex items-center py-3 px-4 transition text-xl ${
+          isOpen ? "gap-3" : "justify-center"
+        } ${isActive("/admin-booking-history") ? "text-gray-600" : "text-black hover:text-gray-600"}`}
+      >
+        <FaCalendarDays className="text-[25px]" />
+        {isOpen && <span>Booking History</span>}
       </button>
 
       <button

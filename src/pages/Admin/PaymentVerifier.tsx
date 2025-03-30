@@ -181,10 +181,10 @@ const currentPayments = payments.slice(indexOfFirstItem, indexOfLastItem);
       <div className="flex w-full justify-center items-center min-h-screen bg-white">
         {/* 🔹 Payment Verification Table (Centered & Bordered) */}
         <div className="md:ml-[150px] border border-gray-300 text-[#191919] md:rounded-[30px] md:shadow-lg max-w-[1320px] py-40 px-10 md:py-10 md:px-5 md:h-auto h-full w-full">
-          <h2 className="text-2xl font-semibold mb-0 text-center">Payment Verification</h2>
+          <h2 className="text-2xl font-semibold mb-5 text-center">Payment Verification</h2>
 
           {/* 🔹 Table Container */}
-          <div className="p-5 overflow-x-auto w-full">
+          <div className="overflow-x-auto w-full">
             <table className="min-w-full border-collapse border border-white text-sm">
               <thead>
                 <tr className="bg-[#7db23a] text-white text-center">

@@ -187,7 +187,7 @@ export const SignUpOptions = (): JSX.Element => {
                 <input type="checkbox" id="termsCheckbox" disabled={!hasScrolled} checked={agreedToTerms} onChange={() => setAgreedToTerms(!agreedToTerms)} className="w-4 h-4 cursor-pointer" />
                 <label htmlFor="termsCheckbox" className="text-lg md:text-[15px]">I have read and agree to the <span className="font-bold [font-family:'Khula',Helvetica]">Terms and Agreement</span></label>
               </div>
-              <button onClick={() => setShowTerms(false)} disabled={!agreedToTerms} className={`mt-4 px-6 py-2 w-full rounded-full text-lg md:text-[18px] text-white ${agreedToTerms ? "bg-[#7db23a]" : "bg-gray-400 cursor-not-allowed"}`}>Continue</button>
+              <button onClick={() => setShowTerms(false)} disabled={!agreedToTerms} className={`mt-4 px-6 py-2 w-full rounded-full text-lg md:text-[18px] font-semibold text-white ${agreedToTerms ? "bg-[#7db23a]" : "bg-gray-400 cursor-not-allowed"}`}>Continue</button>
             </div>
           </div>
         </div>

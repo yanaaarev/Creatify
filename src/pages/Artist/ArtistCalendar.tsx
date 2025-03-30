@@ -12,6 +12,7 @@ interface ArtistCalendarProps {
   isReadOnly?: boolean;
   initialDate?: string; // ✅ Allows setting initial month
   currentMonth?: Date // Add this field
+  selectedDates?: Date[]
 }
 
 const ArtistCalendar: React.FC<ArtistCalendarProps> = ({

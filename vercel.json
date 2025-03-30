@@ -105,6 +105,10 @@
             "dest": "/"
         },
         {
+            "src": "/admin-booking-history",
+            "dest": "/"
+        },
+        {
             "src": "/artist-dashboard",
             "dest": "/"
         },
