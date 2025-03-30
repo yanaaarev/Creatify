@@ -6,6 +6,8 @@ import { IoChevronBackCircleOutline } from "react-icons/io5";
 import { FaSearch } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
+const DEFAULT_AVATAR_URL = "https://res.cloudinary.com/ddjnlhfnu/image/upload/v1740737790/samplepfp_gg1dmq.png";
+
 interface Chat {
   id: string;
   clientId?: string;
@@ -88,10 +90,10 @@ const ChatList = ({ selectChat, goBack }: { selectChat: (chatId: string) => void
             {/* ✅ Avatar Wrapper with Online Status Indicator */}
             <div className="relative">
               <img
-                src={chat.avatarUrl || "/default-avatar.png"}
+                src={chat.avatarUrl || DEFAULT_AVATAR_URL}
                 alt="User Avatar"
                 className="w-[60px] h-[60px] rounded-full object-cover border-5 border-white"
-                onError={(e) => (e.currentTarget.src = "/default-avatar.png")}
+                onError={(e) => (e.currentTarget.src = DEFAULT_AVATAR_URL)}
               />
 
               {/* 🟢 Online Indicator (Only for Artists) */}

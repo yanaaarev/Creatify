@@ -290,7 +290,7 @@ const currentPayments = payments.slice(indexOfFirstItem, indexOfLastItem);
         src={selectedProof} 
         alt="Proof of Payment" 
         className="max-w-full h-full"
-        onError={(e) => e.currentTarget.src = "/placeholder-proof.png"} 
+        onError={(e) => e.currentTarget.src = "/placeholder-proof.webp"} 
       />
     </div>
   </div>

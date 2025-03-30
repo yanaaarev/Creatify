@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { FaArrowLeft, FaArrowRight, FaTimes } from "react-icons/fa";
-import samplePortfolio from "/images/creatifyportfolio.png"; // Sample portfolio image path
+import samplePortfolio from "/images/creatifyportfolio.webp"; // Sample portfolio image path
 
 interface PortfolioFile {
   url: string;

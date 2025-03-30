@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { db } from "../../config/firebaseConfig";
 import { doc, getDoc } from "firebase/firestore";
-import authp from "/images/authp.png";
+import authp from "/images/authp.webp";
 
 const BookingConfirmation = () => {
   const { artistId } = useParams();

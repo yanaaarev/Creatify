@@ -5,6 +5,8 @@ import { triggerNotification } from "../utils/triggerNotification"; // ✅ Impor
 import { logEvent } from "firebase/analytics";
 import { analytics } from "../config/firebaseConfig";
 
+const DEFAULT_AVATAR_URL = "https://res.cloudinary.com/ddjnlhfnu/image/upload/v1740737790/samplepfp_gg1dmq.png";
+
 export const listenForChats = (userId: string, setChats: Function) => {
   console.log("🔥 Listening for chats for user:", userId);
 
@@ -19,7 +21,7 @@ export const listenForChats = (userId: string, setChats: Function) => {
 
         let clientUsername = "Unknown User";
         let artistName = "Unknown Artist";
-        let avatarUrl = "/default-avatar.png";
+        let avatarUrl = DEFAULT_AVATAR_URL; // ✅ Default avatar URL
         let lastMessage = chatData.lastMessage || "No messages yet";
         let isOnline = false; // ✅ Default: Assume offline
         let isUnread = chatData.unreadStatus?.[userId] || false;
@@ -32,7 +34,7 @@ export const listenForChats = (userId: string, setChats: Function) => {
             const clientData = clientSnap.data();
             clientUsername = `@${clientData.username}`;
             if (userId === chatData.artistId) {
-              avatarUrl = clientData.avatar || "/default-avatar.png";
+              avatarUrl = clientData.avatar || DEFAULT_AVATAR_URL;
             }
           }
         }
@@ -45,7 +47,7 @@ export const listenForChats = (userId: string, setChats: Function) => {
             const artistData = artistSnap.data();
             artistName = artistData.fullName || artistData.displayName || "Unknown Artist";
             if (userId === chatData.clientId) {
-              avatarUrl = artistData.profilePicture || artistData.avatar || "/default-avatar.png";
+              avatarUrl = artistData.profilePicture || artistData.avatar || DEFAULT_AVATAR_URL;
             }
 
             // ✅ Fetch Online Status for Artists Only

@@ -1,9 +1,9 @@
 import { useNavigate } from "react-router-dom";
-import N1 from "/images/senenartwork.png";
-import ARTEORK from "/images/ARTEORK.png";
-import CREATIFYElements111 from "/images/faqs.png";
-import WHATWEDO from "/images/whatwedo.png";
-import CREATIFYElements131 from "/images/ayaa.png";
+import N1 from "/images/senenartwork.webp";
+import ARTEORK from "/images/ARTEORK.webp";
+import CREATIFYElements111 from "/images/faqs.webp";
+import WHATWEDO from "/images/whatwedo.webp";
+import CREATIFYElements131 from "/images/ayaa.webp";
 
 export const HomePage = (): JSX.Element => {
   const navigate = useNavigate();
@@ -12,7 +12,7 @@ export const HomePage = (): JSX.Element => {
     <div className="bg-[#1E1E1E] flex flex-col items-center w-full min-h-screen">
       <div className="w-full flex-grow">
         {/* Hero Section */}
-        <div className="relative w-full h-screen md:min-h-screen bg-[url('/images/bg.png')] bg-cover bg-center bg-no-repeat bg-no-save flex flex-col items-center justify-center px-6 py-10 md:px-0 md:py-0 text-center">
+        <div className="relative w-full h-screen md:min-h-screen bg-[url('/images/bg.webp')] bg-cover bg-center bg-no-repeat bg-no-save flex flex-col items-center justify-center px-6 py-10 md:px-0 md:py-0 text-center">
           <h1 className="text-white font-bold text-3xl md:text-5xl px-1 leading-snug max-w-[1000px] md:max-w-[1200px] mb-2">
             CREATE WITH OUR OUTSTANDING ARTISTS WHO CAN TURN YOUR IMAGINATION
             INTO REALITY.
@@ -38,7 +38,7 @@ export const HomePage = (): JSX.Element => {
           <div
             className="relative w-full min-h-[400px] md:min-h-[500px] xl:min-h-screen flex flex-col justify-center items-start md:items-start text-white text-left md:text-left px-4 md:px-10 bg-cover bg-no-save bg-right md:bg-right bg-no-repeat"
             style={{
-              backgroundImage: "url('/images/awd-1.png')",
+              backgroundImage: "url('/images/awd-1.webp')",
               backgroundPosition: "right 2px center",
               backgroundSize: "165%",
             }}
@@ -100,7 +100,7 @@ export const HomePage = (): JSX.Element => {
 
         {/* Join Us Section */}
         <div
-          style={{ backgroundImage: "url('/images/ww-1.png')" }}
+          style={{ backgroundImage: "url('/images/ww-1.webp')" }}
           className="relative w-full h-[500px] md:h-screen bg-cover bg-center bg-no-repeat bg-no-save flex flex-col items-center justify-center pt-4 md:py-24 md:px-6"
         >
           <img

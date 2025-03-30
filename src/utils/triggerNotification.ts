@@ -1,6 +1,8 @@
 import { collection, addDoc, Timestamp, getDoc, doc } from "firebase/firestore";
 import { db } from "../config/firebaseConfig";
 
+const DEFAULT_AVATAR_URL = "https://res.cloudinary.com/ddjnlhfnu/image/upload/v1740737790/samplepfp_gg1dmq.png";
+
 export type NotificationType =
   | "new_message"
   | "cancelled"
@@ -26,7 +28,7 @@ interface BookingData {
 }
 
 const admin = {
-  avatar: '/images/creatify_favicon.png', // replace with the actual avatar URL
+  avatar: '/images/creatify_favicon.webp', // replace with the actual avatar URL
   // other admin properties...
 };
 
@@ -38,13 +40,13 @@ const getUserDetails = async (userId: string, isArtist: boolean): Promise<{ name
     if (userSnap.exists()) {
       const data = userSnap.data();
       const name = isArtist ? data.fullName || data.displayName || data.username : `@${data.username}`;
-      const avatar = isArtist ? data.profilePicture || "/default-avatar.png" : data.avatar || data.avatarUrl || "/default-avatar.png";
+      const avatar = isArtist ? data.profilePicture || DEFAULT_AVATAR_URL : data.avatar || data.avatarUrl || DEFAULT_AVATAR_URL;
       return { name, avatar };
     }
   } catch (error) {
     console.error("Error fetching user details:", error);
   }
-  return { name: "Unknown User", avatar: "/default-avatar.png" };
+  return { name: "Unknown User", avatar: DEFAULT_AVATAR_URL };
 };
 
 // ✅ Function to trigger notifications

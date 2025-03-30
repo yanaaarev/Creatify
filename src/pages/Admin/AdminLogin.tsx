@@ -42,7 +42,7 @@ const AdminLogin = (): JSX.Element => {
   return (
     <div className="bg-[#191919] flex justify-center w-full min-h-screen relative">
       {/* Background */}
-      <div className="absolute inset-0 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: "url('/images/authp.png')" }}></div>
+      <div className="absolute inset-0 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: "url('/images/authp.webp')" }}></div>
 
       <div className="w-full max-w-[1536px] flex flex-col items-center md:p-0 relative z-10">
         {/* White Container */}

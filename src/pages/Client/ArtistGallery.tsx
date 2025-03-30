@@ -4,10 +4,10 @@ import { db, auth } from "../../config/firebaseConfig";
 import { collection, query, where, getDocs, doc, getDoc } from "firebase/firestore";
 import { VscSettings } from "react-icons/vsc";
 import { BsFillCalendarCheckFill } from "react-icons/bs";
-import star1 from "/images/star.png";
-import authp from "/images/authp.png";
+import star1 from "/images/star.webp";
+import authp from "/images/authp.webp";
 import sampleVideo from "/images/sample-video.mp4"; // Sample video path
-import samplePortfolio from "/images/creatifyportfolio.png"; // Sample portfolio image path
+import samplePortfolio from "/images/creatifyportfolio.webp"; // Sample portfolio image path
 import ArtistCalendar from "../Artist/ArtistCalendar"; // ✅ Import Calendar
 import { limit } from "firebase/firestore";
 import { useSearchParams } from "react-router-dom";

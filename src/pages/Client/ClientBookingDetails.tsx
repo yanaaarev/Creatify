@@ -5,13 +5,14 @@ import { doc, getDoc, updateDoc, collection, query, where, getDocs, addDoc } fro
 import { IoChevronBackCircleOutline } from "react-icons/io5";
 import { auth } from "../../config/firebaseConfig"; // Already imported db
 import ArtistCalendar from "../Artist/ArtistCalendar";
-import authp from "/images/authp.png";
+import authp from "/images/authp.webp";
 import { triggerNotification, NotificationType } from "../../utils/triggerNotification";
 import { BsFillCalendar2WeekFill } from "react-icons/bs";
 import { Timestamp } from "firebase/firestore"; 
 import { ClipLoader } from "react-spinners";
 import { FaFileDownload } from "react-icons/fa";
 
+const DEFAULT_AVATAR_URL = "https://res.cloudinary.com/ddjnlhfnu/image/upload/v1740737790/samplepfp_gg1dmq.png";
 
 const ClientBookingDetails = () => {
   const { bookingId } = useParams();
@@ -152,9 +153,9 @@ const getArtistDetails = async (artistId: string): Promise<{ fullName: string; a
   const userSnap = await getDoc(userRef);
   if (userSnap.exists()) {
     const userData = userSnap.data();
-    return { fullName: userData.fullName || "Unknown Artist", avatar: userData.avatar || "/default-avatar.png" };
+    return { fullName: userData.fullName || "Unknown Artist", avatar: userData.avatar || DEFAULT_AVATAR_URL };
   }
-  return { fullName: "Unknown Artist", avatar: "/default-avatar.png" };
+  return { fullName: "Unknown Artist", avatar: DEFAULT_AVATAR_URL };
 };
 
 const handleConfirmUpdateStatus = async (newStatus: string) => {

@@ -19,7 +19,7 @@ import { AiFillMessage } from "react-icons/ai";
 import { FaEye, FaEyeSlash, FaChevronRight } from "react-icons/fa";
 import NotificationComponent from "../../Notifications";
 const DEFAULT_AVATAR_URL = "https://res.cloudinary.com/ddjnlhfnu/image/upload/v1740737790/samplepfp_gg1dmq.png";
-import LOGO from "/images/logo.png";
+import LOGO from "/images/logo.webp";
 import { ClipLoader } from "react-spinners";
 
 

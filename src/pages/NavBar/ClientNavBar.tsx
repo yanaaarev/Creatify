@@ -9,7 +9,7 @@ import { auth, db } from "../../config/firebaseConfig";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { doc, onSnapshot, getDoc } from "firebase/firestore";
 import NotificationComponent from "../../Notifications";
-import LOGO from "/images/logo.png";
+import LOGO from "/images/logo.webp";
 const DEFAULT_AVATAR_URL = "https://res.cloudinary.com/ddjnlhfnu/image/upload/v1740737790/samplepfp_gg1dmq.png";
 
 export const NavBar = (): JSX.Element => {

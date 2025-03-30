@@ -1,5 +1,5 @@
 import { useReducer } from "react";
-import untitled11 from "/images/authp.png";
+import untitled11 from "/images/authp.webp";
 
 // DropdownFaqs Component
 interface Props {

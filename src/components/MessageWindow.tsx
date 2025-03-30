@@ -9,6 +9,8 @@ import { triggerNotification} from "../utils/triggerNotification";
 import { MdPayments } from "react-icons/md"; // ✅ Payment Icon
 import { ClipLoader } from "react-spinners";
 
+const DEFAULT_AVATAR_URL = "https://res.cloudinary.com/ddjnlhfnu/image/upload/v1740737790/samplepfp_gg1dmq.png";
+
 interface Message {
   id: string;
   senderId?: string;
@@ -78,12 +80,12 @@ const getArtistDetails = async (artistId: string): Promise<{ fullName: string; a
     const userSnap = await getDoc(userRef);
     if (userSnap.exists()) {
       const userData = userSnap.data();
-      return { fullName: userData.fullName || "Unknown Artist", avatar: userData.avatar || "/default-avatar.png" };
+      return { fullName: userData.fullName || "Unknown Artist", avatar: userData.avatar || DEFAULT_AVATAR_URL };
     }
   } catch (error) {
     console.error("❌ Error fetching artist details:", error);
   }
-  return { fullName: "Unknown Artist", avatar: "/default-avatar.png" };
+  return { fullName: "Unknown Artist", avatar: DEFAULT_AVATAR_URL };
 };
 
 // ✅ Helper function to fetch client username

@@ -6,9 +6,11 @@ import axios from "axios";
 import { ClipLoader } from "react-spinners";
 import { IoChevronBackCircleOutline } from "react-icons/io5";
 import { triggerNotification } from "../../utils/triggerNotification"; // Adjust path as needed
-import authp from "/images/authp.png";
+import authp from "/images/authp.webp";
 import { logEvent } from "firebase/analytics";
 import { analytics } from "../../config/firebaseConfig"; // Import analytics
+
+const DEFAULT_AVATAR_URL = "https://res.cloudinary.com/ddjnlhfnu/image/upload/v1740737790/samplepfp_gg1dmq.png";
 
 const BookingRequest = () => {
   const { artistId } = useParams();
@@ -100,9 +102,9 @@ const BookingRequest = () => {
     const userSnap = await getDoc(userRef);
     if (userSnap.exists()) {
       const userData = userSnap.data();
-      return { fullName: userData.fullName || "Unknown Artist", avatar: userData.avatar || "/default-avatar.png" };
+      return { fullName: userData.fullName || "Unknown Artist", avatar: userData.avatar || DEFAULT_AVATAR_URL };
     }
-    return { fullName: "Unknown Artist", avatar: "/default-avatar.png" };
+    return { fullName: "Unknown Artist", avatar: DEFAULT_AVATAR_URL };
   };
   
   const handleConfirmBooking = async () => {

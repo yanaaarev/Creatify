@@ -1,5 +1,5 @@
 import { useReducer } from "react";
-import untitled11 from "/images/authp.png"; // Adjust the path as needed
+import untitled11 from "/images/authp.webp"; // Adjust the path as needed
 
 interface DropdownProps {
   FAQS: boolean;

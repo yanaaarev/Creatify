@@ -55,7 +55,7 @@ const AdminSidebar = () => {
       {/* 🔹 Clickable Logo (Replaces FaBars) */}
       <button onClick={() => setIsOpen(!isOpen)} className="focus:outline-none">
         <img
-          src="/images/logo.png"
+          src="/images/logo.webp"
           alt="Creatify Logo"
           className={`transition-all duration-300 ${
             isOpen ? "w-[130px] h-[130px]" : "w-[130px] h-[130px]"

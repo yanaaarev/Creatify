@@ -6,16 +6,17 @@ import { useNavigate } from "react-router-dom";
 import { triggerNotification } from "./utils/triggerNotification";
 import { writeBatch } from "firebase/firestore"; // ✅ Import writeBatch
 
-import creatifyFavicon from "/images/creatifyadmin.png";
-import newMessageIcon from "/images/notificationtype/new_message.png";
-import activeIcon from "/images/notificationtype/active.png";
-import cancelledIcon from "/images/notificationtype/cancelled.png";
-import onHoldIcon from "/images/notificationtype/on-hold.png";
-import bookingRequestIcon from "/images/notificationtype/booking-request.png";
-import completedIcon from "/images/notificationtype/completed.png";
-import paymentIcon from "/images/notificationtype/payment.png";
-import feedbackIcon from "/images/notificationtype/feedback.png";
+import creatifyFavicon from "/images/creatifyadmin.webp";
+import newMessageIcon from "/images/notificationtype/new_message.webp";
+import activeIcon from "/images/notificationtype/active.webp";
+import cancelledIcon from "/images/notificationtype/cancelled.webp";
+import onHoldIcon from "/images/notificationtype/on-hold.webp";
+import bookingRequestIcon from "/images/notificationtype/booking-request.webp";
+import completedIcon from "/images/notificationtype/completed.webp";
+import paymentIcon from "/images/notificationtype/payment.webp";
+import feedbackIcon from "/images/notificationtype/feedback.webp";
 
+const DEFAULT_AVATAR_URL = "https://res.cloudinary.com/ddjnlhfnu/image/upload/v1740737790/samplepfp_gg1dmq.png";
 
 interface Notification {
   id: string;
@@ -412,7 +413,7 @@ else if (notification.title.includes("Feedback")) {
            clientUsername: auth.currentUser?.displayName || "Anonymous",
            bookingId: feedbackData.bookingId,
            senderId: clientId,
-           avatarUrl: artistData?.profilePicture || "/default-avatar.png",
+           avatarUrl: artistData?.profilePicture || DEFAULT_AVATAR_URL,
            timestamp: Timestamp.now(),
        });
   
@@ -523,7 +524,7 @@ else if (notification.title.includes("Feedback")) {
   
                 {getNotificationIcon(notif.type) && (
                   <img
-                    src={getNotificationIcon(notif.type) || "/default-icon.png"}
+                    src={getNotificationIcon(notif.type) || creatifyFavicon}
                     alt="Notification Type Icon"
                     className="absolute bottom-0 right-0 w-[20px] h-[20px] md:w-[30px] md:h-[30px] rounded-full border-2 border-white bg-white"
                   />

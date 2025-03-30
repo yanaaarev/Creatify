@@ -434,7 +434,7 @@ const handleSaveChanges = async () => {
     <div 
       className="absolute inset-0 bg-center bg-no-repeat h-full w-full bg-fixed md:bg-contain"
       style={{ 
-        backgroundImage: "url('/images/authp.png')",
+        backgroundImage: "url('/images/authp.webp')", // ✅ Background Image URL
         backgroundSize: "cover", // ✅ Default: Fills screen
         backgroundPosition: "top center",
       }} 
