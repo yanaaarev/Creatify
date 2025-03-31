@@ -177,7 +177,9 @@ const [currentMonth, setCurrentMonth] = useState<string>(new Date().toISOString(
   }
 
   return (
-    <div className="flex flex-col items-center w-full min-h-screen relative">
+    <div className="bg-[#191919] flex flex-col items-center w-full min-h-screen relative">
+ <div className="absolute inset-0 max-w-full min-h-screen bg-fixed bg-center bg-no-repeat" style={{ backgroundImage: "url('/images/authp.webp')" }}></div>
+  
   {/* ✅ Banner Holder (Fixed Height Issue) */}
   <div className="w-full mt-[93px] h-[200px] md:w-[1250px] md:h-[290px] relative">
     <img
@@ -186,7 +188,7 @@ const [currentMonth, setCurrentMonth] = useState<string>(new Date().toISOString(
       alt="Artist Banner"
     />
      {/* Fake Save Target */}
-     <a href="/images/bkitmsinave.webp" className="absolute inset-0 w-full h-full opacity-0 pointer-events-none"></a>
+     <a href="/images/bkitmsinave.webp" className="absolute inset-0 w-full h-full opacity-0"></a>
 
     {/* Overlay (Now Non-Blocking) */}
     <div className="absolute inset-0 img-overlay"></div>
@@ -204,7 +206,7 @@ const [currentMonth, setCurrentMonth] = useState<string>(new Date().toISOString(
     />
      
      {/* Fake Save Target */}
-     <a href="/images/bkitmsinave.webp" className="absolute inset-0 w-full h-full rounded-full opacity-0 pointer-events-none"></a>
+     <a href="/images/bkitmsinave.webp" className="absolute inset-0 w-full h-full rounded-full opacity-0"></a>
 
 {/* Overlay (Now Non-Blocking) */}
 <div className="absolute inset-0 img-overlay rounded-full"></div>

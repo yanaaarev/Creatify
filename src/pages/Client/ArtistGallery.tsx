@@ -5,6 +5,7 @@ import { collection, query, where, getDocs, doc, getDoc } from "firebase/firesto
 import { VscSettings } from "react-icons/vsc";
 import { BsFillCalendarCheckFill } from "react-icons/bs";
 import star1 from "/images/star.webp";
+import authp from "/images/authp.webp";
 import sampleVideo from "/images/sample-video.mp4"; // Sample video path
 import samplePortfolio from "/images/creatifyportfolio.webp"; // Sample portfolio image path
 import ArtistCalendar from "../Artist/ArtistCalendar"; // ✅ Import Calendar
@@ -250,7 +251,9 @@ const handleOpenCalendar = async (artist: Artist, e: React.MouseEvent) => {
 
   return (
     <div 
-  className="w-full min-h-screen py-5 px-4 md:px-12 md:py-6">
+  className="w-full min-h-screen bg-contain bg-center bg-no-repeat py-5 px-4 md:px-12 md:py-6"
+  style={{ backgroundImage: `url(${authp})`, backgroundSize: "cover", backgroundAttachment: "fixed" }}
+>
       {/* 🔹 Category Dropdown Button */}
       <div className="relative md:ml-[30px] md:mt-[110px] mt-[100px] mb-5 z-10 flex justify-center md:justify-start">
         <div
