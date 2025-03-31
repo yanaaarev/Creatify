@@ -521,7 +521,6 @@ else if (notification.title.includes("Feedback")) {
               onError={(e) => (e.currentTarget.src = creatifyFavicon)}
               className="w-full h-full rounded-full object-cover border-2 border-white"
             />
-  
                 {getNotificationIcon(notif.type) && (
                   <img
                     src={getNotificationIcon(notif.type) || creatifyFavicon}

@@ -5,7 +5,6 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { collection, doc, getDoc, getDocs, updateDoc, where, query, deleteDoc } from "firebase/firestore";
 import { auth, db } from "../../config/firebaseConfig";
 import UserDashboardSidebar from "./UserDashboardSidebar";
-import { IoCloseCircleOutline } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 import { IoBanOutline } from "react-icons/io5";
 import { IoChevronBackCircleOutline } from "react-icons/io5"; // ✅ Import Back Icon
@@ -377,16 +376,14 @@ const handleNavigate = (path: string) => {
 {/* ✅ Avatar Selection Overlay */}
 {showAvatarOverlay && (
   <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-    <div className="bg-white p-12 md:p-6 rounded-[30px] shadow-lg w-full md:w-[700px] md:h-[320px] relative flex flex-col items-center justify-center">
-      
-      {/* ❌ Close Button */}
-      <button
-        className="absolute top-2 right-3 text-red-500 text-2xl"
+    {/* ❌ Close Button */}
+    <button
+        className="absolute top-2 right-3 text-white text-3xl"
         onClick={() => setShowAvatarOverlay(false)}
       >
-        <IoCloseCircleOutline />
+        ✖
       </button>
-
+    <div className="bg-white p-12 md:p-6 rounded-[30px] shadow-lg w-full md:w-[700px] md:h-[320px] relative flex flex-col items-center justify-center">
       {/* Title */}
       <h2 className="text-lg font-semibold text-center mb-4 md:mb-6">Select Your Avatar</h2>
 
@@ -402,12 +399,12 @@ const handleNavigate = (path: string) => {
         </button>
         {defaultAvatars.map((avatar, index) => (
           <img
-            key={index}
-            src={avatar}
-            alt={`Avatar ${index + 1}`}
-            className="w-[50px] h-[50px] md:w-[100px] md:h-[100px] rounded-full cursor-pointer border-2 border-gray-300 hover:border-blue-500"
-            onClick={() => handleAvatarSelection(avatar)}
-          />
+          key={index}
+          src={avatar}
+          alt={`Avatar ${index + 1}`}
+          className="w-[50px] h-[50px] md:w-[100px] md:h-[100px] rounded-full cursor-pointer border-2 border-gray-300 hover:border-blue-500 pointer-events-auto"
+          onClick={() => handleAvatarSelection(avatar)}
+        />        
         ))}
       </div>
     </div>

@@ -38,6 +38,15 @@ img {
   user-select: none;
 }
 
+.img-overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: url('/images/bkitmsinave.webp') no-repeat center center;
+  background-size: cover;
+  pointer-events: auto; /* Allow interaction with this instead */
+}
+
 .bg-no-save {
   -webkit-touch-callout: none; /* Disables long-press menu on iOS */
   -webkit-user-select: none; /* Prevents text selection */
