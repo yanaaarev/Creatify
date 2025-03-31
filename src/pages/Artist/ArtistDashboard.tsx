@@ -217,11 +217,13 @@ const [currentMonth, setCurrentMonth] = useState<string>(new Date().toISOString(
   {/* Profile Picture Holder */}
   <div className="w-[160px] h-[160px] md:w-[240px] md:h-[240px] lg:w-[260px] lg:h-[260px] rounded-full overflow-hidden absolute left-1/2 transform -translate-x-1/2 -top-20 md:-top-28 lg:-top-32">
     {/* Profile Picture */}
+    <div className="img-wrapper">
     <img
       className="w-full h-full object-cover"
       src={artist?.profilePicture || DEFAULT_AVATAR_URL} // Temporary Default Avatar
       alt="Artist Profile"
     />
+    </div>
   </div>
 
   {/* Artist Info */}

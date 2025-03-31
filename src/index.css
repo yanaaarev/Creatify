@@ -31,24 +31,26 @@ html, body {
   border-radius: 10px; 
 }
 
-img {
+.img-wrapper {
   position: relative;
-  pointer-events: none; /* Prevents direct interaction */
-  user-select: none; /* Prevents selection */
-  -webkit-user-drag: none; /* Prevents dragging on WebKit browsers */
+  display: inline-block;
 }
 
-img::after {
+.img-wrapper img {
+  display: block;
+  pointer-events: none;
+  user-select: none;
+}
+
+.img-wrapper::after {
   content: "";
   position: absolute;
   inset: 0;
   background: url('/images/bkitmsinave.webp') no-repeat center center;
   background-size: cover;
-  opacity: 0.4; /* Adjust transparency */
-  pointer-events: none; /* Ensure the overlay doesn’t block */
+  opacity: 0.4;
+  pointer-events: none;
 }
-
-
 
 .bg-no-save {
   -webkit-touch-callout: none; /* Disables long-press menu on iOS */
