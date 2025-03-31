@@ -36,7 +36,6 @@ img {
   -webkit-touch-callout: none;  /* Disables long-press menu on iOS */
   -webkit-user-select: none; /* Prevents text selection */
   user-select: none;
-  background-image: url('/images/bkitmsinave.webp');
 }
 
 .bg-no-save {
