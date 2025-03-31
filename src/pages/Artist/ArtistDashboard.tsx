@@ -179,7 +179,6 @@ const [currentMonth, setCurrentMonth] = useState<string>(new Date().toISOString(
   return (
     <div className="bg-[#191919] flex flex-col items-center w-full min-h-screen relative">
  <div className="absolute inset-0 max-w-full min-h-screen bg-fixed bg-center bg-no-repeat" style={{ backgroundImage: "url('/images/authp.webp')" }}></div>
-  
   {/* ✅ Banner Holder (Fixed Height Issue) */}
   <div className="w-full mt-[93px] h-[200px] md:w-[1250px] md:h-[290px] relative">
     <img
