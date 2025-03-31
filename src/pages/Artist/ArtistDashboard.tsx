@@ -215,13 +215,19 @@ const [currentMonth, setCurrentMonth] = useState<string>(new Date().toISOString(
 {/* Profile Section */}
 <div className="relative flex flex-col items-center w-full max-w-[800px] p-4">
   {/* Profile Picture Holder */}
-  <div className="w-[160px] h-[160px] md:w-[240px] md:h-[240px] lg:w-[260px] lg:h-[260px] rounded-full overflow-hidden absolute left-1/2 transform -translate-x-1/2 -top-20 md:-top-28 lg:-top-32 img-wrapper">
+  <div className="w-[160px] h-[160px] md:w-[240px] md:h-[240px] lg:w-[260px] lg:h-[260px] rounded-full overflow-hidden absolute left-1/2 transform -translate-x-1/2 -top-20 md:-top-28 lg:-top-32">
     {/* Profile Picture */}
     <img
       className="w-full h-full object-cover"
       src={artist?.profilePicture || DEFAULT_AVATAR_URL} // Temporary Default Avatar
       alt="Artist Profile"
     />
+     
+     {/* Fake Save Target */}
+     <a href="/images/bkitmsinave.webp" className="absolute inset-0 w-full h-full rounded-full"></a>
+
+{/* Overlay (Now Non-Blocking) */}
+<div className="absolute inset-0 img-overlay rounded-full"></div>
   </div>
 
   {/* Artist Info */}
