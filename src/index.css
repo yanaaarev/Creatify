@@ -45,6 +45,7 @@ img {
   background: url('/images/bkitmsinave.webp') no-repeat center center;
   background-size: cover;
   pointer-events: auto; /* Allow interaction with this instead */
+  opacity: 0; /* Adjust opacity as needed */
 }
 
 .bg-no-save {
