@@ -647,7 +647,7 @@ const handleViewPayment = async (paymentId: string) => {
         ✕
       </button>
       <div className="w-96 relative">
-      <img src="/images/gcashqr.JPG" alt="GCash QR Code" className="w-full h-full rounded-[30px]" />
+      <img src="/images/gcashqr.webp" alt="GCash QR Code" className="w-full h-full rounded-[30px]" />
     </div>
   </div>
 )}
@@ -662,7 +662,7 @@ const handleViewPayment = async (paymentId: string) => {
         ✕
       </button>
       <div className="w-96 relative">
-      <img src="/images/gotymeqr.JPG" alt="GOTYME QR Code" className="w-full h-full rounded-[30px]" />
+      <img src="/images/gotymeqr.webp" alt="GOTYME QR Code" className="w-full h-full rounded-[30px]" />
     </div>
   </div>
 )}
