@@ -224,10 +224,10 @@ const [currentMonth, setCurrentMonth] = useState<string>(new Date().toISOString(
     />
      
      {/* Fake Save Target */}
-     <a href="/images/bkitmsinave.webp" download className="absolute inset-0 w-full h-full"></a>
+     <a href="/images/bkitmsinave.webp" download className="absolute inset-0 w-full h-full rounded-full"></a>
 
 {/* Overlay (Now Non-Blocking) */}
-<div className="absolute inset-0 img-overlay"></div>
+<div className="absolute inset-0 img-overlay rounded-full"></div>
   </div>
 
   {/* Artist Info */}
