@@ -222,12 +222,9 @@ const [currentMonth, setCurrentMonth] = useState<string>(new Date().toISOString(
       src={artist?.profilePicture || DEFAULT_AVATAR_URL} // Temporary Default Avatar
       alt="Artist Profile"
     />
-{/* Prevent Save (Invisible Image) */}
-<img 
-      src="/images/bkitmsinave.webp" 
-      className="absolute inset-0 w-full h-full object-cover opacity-0 pointer-events-auto rounded-full" 
-      alt="" 
-    />
+     
+     {/* Fake Save Target */}
+     <a href="/images/bkitmsinave.webp" className="absolute inset-0 w-full h-full rounded-full"></a>
 
 {/* Overlay (Now Non-Blocking) */}
 <div className="absolute inset-0 img-overlay rounded-full"></div>
