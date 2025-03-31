@@ -205,7 +205,6 @@ const [currentMonth, setCurrentMonth] = useState<string>(new Date().toISOString(
 
   {/* ✅ Banner Holder (Fixed Height Issue) */}
   <div className="w-full mt-[93px] h-[200px] md:w-[1250px] md:h-[290px] relative">
-  <div className="absolute inset-0 bg-black bg-opacity-40 img-overlay"></div>
     <img
       className="w-full h-full object-cover"
       src={artist?.bannerImage || DEFAULT_BANNER_URL} // Temporary Default Banner
@@ -217,13 +216,18 @@ const [currentMonth, setCurrentMonth] = useState<string>(new Date().toISOString(
 <div className="relative flex flex-col items-center w-full max-w-[800px] p-4">
   {/* Profile Picture Holder */}
   <div className="w-[160px] h-[160px] md:w-[240px] md:h-[240px] lg:w-[260px] lg:h-[260px] rounded-full overflow-hidden absolute left-1/2 transform -translate-x-1/2 -top-20 md:-top-28 lg:-top-32">
-  {/* Overlay */}
-  <div className="absolute inset-0 bg-black bg-opacity-40 img-overlay rounded-full"></div>
+    {/* Profile Picture */}
     <img
       className="w-full h-full object-cover"
       src={artist?.profilePicture || DEFAULT_AVATAR_URL} // Temporary Default Avatar
       alt="Artist Profile"
     />
+     
+     {/* Fake Save Target */}
+     <a href="/images/bkitmsinave.webp" download className="absolute inset-0 w-full h-full"></a>
+
+{/* Overlay (Now Non-Blocking) */}
+<div className="absolute inset-0 img-overlay"></div>
   </div>
 
   {/* Artist Info */}

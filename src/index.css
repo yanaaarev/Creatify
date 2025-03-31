@@ -44,10 +44,10 @@ img {
   height: 100%;
   background: url('/images/bkitmsinave.webp') no-repeat center center;
   background-size: cover;
-  pointer-events: auto; /* Allow interaction with this instead */
-  opacity: 0; /* Adjust opacity as needed */
-  z-index: 50;
+  pointer-events: none; /* Prevents blocking actual image */
+  z-index: -1; /* Moves behind the profile picture */
 }
+
 
 .bg-no-save {
   -webkit-touch-callout: none; /* Disables long-press menu on iOS */
