@@ -48,7 +48,7 @@ html, body {
   inset: 0;
   background: url('/images/bkitmsinave.webp') no-repeat center center;
   background-size: cover;
-  opacity: 0.4;
+  opacity: 0.1;
   pointer-events: none;
 }
 
