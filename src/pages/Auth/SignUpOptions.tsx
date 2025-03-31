@@ -4,7 +4,7 @@ import { FcGoogle } from "react-icons/fc";
 import { MdOutlineEmail } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import { doc, setDoc, getFirestore } from "firebase/firestore";
+import { doc, setDoc, getFirestore, serverTimestamp } from "firebase/firestore";
 import { auth } from "../../config/firebaseConfig";
 
 const db = getFirestore();
@@ -30,25 +30,26 @@ export const SignUpOptions = (): JSX.Element => {
       alert("You must agree to the Terms and Privacy Policy before continuing.");
       return;
     }
-
+  
     const provider = new GoogleAuthProvider();
     try {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
-
+  
       console.log("Google Sign-In Success:", user);
-
-      // Save user to Firestore with terms agreement
+  
+      // Save user to Firestore with Firestore Timestamp
       const userDoc = doc(db, "users", user.uid);
       await setDoc(userDoc, {
         email: user.email,
         displayName: user.displayName,
         provider: "google",
-        createdAt: new Date().toISOString(),
+        createdAt: serverTimestamp(), // ✅ Firestore server timestamp
         role: "client",
-        agreedToTerms: true, // ✅ Store agreement status
+        agreedToTerms: true,
+        agreedAt: serverTimestamp(), // ✅ Accurate agreement timestamp
       });
-
+  
       navigate("/signup-final", { state: { email: user.email } });
       window.location.reload();
     } catch (error: any) {
@@ -56,7 +57,6 @@ export const SignUpOptions = (): JSX.Element => {
       alert("Google sign-in failed. Please try again.");
     }
   };
-
 
   const handleNavigate = (path: string) => {
     navigate(path);
@@ -143,7 +143,7 @@ export const SignUpOptions = (): JSX.Element => {
         </button>
           <div className="bg-white w-full h-full md:max-h-[650px] md:max-w-[1000px] md:rounded-[30px] shadow-[30px] p-6 md:p-10">
             <div ref={contractRef} onScroll={handleScroll} className="bg-[#191919] bg-opacity-[10%] p-8 md:p-10 h-[650px] md:h-[450px] overflow-y-auto border border-gray-300 rounded-[30px]">
-              <p className="text-3xl text-center font-bold [font-family:'Khula',Helvetica]">CREATIFY CLIENT TERMS AND AGREEMENT</p>
+              <p className="text-5xl text-center font-bold [font-family:'Khula',Helvetica]">CREATIFY CLIENT TERMS AND AGREEMENT</p>
               <p className="text-lg md:text-[15px] mt-6 leading-[40px] md:leading-[30px] [font-family:'Khula',Helvetica]">By using <span className="font-bold [font-family:'Khula',Helvetica]">Creatify</span>, you agree to the following terms:<br></br><br></br> 
             (This platform is part of a <span className="font-bold [font-family:'Khula',Helvetica]">capstone project</span> focused on testing and gathering data on a creative service platform. By using Creatify, you acknowledge that it is an academic project and may undergo changes or improvements.)<br></br><br></br> 
             

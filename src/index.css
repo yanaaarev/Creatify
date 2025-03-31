@@ -9,9 +9,8 @@ html, body {
   padding: 0;
   background-color: #1E1E1E;
   overflow-x: hidden;
-  height: 100%;
   background-image: url('/images/authp.webp'); /* Adjust path based on your setup */
-  background-size: cover;  /* Ensures it covers the entire screen */
+  background-size: auto;  /* Ensures it covers the entire screen */
   background-position: center;  /* Centers the image */
   background-repeat: no-repeat;  /* Prevents tiling */
   background-attachment: fixed;  /* Keeps it fixed while scrolling */
@@ -46,6 +45,7 @@ img {
   background-size: cover;
   pointer-events: none; /* Prevents blocking actual image */
   z-index: -1; /* Moves behind the profile picture */
+  opacity: 0; /* Initially hidden */;
 }
 
 

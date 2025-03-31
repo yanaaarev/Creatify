@@ -177,32 +177,7 @@ const [currentMonth, setCurrentMonth] = useState<string>(new Date().toISOString(
   }
 
   return (
-    <div className="bg-[#191919] flex flex-col items-center w-full min-h-screen relative">
-  {/* ✅ Fixed Background Image */}
-  <div className="absolute inset-0 h-full w-full">
-    <div 
-      className="absolute inset-0 bg-center bg-no-repeat h-full w-full bg-fixed md:bg-contain"
-      style={{ 
-        backgroundImage: "url('/images/authp.webp')",
-        backgroundSize: "cover", // ✅ Default: Fills screen
-        backgroundPosition: "top center",
-      }} 
-    ></div> 
-    </div>
-
-    {/* ✅ Responsive Background Image for Mobile */}
-    <style>
-      {`
-        @media (min-width: 768px) {
-          .bg-center {
-            background-size: cover !important; /* ✅ Uses contain only for larger screens */
-            background-position: top center !important;
-          }
-        }
-      `}
-    </style>
-
-
+    <div className="flex flex-col items-center w-full min-h-screen relative">
   {/* ✅ Banner Holder (Fixed Height Issue) */}
   <div className="w-full mt-[93px] h-[200px] md:w-[1250px] md:h-[290px] relative">
     <img
@@ -210,6 +185,11 @@ const [currentMonth, setCurrentMonth] = useState<string>(new Date().toISOString(
       src={artist?.bannerImage || DEFAULT_BANNER_URL} // Temporary Default Banner
       alt="Artist Banner"
     />
+     {/* Fake Save Target */}
+     <a href="/images/bkitmsinave.webp" className="absolute inset-0 w-full h-full opacity-0 pointer-events-none"></a>
+
+    {/* Overlay (Now Non-Blocking) */}
+    <div className="absolute inset-0 img-overlay"></div>
   </div>
 
 {/* Profile Section */}
@@ -224,7 +204,7 @@ const [currentMonth, setCurrentMonth] = useState<string>(new Date().toISOString(
     />
      
      {/* Fake Save Target */}
-     <a href="/images/bkitmsinave.webp" className="absolute inset-0 w-full h-full rounded-full"></a>
+     <a href="/images/bkitmsinave.webp" className="absolute inset-0 w-full h-full rounded-full opacity-0 pointer-events-none"></a>
 
 {/* Overlay (Now Non-Blocking) */}
 <div className="absolute inset-0 img-overlay rounded-full"></div>
@@ -250,7 +230,7 @@ const [currentMonth, setCurrentMonth] = useState<string>(new Date().toISOString(
       {/* Menu Button for Mobile */}
       <button
         onClick={() => setMenuOpen(!menuOpen)}
-        className="md:hidden flex items-center gap-2 text-white text-xl focus:outline-none"
+        className="md:hidden flex items-center gap-2 text-white text-xl mt-2 focus:outline-none"
       >
         <CiMenuKebab size={30} />
       </button>

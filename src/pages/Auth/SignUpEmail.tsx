@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
 import { auth, db } from "../../config/firebaseConfig"; // Firebase config import
-import { doc, setDoc } from "firebase/firestore";
+import { doc, setDoc, serverTimestamp } from "firebase/firestore";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { ClipLoader } from "react-spinners";
 
@@ -66,8 +66,9 @@ export const SignUpEmail = (): JSX.Element => {
       // ✅ Save User Info in Firestore
       await setDoc(doc(db, "users", user.uid), {
         email,
-        createdAt: new Date().toISOString(),
-        agreedToTerms: true, // ✅ Store agreement status
+        createdAt: serverTimestamp(), // ✅ Store creation time
+        agreedToTerms: true,
+        agreedAt: serverTimestamp(), // ✅ Store agreement status
       });
 
       setIsVerificationPending(true);

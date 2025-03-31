@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { signInWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth";
+import { signInWithEmailAndPassword, sendPasswordResetEmail, signOut } from "firebase/auth";
 import { auth, db } from "../../config/firebaseConfig";
-import { getDoc, doc, updateDoc } from "firebase/firestore";
+import { getDoc, doc, updateDoc, serverTimestamp } from "firebase/firestore";
 import { IoChevronBackCircleOutline } from "react-icons/io5";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { ClipLoader } from "react-spinners";
@@ -16,46 +16,104 @@ export const ArtistLogin = (): JSX.Element => {
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [buttonLoading, setButtonLoading] = useState(false);
+  const [hasScrolled, setHasScrolled] = useState(false);
+  const contractRef = useRef<HTMLDivElement>(null);
+
+  // ✅ State for Contract Overlay
+  const [showContract, setShowContract] = useState(false);
+  const [agreedToTerms, setAgreedToTerms] = useState(false);
+  const [fullName, setFullName] = useState("");
+
+  useEffect(() => {
+    const checkArtistAgreement = async () => {
+      if (auth.currentUser) {
+        const artistRef = doc(db, "artists", auth.currentUser.uid);
+        const artistSnap = await getDoc(artistRef);
+
+        if (artistSnap.exists() && artistSnap.data().agreedToTerms) {
+          setAgreedToTerms(true);
+        } else {
+          setShowContract(true);
+        }
+      }
+    };
+
+    checkArtistAgreement();
+  }, []);
+
+// Enable checkbox when user scrolls
+const handleScroll = () => {
+  if (!contractRef.current) return;
+  const { scrollTop, scrollHeight, clientHeight } = contractRef.current;
+  if (scrollTop + clientHeight >= scrollHeight - 10) {
+    setHasScrolled(true);
+  }
+};
 
   // Handle Artist Login
   const handleLogin = async () => {
     try {
       let emailToUse = artistIdOrEmail;
   
-      console.log("🔍 Checking input:", artistIdOrEmail); 
-  
       if (!artistIdOrEmail.includes("@")) {
         const artistRef = doc(db, "artists", artistIdOrEmail);
         const artistSnap = await getDoc(artistRef);
   
         if (!artistSnap.exists()) {
-          console.error("🚨 Artist ID not found in Firestore.");
           setError("Artist ID not found.");
           return;
         }
         emailToUse = artistSnap.data().email;
       }
-  
-      console.log("✅ Found email:", emailToUse);
+      const userCredential = await signInWithEmailAndPassword(auth, emailToUse, password);
+      const user = userCredential.user;
       setButtonLoading(true);
-      await signInWithEmailAndPassword(auth, emailToUse, password);
-      console.log("✅ Firebase Auth Success!");
+      // Check if artist has agreed to terms
+      const artistRef = doc(db, "artists", user.uid);
+      const artistSnap = await getDoc(artistRef);
 
+      if (artistSnap.exists() && artistSnap.data().agreedToTerms) {
          // ✅ Log successful login
     logEvent(analytics, "login", {
       method: "email_password",
       user_id: auth.currentUser?.uid || "unknown",
       role: "artist",
     });
-      setButtonLoading(false);
-      navigate("/artist-dashboard");
-      window.location.reload();
+        setButtonLoading(false);
+        navigate("/artist-dashboard");
+        window.location.reload();
+      } else {
+        setShowContract(true);
+      }
     } catch (err) {
       setButtonLoading(false);
-      console.error("❌ Login Error:", err);
-      setError("Invalid credentials. Please try again.");
+      alert("Invalid credentials. Please try again.");
     }
-  };  
+  };
+
+   // ✅ Handle Agreement & Update Firestore
+   const handleAgreeToTerms = async () => {
+    if (!fullName.trim()) {
+      setError("Please enter your full name to proceed.");
+      return;
+    }
+
+    if (!agreedToTerms) {
+      setError("You must agree to the terms to proceed.");
+      return;
+    }
+    
+    if (auth.currentUser) {
+      const artistRef = doc(db, "artists", auth.currentUser.uid);
+      await updateDoc(artistRef, {
+        agreedToTerms: true,
+        agreedAt: serverTimestamp(),
+      });
+      setShowContract(false);
+      navigate("/artist-dashboard");
+      window.location.reload();
+    }
+  };
 
   const updateArtistStatus = async (isOnline: boolean) => {
     if (auth.currentUser) {
@@ -108,6 +166,16 @@ export const ArtistLogin = (): JSX.Element => {
       setError("Error sending reset link. Please try again.");
     }
   };
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      navigate("/");
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
+
 
   return (
     <div className="bg-[#191919] flex items-center justify-center w-full min-h-screen relative">
@@ -195,19 +263,123 @@ export const ArtistLogin = (): JSX.Element => {
 
       {/* Sign In Button */}
       <button
-        onClick={handleLogin}
-        disabled={!artistIdOrEmail || !password || buttonLoading}
-        className={`w-full h-[52px] text-2xl font-semibold rounded-[30px] mt-5 ${
-          !artistIdOrEmail || !password
-            ? "bg-gray-400 text-white cursor-not-allowed"
-            : "bg-[#7db23a] text-white"
-        }`}
+            onClick={handleLogin}
+            disabled={!artistIdOrEmail || !password || buttonLoading}
+            className="w-full h-[52px] text-xl font-semibold rounded-[30px] mt-5 bg-[#7db23a] text-white"
+          >
+            {buttonLoading ? <ClipLoader size={20} color="white" /> : "Sign In"}
+          </button>
+        </div>
+      </div>
+
+      {/* ✅ Contract Overlay */}
+      {showContract && (
+       <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+       {/* Close Button - Positioned at the Outer Right */}
+      <button 
+        className="absolute top-4 right-4 text-4xl text-white hover:text-gray-300"
+        onClick={handleLogout}
       >
-        {buttonLoading ? <ClipLoader size={20} color="white" /> : "Sign In"}
+        ✖
       </button>
 
-    </div>
-  </div>
+       <div className="bg-white w-full h-full md:max-h-[700px] md:max-w-[1000px] md:rounded-[30px] shadow-[30px] p-6 md:p-10">
+         <div ref={contractRef} onScroll={handleScroll} className="bg-[#191919] bg-opacity-[10%] p-8 md:p-10 h-[650px] md:h-[450px] overflow-y-auto border border-gray-300 rounded-[30px]">
+           <p className="text-5xl text-center font-bold [font-family:'Khula',Helvetica]">CREATIFY ARTIST AGREEMENT</p>
+           <p className="text-lg md:text-[15px] mt-6 leading-[40px] md:leading-[30px] [font-family:'Khula',Helvetica]"><span className="font-semibold italic [font-family:'Khula',Helvetica]">(For Capstone Project Participation)</span><br></br><br></br>
+           This <span className="font-bold [font-family:'Khula',Helvetica]">Creatify Artist Agreement</span> (“Agreement”) is made between <span className="font-bold [font-family:'Khula',Helvetica]">Creatify</span> (“Platform”) and the undersigned <span className="font-bold [font-family:'Khula',Helvetica]">Artist</span> for participation in a <span className="font-bold [font-family:'Khula',Helvetica]">capstone project</span>.<br></br><br></br> 
+         
+         <p className="md:text-[15px] leading-[40px] md:leading-[35px] [font-family:'Khula',Helvetica]">
+           <span className="font-bold text-3xl [font-family:'Khula',Helvetica]">1. Introduction</span><br></br>
+           &nbsp;&nbsp;&nbsp;•	Creatify is a capstone project designed for academic purposes, focusing on testing and gathering data on a creative 
+           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;service platform. As an Artist, you are volunteering to participate in this project until the end of April. After this period, 
+           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;any continuation of the platform and artist involvement will be subject to further discussion.<br></br>
+           &nbsp;&nbsp;&nbsp;•	This agreement is a formality, as Creatify serves only as a medium for transactions between clients and artists. You are not 
+           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;restricted from taking on other jobs or working outside of Creatify. Your personal information and data are secure and 
+           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;will not be shared outside the platform.<br></br><br></br>
+         
+        <span className="font-bold text-3xl [font-family:'Khula',Helvetica]">2. Artist Obligations & Responsibilities</span><br></br>
+        As a Creatify Artist, you agree to:<br></br>
+         &nbsp;&nbsp;&nbsp;•	Maintain professionalism and ethical conduct when interacting with clients.<br></br>
+         &nbsp;&nbsp;&nbsp;•	Provide high-quality services as per the agreed-upon commission details.<br></br>
+         &nbsp;&nbsp;&nbsp;•	Complete projects within the specified deadlines.<br></br>
+         &nbsp;&nbsp;&nbsp;•	Regularly update clients on project progress.<br></br>
+         &nbsp;&nbsp;&nbsp;•	Follow the platform’s rules and policies, including fair treatment of clients.<br></br><br></br>
+         
+        <span className="font-bold text-3xl [font-family:'Khula',Helvetica]">3. Data Gathering & Documentation</span><br></br>
+         &nbsp;&nbsp;&nbsp;•	As part of this capstone project, the Artist’s participation will be included in the platform’s data gathering for academic 
+         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;purposes.<br></br>
+         &nbsp;&nbsp;&nbsp;•	The Artist’s name will be documented as part of the research and findings for this project.<br></br>
+         &nbsp;&nbsp;&nbsp;•	This data will only be used within the scope of the capstone project and for evaluating the platform’s performance.<br></br><br></br>
+         
+        <span className="font-bold text-3xl [font-family:'Khula',Helvetica]">4. Duration & Termination</span><br></br>
+        Artists may leave the platform under the following conditions:<br></br>
+         &nbsp;&nbsp;&nbsp;•	<span className="font-bold [font-family:'Khula',Helvetica]">Project End</span>: The official participation period ends in April, but Artists may choose to continue using the platform beyond &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;that.<br></br>
+         &nbsp;&nbsp;&nbsp;•	<span className="font-bold [font-family:'Khula',Helvetica]">Voluntary Exit</span>: Artists may leave at any time, provided they have no ongoing transactions with a client.<br></br>
+         &nbsp;&nbsp;&nbsp;•	<span className="font-bold [font-family:'Khula',Helvetica]">Forced Termination</span>: Artists may be removed from the platform if they repeatedly fail to follow platform rules or engage &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in misconduct.<br></br><br></br>
+         
+        <span className="font-bold text-3xl [font-family:'Khula',Helvetica]">5. Payment Structure</span><br></br>
+         &nbsp;&nbsp;&nbsp;•	Clients make a 50% down payment upon finalizing details before work begins.<br></br>
+         &nbsp;&nbsp;&nbsp;•	<span className="font-bold [font-family:'Khula',Helvetica]">First Payment Release</span>: The 50% down payment is transferred to the Artist only upon confirmation of substantial &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;progress (e.g., an initial draft, sketch, or progress update).<br></br>
+         &nbsp;&nbsp;&nbsp;•	<span className="font-bold [font-family:'Khula',Helvetica]">Final Payment Release</span>: The remaining 50% balance is transferred once the Client confirms the final deliverables and &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;approves the completed work.<br></br>
+         &nbsp;&nbsp;&nbsp;•	Payments are processed through Creatify for security and transparency. Instead of a percentage-based fee, a fixed ₱50 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;platform fee is applied per invoice. This is the only additional charge outside the commission price.<br></br><br></br>
+         
+        <span className="font-bold text-3xl [font-family:'Khula',Helvetica]">6. Cancellations & Refund Policy</span><br></br>
+         &nbsp;&nbsp;&nbsp;•	Once a transaction has started, the client cannot receive a refund if they cancel the commission.<br></br>
+         &nbsp;&nbsp;&nbsp;•	If unresolved, Creatify may review the situation but is not responsible for arbitration or legal matters.<br></br><br></br>
+        
+         <span className="font-bold text-3xl [font-family:'Khula',Helvetica]">7. No-Show & Abandonment Policy</span><br></br>
+         &nbsp;&nbsp;&nbsp;•	If an Artist fails to communicate or abandons a project, they may face suspension or removal from the platform.<br></br>
+         &nbsp;&nbsp;&nbsp;•	In case of disputes, the platform reserves the right to review the situation and take appropriate action.<br></br><br></br>
+         
+         <span className="font-bold text-3xl [font-family:'Khula',Helvetica]">8. Ownership & Intellectual Property Rights</span><br></br>
+         &nbsp;&nbsp;&nbsp;•	Artists retain full intellectual property rights over their commissioned work unless otherwise agreed with the client.<br></br>
+         &nbsp;&nbsp;&nbsp;•	Clients are granted a non-exclusive license to use the commissioned work only for its intended purpose.<br></br>
+         &nbsp;&nbsp;&nbsp;•	Unauthorized resale, modification, or redistribution of the artwork without the Artist’s consent is prohibited.<br></br><br></br>
+         
+         <span className="font-bold text-3xl [font-family:'Khula',Helvetica]">9. Dispute Resolution</span><br></br>
+         &nbsp;&nbsp;&nbsp;•	Artists and clients should communicate in good faith to resolve any conflicts.<br></br>
+         &nbsp;&nbsp;&nbsp;•	If no resolution is reached, the platform may review the case and enforce its policies but is not responsible for arbitration &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;beyond this.<br></br><br></br>
+
+         <span className="font-bold text-3xl [font-family:'Khula',Helvetica]">10. Certification & Incentive</span><br></br>
+         &nbsp;&nbsp;&nbsp;•	Artists <span className="font-bold [font-family:'Khula',Helvetica]">who fully comply and actively participate until April</span> will receive:<br></br>
+         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;○ <span className="font-bold [font-family:'Khula',Helvetica]">E-Certificate of Appreciation</span><br></br>
+         &nbsp;&nbsp;&nbsp;•	This policy ensures fairness to those who commit their time and effort to the project.<br></br><br></br>
+
+        <span className="font-bold text-3xl [font-family:'Khula',Helvetica]">11. Help & Support</span><br></br>
+        For any questions or assistance, you can reach out to us through:<br></br>
+        &nbsp;&nbsp;&nbsp;•	<span className="font-bold [font-family:'Khula',Helvetica]">Email:</span> ask.creatify@gmail.com<br></br>
+        &nbsp;&nbsp;&nbsp;•	<span className="font-bold [font-family:'Khula',Helvetica]">Viber Group Chat</span></p></p>
+           <p className="text-lg md:text-[15px] mt-6 text-center">By proceeding, you acknowledge that you have read, understood, and agreed to the terms stated above. You also confirm that you understand that <span className="font-bold [font-family:'Khula',Helvetica]">this is a capstone project</span> and that your participation is <span className="font-bold [font-family:'Khula',Helvetica]">voluntary</span>. If you do not agree to these terms, <span className="font-bold [font-family:'Khula',Helvetica]">you may not proceed or login to your artist account.</span></p>
+         </div>
+         <div className="p-4 flex flex-col items-center">
+           <div className="flex items-center gap-2">
+             <input type="checkbox" id="termsCheckbox" disabled={!hasScrolled} checked={agreedToTerms} onChange={() => setAgreedToTerms(!agreedToTerms)} className="w-4 h-4 cursor-pointer" />
+             <label htmlFor="termsCheckbox" className="text-lg md:text-[15px]">I have read and agree to the <span className="font-bold [font-family:'Khula',Helvetica]">Terms and Agreement</span></label>
+           </div>
+           <input 
+              type="text" 
+              placeholder="Enter your full name to confirm" 
+              className="w-full border border-[#191919] border-opacity-30 mt-2 p-3 rounded-full"
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
+            />
+           <button
+          onClick={() => {
+            handleAgreeToTerms();
+            handleLogin();
+          }}
+          disabled={!agreedToTerms || !fullName }
+          className={`mt-4 px-6 py-2 w-full rounded-full text-lg md:text-[18px] font-semibold text-white ${
+            agreedToTerms && fullName ? "bg-[#7db23a]" : "bg-gray-400 cursor-not-allowed"
+          }`}
+        >
+          Proceed
+        </button>
+         </div>
+       </div>
+     </div>
+   )}
 </div>
 
   );
