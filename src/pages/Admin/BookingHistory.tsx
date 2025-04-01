@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { collection, getDocs, query, orderBy, Timestamp, where } from "firebase/firestore";
-import { db } from "../../config/firebaseConfig";
+import { auth, db } from "../../config/firebaseConfig";
 import AdminSidebar from "./AdminSidebar";
 import ArtistCalendar from '../Artist/ArtistCalendar';
 import { FaSearch } from "react-icons/fa";
@@ -9,6 +10,7 @@ import { IoFilter } from "react-icons/io5";
 
 interface Booking {
   id: string;
+  requestId: number;
   artistName: string;
   clientUsername: string;
   selectedDates: string;
@@ -17,6 +19,9 @@ interface Booking {
 }
 
 const BookingHistory = () => {
+  const navigate = useNavigate();
+  const [, setIsAdmin] = useState(false);
+  const [, setLoading] = useState(true);
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [selectedDates, setSelectedDates] = useState<string[] | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
@@ -24,6 +29,50 @@ const BookingHistory = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [showCalendarOverlay, setShowCalendarOverlay] = useState(false);
   const itemsPerPage = 10;
+
+  // 🔹 Ensure Admin Authentication
+    useEffect(() => {
+      const checkAdminStatus = async () => {
+        try {
+          const user = auth.currentUser;
+          if (!user) {
+            navigate("/admin-login");
+            return;
+          }
+  
+          const idTokenResult = await user.getIdTokenResult(true);
+          if (idTokenResult.claims.admin) {
+            setIsAdmin(true);
+          } else {
+            alert("Access Denied: You are not an admin.");
+            navigate("/admin-login");
+          }
+        } catch (error) {
+          console.error("Admin Check Failed:", error);
+          navigate("/admin-login");
+        } finally {
+          setLoading(false);
+        }
+      };
+  
+      checkAdminStatus();
+    }, [navigate]);
+
+    useEffect(() => {
+      const handleUnload = async () => {
+        try {
+          await auth.signOut(); // Sign out admin when tab is closed
+        } catch (error) {
+          console.error("Error during auto logout:", error);
+        }
+      };
+    
+      window.addEventListener("beforeunload", handleUnload);
+    
+      return () => {
+        window.removeEventListener("beforeunload", handleUnload);
+      };
+    }, []);
 
   useEffect(() => {
     const fetchBookings = async () => {
@@ -63,6 +112,7 @@ const BookingHistory = () => {
 
           return {
             id: docSnap.id,
+            requestId: data.requestId || "N/A",
             artistName: artistMap[data.artistId] || "Unknown Artist",
             clientUsername: clientMap[data.clientId] || "Unknown Client",
             selectedDates: data.selectedDates || "N/A",
@@ -82,8 +132,8 @@ const BookingHistory = () => {
 
   const filteredBookings = bookings.filter((booking) =>
     (filterStatus === "all" || booking.status === filterStatus) &&
-    (searchTerm === "" ||
-      booking.id.includes(searchTerm) ||
+    (searchTerm === "" || 
+      booking.id.includes(searchTerm) || booking.requestId.toString().includes(searchTerm) || // Convert requestId to string
       booking.artistName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       booking.clientUsername.toLowerCase().includes(searchTerm.toLowerCase()))
   );
@@ -92,6 +142,11 @@ const BookingHistory = () => {
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentBookings = filteredBookings.slice(indexOfFirstItem, indexOfLastItem);
+
+  // 🔹 Ensure Firebase Token is Up-to-Date
+  auth.currentUser?.getIdToken(true).then((idToken) => {
+    console.log("🔄 New Token Fetched:", idToken);
+  });
 
   return (
     <div className="flex">
@@ -136,6 +191,7 @@ const BookingHistory = () => {
               <thead>
                 <tr className="bg-[#7db23a] text-white text-center">
                   <th className="border p-2">Booking ID</th>
+                  <th className="border p-2">Request ID</th>
                   <th className="border p-2">Artist</th>
                   <th className="border p-2">Client</th>
                   <th className="border p-2">Selected Dates</th>
@@ -147,6 +203,7 @@ const BookingHistory = () => {
                   currentBookings.map((booking) => (
                     <tr key={booking.id} className="border-b text-center">
                                             <td className="border p-2">{booking.id}</td>
+                                            <td className="border p-2">#{booking.requestId}</td>
                                             <td className="border p-2">{booking.artistName}</td>
                                             <td className="border p-2">{booking.clientUsername}</td>
                                             <td className="border p-2">
@@ -195,7 +252,7 @@ const BookingHistory = () => {
                 ✖
             </button>
 
-        <div className="relative w-full max-w-[800px] h-full bg-white px-5 py-2 rounded-[30px] shadow-lg overflow-y-hidden">  
+        <div className="relative w-full max-w-[800px] h-auto md:h-[700px] bg-white md:px-5 py-3 md:py-4 rounded-[30px] shadow-lg overflow-y-hidden">  
         <div className="w-full h-full overflow-y-auto"> 
             <ArtistCalendar
                 bookedDates={selectedDates}  // Ensure dates are formatted properly
@@ -204,6 +261,9 @@ const BookingHistory = () => {
                 setChangesMade={() => {}} 
                 isReadOnly={true}
             />
+            <div className="[font-family:'Khula',Helvetica] text-xs text-center space-x-2">
+          <span className="text-red-500 text-lg">●</span> Booked
+        </div>
         </div>
         </div>
     </div>

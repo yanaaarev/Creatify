@@ -14,8 +14,7 @@ const AdminSidebar = () => {
   const [isOpen, setIsOpen] = useState<boolean>(() => {
     return false; // Sidebar starts as collapsed when refreshed or logged in
   });
-  
-  const [, setError] = useState("");
+
 
    // Function to check if the button is active
    const isActive = (path: string) => location.pathname === path;
@@ -27,7 +26,7 @@ const AdminSidebar = () => {
       navigate("/"); // Redirect to homepage
     } catch (error) {
       console.error("❌ Failed to logout:", error);
-      setError("Logout failed. Try again.");
+      alert("Logout failed. Try again.");
     }
   };
 

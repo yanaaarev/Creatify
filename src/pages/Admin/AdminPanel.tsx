@@ -8,14 +8,13 @@ import AdminSidebar from "./AdminSidebar"; // Adjust path based on folder struct
 
 const AdminPanel = (): JSX.Element => {
   const navigate = useNavigate();
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [, setIsAdmin] = useState(false);
+  const [, setLoading] = useState(true);
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState(generateRandomPassword());
   const [isActive, setIsActive] = useState<boolean>(true);
   const [artists, setArtists] = useState<any[]>([]);
-  const [, setError] = useState("");
   const [buttonLoading, setButtonLoading] = useState(false);
 
   // 🔹 Function to Generate a Random Default Password
@@ -37,7 +36,7 @@ const AdminPanel = (): JSX.Element => {
         if (idTokenResult.claims.admin) {
           setIsAdmin(true);
         } else {
-          setError("Access Denied: You are not an admin.");
+          alert("Access Denied: You are not an admin.");
           navigate("/admin-login");
         }
       } catch (error) {
@@ -71,7 +70,7 @@ const AdminPanel = (): JSX.Element => {
   // 🔹 Handle Artist Submission
   const handleSubmit = async () => {
     if (!fullName || !email) {
-      setError("All fields are required.");
+      alert("All fields are required.");
       return;
     }
     setButtonLoading(true);
@@ -107,11 +106,11 @@ const AdminPanel = (): JSX.Element => {
       setEmail("");
       setPassword(generateRandomPassword());
       setIsActive(true);
-      setError("");
+      alert("Artist added successfully!");
     } catch (error) {
       setButtonLoading(false);
       console.error("❌ Failed to add artist:", error);
-      setError("Failed to add artist. Try again.");
+      alert("Failed to add artist. Try again.");
     }
   };
 
@@ -120,18 +119,6 @@ const AdminPanel = (): JSX.Element => {
   auth.currentUser?.getIdToken(true).then((idToken) => {
     console.log("🔄 New Token Fetched:", idToken);
   });
-
-  if (loading) {
-    return <p className="flex items-center justify-center"></p>;
-  }
-
-  if (!isAdmin) {
-    return (
-      <div className="text-center text-white text-lg mt-10">
-        Unauthorized. Redirecting...
-      </div>
-    );
-  }
 
   return (
     <div className="flex">

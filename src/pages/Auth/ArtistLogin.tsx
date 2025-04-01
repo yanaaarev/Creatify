@@ -13,7 +13,7 @@ export const ArtistLogin = (): JSX.Element => {
   const navigate = useNavigate();
   const [artistIdOrEmail, setArtistIdOrEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [error] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [buttonLoading, setButtonLoading] = useState(false);
   const [hasScrolled, setHasScrolled] = useState(false);
@@ -60,7 +60,7 @@ const handleScroll = () => {
         const artistSnap = await getDoc(artistRef);
   
         if (!artistSnap.exists()) {
-          setError("Artist ID not found.");
+          alert("Artist ID not found.");
           return;
         }
         emailToUse = artistSnap.data().email;
@@ -94,12 +94,12 @@ const handleScroll = () => {
    // ✅ Handle Agreement & Update Firestore
    const handleAgreeToTerms = async () => {
     if (!fullName.trim()) {
-      setError("Please enter your full name to proceed.");
+      alert("Please enter your full name to proceed.");
       return;
     }
 
     if (!agreedToTerms) {
-      setError("You must agree to the terms to proceed.");
+      alert("You must agree to the terms to proceed.");
       return;
     }
     
@@ -141,7 +141,7 @@ const handleScroll = () => {
   // Handle Forgot Password (Send Reset Email)
   const handleForgotPassword = async () => {
     if (!artistIdOrEmail) {
-      setError("Please enter your Artist ID or email first.");
+      alert("Please enter your Artist ID or email first.");
       return;
     }
 
@@ -154,7 +154,7 @@ const handleScroll = () => {
         const artistSnap = await getDoc(artistRef);
 
         if (!artistSnap.exists()) {
-          setError("Artist ID not found.");
+          alert("Artist ID not found.");
           return;
         }
         emailToUse = artistSnap.data().email;
@@ -163,7 +163,7 @@ const handleScroll = () => {
       await sendPasswordResetEmail(auth, emailToUse);
       alert("Password reset link sent to your email.");
     } catch (err) {
-      setError("Error sending reset link. Please try again.");
+      alert("Error sending reset link. Please try again.");
     }
   };
 
@@ -277,14 +277,14 @@ const handleScroll = () => {
        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
        {/* Close Button - Positioned at the Outer Right */}
       <button 
-        className="absolute top-4 right-4 text-4xl text-white hover:text-gray-300"
+        className="absolute top-4 right-4 text-4xl text-black md:text-white hover:text-gray-300"
         onClick={handleLogout}
       >
         ✖
       </button>
 
-       <div className="bg-white w-full h-full md:max-h-[700px] md:max-w-[1000px] md:rounded-[30px] shadow-[30px] p-6 md:p-10">
-         <div ref={contractRef} onScroll={handleScroll} className="bg-[#191919] bg-opacity-[10%] p-8 md:p-10 h-[650px] md:h-[450px] overflow-y-auto border border-gray-300 rounded-[30px]">
+       <div className="bg-white w-full h-full md:max-h-[700px] md:max-w-[1000px] md:rounded-[30px] shadow-[30px] py-16 px-5 md:p-10">
+         <div ref={contractRef} onScroll={handleScroll} className="bg-[#191919] bg-opacity-[10%] p-8 md:p-10 h-[500px] md:h-[450px] overflow-y-auto border border-gray-300 rounded-[30px]">
            <p className="text-5xl text-center font-bold [font-family:'Khula',Helvetica]">CREATIFY ARTIST AGREEMENT</p>
            <p className="text-lg md:text-[15px] mt-6 leading-[40px] md:leading-[30px] [font-family:'Khula',Helvetica]"><span className="font-semibold italic [font-family:'Khula',Helvetica]">(For Capstone Project Participation)</span><br></br><br></br>
            This <span className="font-bold [font-family:'Khula',Helvetica]">Creatify Artist Agreement</span> (“Agreement”) is made between <span className="font-bold [font-family:'Khula',Helvetica]">Creatify</span> (“Platform”) and the undersigned <span className="font-bold [font-family:'Khula',Helvetica]">Artist</span> for participation in a <span className="font-bold [font-family:'Khula',Helvetica]">capstone project</span>.<br></br><br></br> 
@@ -353,22 +353,19 @@ const handleScroll = () => {
            <p className="text-lg md:text-[15px] mt-6 text-center">By proceeding, you acknowledge that you have read, understood, and agreed to the terms stated above. You also confirm that you understand that <span className="font-bold [font-family:'Khula',Helvetica]">this is a capstone project</span> and that your participation is <span className="font-bold [font-family:'Khula',Helvetica]">voluntary</span>. If you do not agree to these terms, <span className="font-bold [font-family:'Khula',Helvetica]">you may not proceed or login to your artist account.</span></p>
          </div>
          <div className="p-4 flex flex-col items-center">
-           <div className="flex items-center gap-2">
+           <div className="flex items-center gap-2 mt-2 mb-2">
              <input type="checkbox" id="termsCheckbox" disabled={!hasScrolled} checked={agreedToTerms} onChange={() => setAgreedToTerms(!agreedToTerms)} className="w-4 h-4 cursor-pointer" />
              <label htmlFor="termsCheckbox" className="text-lg md:text-[15px]">I have read and agree to the <span className="font-bold [font-family:'Khula',Helvetica]">Terms and Agreement</span></label>
            </div>
            <input 
               type="text" 
               placeholder="Enter your full name to confirm" 
-              className="w-full border border-[#191919] border-opacity-30 mt-2 p-3 rounded-full"
+              className="w-full border border-[#191919] border-opacity-30 mt-2 mb-2 p-3 rounded-full"
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
             />
            <button
-          onClick={() => {
-            handleAgreeToTerms();
-            handleLogin();
-          }}
+          onClick={handleAgreeToTerms}
           disabled={!agreedToTerms || !fullName }
           className={`mt-4 px-6 py-2 w-full rounded-full text-lg md:text-[18px] font-semibold text-white ${
             agreedToTerms && fullName ? "bg-[#7db23a]" : "bg-gray-400 cursor-not-allowed"

@@ -266,6 +266,41 @@ const handleConfirmUpdateStatus = async (newStatus: string) => {
 const handleUpdateStatus = async (newStatus: string) => {
   if (!bookingId) return;
 
+  // 🔹 Check for double booking before accepting
+  if (newStatus === "active") {
+    try {
+      // ✅ Fetch artist's active bookings
+      const bookingsRef = collection(db, "bookings");
+      const q = query(
+        bookingsRef,
+        where("artistId", "==", booking?.artistId),
+        where("status", "==", "active")
+      );
+      const activeBookingsSnap = await getDocs(q);
+
+      // ✅ Check for overlapping dates
+      const activeBookings = activeBookingsSnap.docs.map((doc) => doc.data());
+      const overlappingBookings = activeBookings.filter((activeBooking) =>
+        activeBooking.selectedDates.some((date: string) =>
+          booking?.selectedDates.includes(date)
+        )
+      );
+
+      if (overlappingBookings.length > 0) {
+        const userConfirmed = window.confirm(
+          "Are you sure to accept this booking? It has the same date with your other active bookings. This will be considered as a double booking at your own risk."
+        );
+        if (!userConfirmed) {
+          return; // 🚫 Exit if the artist chooses "No"
+        }
+      }
+    } catch (error) {
+      console.error("❌ Error checking for double bookings:", error);
+      alert("Something went wrong while checking for double bookings. Please try again.");
+      return;
+    }
+  }
+
   setButtonLoading(true);
 
   try {

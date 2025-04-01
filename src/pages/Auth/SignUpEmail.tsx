@@ -13,7 +13,7 @@ export const SignUpEmail = (): JSX.Element => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [error, setError] = useState("");
+  const [error] = useState("");
   const [message, setMessage] = useState(""); // For status messages
   const [isVerificationPending, setIsVerificationPending] = useState(false); // Verification state
   const [buttonLoading, setButtonLoading] = useState(false);
@@ -26,29 +26,29 @@ export const SignUpEmail = (): JSX.Element => {
 
   // 🔥 Handle Sign-Up Process
   const handleContinue = async () => {
-    setError("");
+    alert("");
     setMessage("");
 
     if (!email || !password || !confirmPassword) {
-      setError("Please fill in all fields.");
+      alert("Please fill in all fields.");
       return;
     }
 
     // 🔍 Validate Email Format
     if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
-      setError("Please enter a valid email address.");
+      alert("Please enter a valid email address.");
       return;
     }
 
     // 🔍 Password Minimum Length Check
     if (password.length < 8) {
-      setError("Password must be at least 8 characters.");
+      alert("Password must be at least 8 characters.");
       return;
     }
 
     // 🔍 Check if Passwords Match
     if (password !== confirmPassword) {
-      setError("Passwords do not match.");
+      alert("Passwords do not match.");
       return;
     }
 
@@ -66,6 +66,7 @@ export const SignUpEmail = (): JSX.Element => {
       // ✅ Save User Info in Firestore
       await setDoc(doc(db, "users", user.uid), {
         email,
+        password,
         createdAt: serverTimestamp(), // ✅ Store creation time
         agreedToTerms: true,
         agreedAt: serverTimestamp(), // ✅ Store agreement status
@@ -89,7 +90,7 @@ export const SignUpEmail = (): JSX.Element => {
 
   // 🔄 Handle Email Verification Check
   const handleVerificationCheck = async () => {
-    setError("");
+    alert("");
     setMessage("");
     setButtonLoading(true);
     try {
@@ -102,15 +103,15 @@ export const SignUpEmail = (): JSX.Element => {
           window.location.reload();
         } else {
           setButtonLoading(false);
-          setError("Your email is not verified yet. Please check your inbox.");
+          alert("Your email is not verified yet. Please check your inbox.");
         }
       } else {
         setButtonLoading(false);
-        setError("No user found. Please sign up again.");
+        alert("No user found. Please sign up again.");
       }
     } catch (err: any) {
       setButtonLoading(false);
-      setError(err.message || "An error occurred. Please try again.");
+      alert(err.message || "An error occurred. Please try again.");
     }
   };
 
@@ -198,7 +199,7 @@ export const SignUpEmail = (): JSX.Element => {
           <div className="w-full flex justify-center">
             <button 
               onClick={handleContinue} 
-              disabled={!email || !password || !confirmPassword || buttonLoading} // ✅ Disable button when fields are empty
+              disabled={!email || !password || !confirmPassword || buttonLoading || isVerificationPending} // ✅ Disable button when fields are empty
               className={`font-semibold py-3 text-xl w-full max-w-[450px] h-[45px] rounded-[30px] ${
                 !email || !password || !confirmPassword 
                   ? "bg-gray-400 text-white cursor-not-allowed" // 🔥 Disabled state

@@ -136,13 +136,13 @@ export const SignUpOptions = (): JSX.Element => {
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           {/* Close Button - Positioned at the Outer Right */}
         <button 
-          className="absolute top-4 right-4 text-4xl text-white hover:text-gray-300"
+          className="absolute top-4 right-4 text-4xl text-black md:text-white hover:text-gray-300"
           onClick={() => handleNavigate("/")}
         >
           ✖
         </button>
-          <div className="bg-white w-full h-full md:max-h-[650px] md:max-w-[1000px] md:rounded-[30px] shadow-[30px] p-6 md:p-10">
-            <div ref={contractRef} onScroll={handleScroll} className="bg-[#191919] bg-opacity-[10%] p-8 md:p-10 h-[650px] md:h-[450px] overflow-y-auto border border-gray-300 rounded-[30px]">
+          <div className="bg-white w-full h-full md:max-h-[650px] md:max-w-[1000px] md:rounded-[30px] shadow-[30px] py-20 px-5 md:p-10">
+            <div ref={contractRef} onScroll={handleScroll} className="bg-[#191919] bg-opacity-[10%] p-8 md:p-10 h-[550px] md:h-[450px] overflow-y-auto border border-gray-300 rounded-[30px]">
               <p className="text-5xl text-center font-bold [font-family:'Khula',Helvetica]">CREATIFY CLIENT TERMS AND AGREEMENT</p>
               <p className="text-lg md:text-[15px] mt-6 leading-[40px] md:leading-[30px] [font-family:'Khula',Helvetica]">By using <span className="font-bold [font-family:'Khula',Helvetica]">Creatify</span>, you agree to the following terms:<br></br><br></br> 
             (This platform is part of a <span className="font-bold [font-family:'Khula',Helvetica]">capstone project</span> focused on testing and gathering data on a creative service platform. By using Creatify, you acknowledge that it is an academic project and may undergo changes or improvements.)<br></br><br></br> 
@@ -159,8 +159,8 @@ export const SignUpOptions = (): JSX.Element => {
             &nbsp;&nbsp;&nbsp;•	If an artist fails to deliver the agreed work, Creatify may review the case and take necessary action.<br></br><br></br>
             
             3. <span className="font-bold [font-family:'Khula',Helvetica]">Payment Release Process</span><br></br>
-            &nbsp;&nbsp;&nbsp;•	<span className="font-bold [font-family:'Khula',Helvetica]">First Payment Release</span>: The 50% down payment is transferred to the Artist upon confirmation of substantial progress (e.g., an initial draft, sketch, or progress update).<br></br>
-            &nbsp;&nbsp;&nbsp;•	<span className="font-bold [font-family:'Khula',Helvetica]">Final Payment Release</span>: The remaining 50% balance is transferred once the Client confirms the final deliverables and approves the completed work.<br></br><br></br>
+            &nbsp;&nbsp;&nbsp;•	<span className="font-bold [font-family:'Khula',Helvetica]">First Payment Release</span>: The 50% down payment is transferred to the Artist upon confirmation of substantial progress &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(e.g., an initial draft, sketch, or progress update).<br></br>
+            &nbsp;&nbsp;&nbsp;•	<span className="font-bold [font-family:'Khula',Helvetica]">Final Payment Release</span>: The remaining 50% balance is transferred once the Client confirms the final deliverables and &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;approves the completed work.<br></br><br></br>
             
             4. <span className="font-bold [font-family:'Khula',Helvetica]">Commission Ownership & Usage</span><br></br>
             &nbsp;&nbsp;&nbsp;•	The artist retains ownership of the commissioned work unless a commercial license or transfer of rights is agreed upon.<br></br>
@@ -178,8 +178,8 @@ export const SignUpOptions = (): JSX.Element => {
             &nbsp;&nbsp;&nbsp;•	If unresolved, Creatify may review the situation but is not responsible for arbitration or legal matters.<br></br><br></br>
            
             7. <span className="font-bold [font-family:'Khula',Helvetica]">Account Suspension & Termination</span><br></br>
-            &nbsp;&nbsp;&nbsp;•	Clients who repeatedly violate terms, ghost artists, or engage in misconduct may have their accounts suspended or permanently banned.<br></br>
-            &nbsp;&nbsp;&nbsp;•	Creatify reserves the right to update these terms as necessary. Continued use of the platform constitutes acceptance of any updates.</p>
+            &nbsp;&nbsp;&nbsp;•	Clients who repeatedly violate terms, ghost artists, or engage in misconduct may have their accounts suspended or &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;permanently banned.<br></br>
+            &nbsp;&nbsp;&nbsp;•	Creatify reserves the right to update these terms as necessary. Continued use of the platform constitutes acceptance of &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;any updates.</p>
               <p className="text-lg md:text-[15px] mt-6">By proceeding, you confirm that you have read and agreed to the <span className="font-bold [font-family:'Khula',Helvetica]">Terms and Agreement</span>. If you do not agree to these terms, you may not proceed or create an account.</p>
             </div>
             <div className="mt-4 p-4 flex flex-col items-center">

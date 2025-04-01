@@ -30,6 +30,7 @@ export const ArtistDashboard = ({ mode, artistId }: ArtistDashboardProps): JSX.E
   const [isAvailabilityOpen, setIsAvailabilityOpen] = useState(false);
   const [unavailableDates, setUnavailableDates] = useState<string[]>([]);
   const [bookedDates, setBookedDates] = useState<string[]>([]);  
+  const [pendingDates, setPendingDates] = useState<string[]>([]); 
   const [feedbacks, setFeedbacks] = useState<any[]>([]);
 const [averageRating, setAverageRating] = useState(0);
 const [totalReviews, setTotalReviews] = useState(0);
@@ -81,24 +82,31 @@ const [currentMonth, setCurrentMonth] = useState<string>(new Date().toISOString(
           fetchedUnavailableDates = Array.isArray(data.unavailableDates) ? data.unavailableDates : [];
         }
 
-        // 🔹 Fetch Active Booked Dates (Confirmed Bookings Only)
+        // 🔹 Fetch Active Booked Dates
         const bookingsQuery = query(
           collection(db, "bookings"),
           where("artistId", "==", activeArtistId),
-          where("status", "==", "active") // ✅ Only fetch ACTIVE bookings
+          where("status", "in", ["active", "pending"]) // ✅ Fetch both ACTIVE and PENDING bookings
         );
         const bookingsSnap = await getDocs(bookingsQuery);
 
         let fetchedBookedDates: string[] = [];
-        bookingsSnap.forEach((doc) => {
-          const bookingData = doc.data();
-          if (Array.isArray(bookingData.selectedDates)) {
-            fetchedBookedDates.push(...bookingData.selectedDates);
-          }
-        });
+              let fetchedPendingDates: string[] = []; // ✅ Separate pending dates
 
+              bookingsSnap.forEach((doc) => {
+                const bookingData = doc.data();
+                if (Array.isArray(bookingData.selectedDates)) {
+                  if (bookingData.status === "active") {
+                    fetchedBookedDates.push(...bookingData.selectedDates);
+                  } else if (bookingData.status === "pending") {
+                    fetchedPendingDates.push(...bookingData.selectedDates);
+                  }
+                }
+              });
+  
         // ✅ Remove Duplicate Dates
         const uniqueBookedDates = Array.from(new Set(fetchedBookedDates));
+        const uniquePendingDates = Array.from(new Set(fetchedPendingDates));
 
         console.log("✅ Fetched Unavailable Dates:", fetchedUnavailableDates);
         console.log("✅ Fetched Active Booked Dates:", uniqueBookedDates);
@@ -106,6 +114,7 @@ const [currentMonth, setCurrentMonth] = useState<string>(new Date().toISOString(
         // ✅ Update State with Fetched Data
         setUnavailableDates(fetchedUnavailableDates);
         setBookedDates(uniqueBookedDates);
+        setPendingDates(uniquePendingDates); // ✅ Update pending dates
       } catch (error) {
         console.error("❌ Error fetching availability data:", error);
       } finally {
@@ -340,12 +349,19 @@ const [currentMonth, setCurrentMonth] = useState<string>(new Date().toISOString(
               <ArtistCalendar
                 unavailableDates={unavailableDates} // ✅ Pass Unavailable Dates
                 bookedDates={bookedDates} // ✅ Pass Active Booked Dates
+                pendingDates={pendingDates} // ✅ Pass Pending Dates
                 setUnavailableDates={() => {}} // Read-only mode
                 setChangesMade={() => {}} // Read-only mode
                 isReadOnly={true} // ✅ Read-Only Mode
                 currentMonth={new Date(`${currentMonth}-01`)}  // ✅ Pass current month to calendar
               />
             )}
+             {/* 📌 Date Indicators */}
+        <div className="[font-family:'Khula',Helvetica] text-xs text-center space-x-2">
+          <span className="text-[#191919] text-opacity-50 text-lg">●</span> Unavailable
+          <span className="text-red-500 text-lg">●</span> Booked
+          <span className="text-[#e1ad01] text-lg">●</span> Pending
+        </div>
           </div>
         </div>
       )}

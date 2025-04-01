@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
 import { collection, getDocs, updateDoc, doc, query, orderBy, getDoc, Timestamp, where } from 'firebase/firestore';
-import { auth,db } from '../../config/firebaseConfig';
+import { auth, db } from '../../config/firebaseConfig';
 import { triggerNotification } from '../../utils/triggerNotification';
 import AdminSidebar from './AdminSidebar';
 import { FaCircleMinus,FaCircleCheck } from "react-icons/fa6";
@@ -23,10 +24,57 @@ interface Payment {
   }
   
   const PaymentVerifier = () => {
+    const navigate = useNavigate();
+  const [, setIsAdmin] = useState(false);
+  const [, setLoading] = useState(true);
     const [payments, setPayments] = useState<Payment[]>([]);
     const [selectedProof, setSelectedProof] = useState<string | null>(null);
     const [verifiedPayments, setVerifiedPayments] = useState<{ [key: string]: boolean }>({});
   
+// 🔹 Ensure Admin Authentication
+useEffect(() => {
+  const checkAdminStatus = async () => {
+    try {
+      const user = auth.currentUser;
+      if (!user) {
+        navigate("/admin-login");
+        return;
+      }
+
+      const idTokenResult = await user.getIdTokenResult(true);
+      if (idTokenResult.claims.admin) {
+        setIsAdmin(true);
+      } else {
+        alert("Access Denied: You are not an admin.");
+        navigate("/admin-login");
+      }
+    } catch (error) {
+      console.error("Admin Check Failed:", error);
+      navigate("/admin-login");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  checkAdminStatus();
+}, [navigate]);
+
+useEffect(() => {
+  const handleUnload = async () => {
+    try {
+      await auth.signOut(); // Sign out admin when tab is closed
+    } catch (error) {
+      console.error("Error during auto logout:", error);
+    }
+  };
+
+  window.addEventListener("beforeunload", handleUnload);
+
+  return () => {
+    window.removeEventListener("beforeunload", handleUnload);
+  };
+}, []);
+
     useEffect(() => {
       const fetchPayments = async () => {
         try {
@@ -170,7 +218,11 @@ const indexOfLastItem = currentPage * itemsPerPage;
 const indexOfFirstItem = indexOfLastItem - itemsPerPage;
 const currentPayments = payments.slice(indexOfFirstItem, indexOfLastItem);
 
-    
+ // 🔹 Ensure Firebase Token is Up-to-Date
+ auth.currentUser?.getIdToken(true).then((idToken) => {
+  console.log("🔄 New Token Fetched:", idToken);
+});
+
   
   return (
     <div className="flex">

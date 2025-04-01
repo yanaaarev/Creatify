@@ -7,6 +7,7 @@ import "./ArtistCalendar.css"; // Custom styles
 interface ArtistCalendarProps {
   unavailableDates: string[];
   bookedDates?: string[];
+  pendingDates?: string[];
   setUnavailableDates: (dates: string[]) => void;
   setChangesMade: (changed: boolean) => void;
   isReadOnly?: boolean;
@@ -18,6 +19,7 @@ interface ArtistCalendarProps {
 const ArtistCalendar: React.FC<ArtistCalendarProps> = ({
   unavailableDates,
   bookedDates = [],
+  pendingDates = [],
   setUnavailableDates,
   setChangesMade,
   isReadOnly = false,
@@ -29,12 +31,13 @@ const ArtistCalendar: React.FC<ArtistCalendarProps> = ({
     return [
       ...normalizedUnavailable.map(date => ({ start: date, color: "gray" })), // Unavailable dates (gray)
       ...bookedDates.map(date => ({ start: date, color: "red" })), // Booked dates (red)
+      ...pendingDates.map(date => ({ start: date, color: "#e1ad01" })), // Pending dates
     ];
   }, [unavailableDates, bookedDates]);
 
  // ✅ If we're in Client Booking Details, show the first booked date
 const autoInitialDate = useMemo(() => {
-  if (window.location.pathname.includes("/client-booking")) {
+  if (window.location.pathname.includes("/client-booking") || window.location.pathname.includes("/admin-booking-history")) {
     return bookedDates.length > 0 ? bookedDates.sort()[0] : new Date().toISOString().split("T")[0];
   }
   return new Date().toISOString().split("T")[0]; // ✅ Default to current month & date

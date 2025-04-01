@@ -18,6 +18,7 @@ const BookingCalendar = () => {
   const [selectedDates, setSelectedDates] = useState<string[]>([]);
   const [, setInitialDate] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [pendingDates, setPendingDates] = useState<string[]>([]);
 
   useEffect(() => {
     const fetchAvailabilityData = async () => {
@@ -37,24 +38,32 @@ const BookingCalendar = () => {
           fetchedUnavailableDates = Array.isArray(fetchedArtistData.unavailableDates) ? fetchedArtistData.unavailableDates : [];
         }
   
-        // 🔹 Fetch Active Booked Dates for the Selected Artist
+        // 🔹 Fetch Active and Pending Booked Dates for the Selected Artist
         const bookingsQuery = query(
           collection(db, "bookings"),
           where("artistId", "==", artistId), // ✅ Ensure correct artist ID
-          where("status", "==", "active") // ✅ Fetch only ACTIVE bookings
+          where("status", "in", ["active", "pending"]) // ✅ Fetch both ACTIVE and PENDING bookings
         );
+
         const bookingsSnap = await getDocs(bookingsQuery);
   
         let fetchedBookedDates: string[] = [];
+        let fetchedPendingDates: string[] = []; // ✅ Separate pending dates
+
         bookingsSnap.forEach((doc) => {
           const bookingData = doc.data();
           if (Array.isArray(bookingData.selectedDates)) {
-            fetchedBookedDates.push(...bookingData.selectedDates);
+            if (bookingData.status === "active") {
+              fetchedBookedDates.push(...bookingData.selectedDates);
+            } else if (bookingData.status === "pending") {
+              fetchedPendingDates.push(...bookingData.selectedDates);
+            }
           }
         });
   
         // ✅ Remove Duplicate Dates
         const uniqueBookedDates = Array.from(new Set(fetchedBookedDates));
+        const uniquePendingDates = Array.from(new Set(fetchedPendingDates));
 
          // ✅ Restore previously selected dates
          const storedDates = sessionStorage.getItem("selectedDates");
@@ -63,6 +72,7 @@ const BookingCalendar = () => {
          setArtistData(fetchedArtistData);
          setUnavailableDates(fetchedUnavailableDates);
          setBookedDates(uniqueBookedDates);
+         setPendingDates(uniquePendingDates); // ✅ Set pending dates
          setSelectedDates(parsedDates); // ✅ Restore selected dates from sessionStorage
 
           // ✅ Determine the first selected date to set initial view
@@ -73,6 +83,7 @@ const BookingCalendar = () => {
         console.log("✅ Fetched Artist Data:", fetchedArtistData);
         console.log("✅ Fetched Unavailable Dates:", fetchedUnavailableDates);
         console.log("✅ Fetched Active Booked Dates:", uniqueBookedDates);
+        console.log("✅ Fetched Pending Booked Dates:", fetchedBookedDates);
   
         // ✅ Update State with Fetched Data
         if (fetchedArtistData) setArtistData(fetchedArtistData); // ✅ Set the correct artist data
@@ -138,6 +149,11 @@ const BookingCalendar = () => {
     if (bookedDates.includes(info.dateStr)) {
       alert("This date is already booked.");
       return;
+  }
+
+  // 🔴 Show alert for pending dates but allow selection
+  if (pendingDates.includes(info.dateStr)) {
+    alert("This date is pending. Please note that selecting a pending date may involve a risk depending on the artist's decision.");
   }
 
     // 🔴 Prevent selecting unavailable or booked dates
@@ -241,6 +257,7 @@ const BookingCalendar = () => {
           events={[
             ...unavailableDates.map((date) => ({ start: date, color: "gray" })),
             ...bookedDates.map((date) => ({ start: date, color: "red" })),
+            ...pendingDates.map((date) => ({ start: date, color: "#e1ad01" })),
             ...selectedDates.map((date) => ({ start: date, color: "#7db23a" })),
           ]}
           eventDisplay="background"
@@ -254,6 +271,7 @@ const BookingCalendar = () => {
         <div className="[font-family:'Khula',Helvetica] text-xs text-center mt-2 space-x-2">
           <span className="text-black text-lg">●</span> Available
           <span className="text-[#191919] text-opacity-50 text-lg">●</span> Not Available
+          <span className="text-[#e1ad01] text-lg">●</span> Pending
           <span className="text-red-500 text-lg">●</span> Booked
           <span className="text-[#7db23a] text-lg">●</span> Selected
         </div>

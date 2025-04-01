@@ -1,53 +1,119 @@
+import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { IoChevronBackCircleOutline } from "react-icons/io5";
 import { MdOutlineEmail } from "react-icons/md"; // Email icon
 import { FcGoogle } from "react-icons/fc"; // Google icon
 import { auth, db } from "../../config/firebaseConfig"; // Firebase config
-import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
+import { GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
+import { doc, getDoc, setDoc, serverTimestamp, updateDoc } from "firebase/firestore";
 import { logEvent } from "firebase/analytics";
 import { analytics } from "../../config/firebaseConfig";
+import { ClipLoader } from "react-spinners";
 
 export const ClientLoginOptions = (): JSX.Element => {
   const navigate = useNavigate();
+    const [showTerms, setShowTerms] = useState(false); // Show terms modal first
+    const [agreedToTerms, setAgreedToTerms] = useState(false);
+    const [hasScrolled, setHasScrolled] = useState(false);
+    const [userDocId, setUserDocId] = useState<string | null>(null);
+    const contractRef = useRef<HTMLDivElement>(null);
+    const [buttonLoading, setButtonLoading] = useState(false);
+
+
+// Enable checkbox when user scrolls
+const handleScroll = () => {
+  if (!contractRef.current) return;
+  const { scrollTop, scrollHeight, clientHeight } = contractRef.current;
+  if (scrollTop + clientHeight >= scrollHeight - 10) {
+    setHasScrolled(true);
+  }
+};
 
   // Handle Google Login
-  const handleGoogleLogin = async () => {
-    const provider = new GoogleAuthProvider();
-    try {
-      const result = await signInWithPopup(auth, provider);
-      const user = result.user;
+const handleGoogleLogin = async () => {
+  const provider = new GoogleAuthProvider();
+  try {
+    const result = await signInWithPopup(auth, provider);
+    const user = result.user;
 
-      console.log("User successfully logged in with Google:", user);
+    console.log("User successfully logged in with Google:", user);
 
-       // ✅ Log Google login event
+    // ✅ Log Google login event
     logEvent(analytics, "login", {
       method: "google",
       user_id: user.uid,
       role: "client",
     });
 
-      // Check if the user exists in the Firestore database
-      const userDocRef = doc(db, "users", user.uid);
-      const userDoc = await getDoc(userDocRef);
+    // Check if the user exists in Firestore
+    const userDocRef = doc(db, "users", user.uid);
+    const userDoc = await getDoc(userDocRef);
 
-      if (userDoc.exists()) {
-        console.log("User exists in Firestore:", userDoc.data());
-        // Navigate to the homepage if the user exists
+    if (userDoc.exists()) {
+      const userData = userDoc.data();
+      console.log("User exists in Firestore:", userData);
+
+      // ✅ Check if user has agreed to terms
+      if (userData.agreedToTerms) {
         navigate("/");
         window.location.reload();
       } else {
-        console.log("User does not exist in Firestore. Redirecting to sign-up.");
-        // Redirect to SignUpFinal to collect additional information
-        navigate("/signup-final", {
-          state: { email: user.email },
-        });
+        setShowTerms(true); // Show contract overlay
+        setUserDocId(user.uid); // Save user ID for agreement update
       }
-    } catch (error: any) {
-      console.error("Google login failed:", error);
-      alert("Google login failed. Please try again.");
+    } else {
+      console.log("User does not exist in Firestore. Creating new user record...");
+      
+      // Create new user document with `agreedToTerms: false`
+      await setDoc(userDocRef, {
+        email: user.email,
+        displayName: user.displayName,
+        provider: "google",
+        createdAt: serverTimestamp(),
+        role: "client",
+        agreedToTerms: false, // Require agreement
+      });
+
+      setShowTerms(true); // Show contract overlay for agreement
+      setUserDocId(user.uid); // Save user ID for agreement update
     }
-  };
+  } catch (error: any) {
+    console.error("Google login failed:", error);
+    alert("Google login failed. Please try again.");
+  }
+};
+
+// Handle agreeing to terms
+const handleAgreeToTerms = async () => {
+  setButtonLoading(true); // Show loading spinner
+  if (userDocId) {
+    try {
+      await updateDoc(doc(db, "users", userDocId), {
+        agreedToTerms: true,
+        agreedAt: serverTimestamp(),
+      });
+
+      setButtonLoading(false); // Hide loading spinner
+      setShowTerms(false); // Hide contract overlay
+      navigate("/"); // Proceed after agreement
+      window.location.reload();
+    } catch (error) {
+      console.error("Error updating agreement status:", error);
+      alert("Failed to update agreement status. Please try again.");
+    }
+  }
+};
+
+
+  const handleLogout = async () => {
+        try {
+          await signOut(auth);
+          navigate("/");
+        } catch (error) {
+          console.error("Logout failed:", error);
+        }
+      };
+  
 
   const handleNavigate = (path: string) => {
     navigate(path);
@@ -118,6 +184,69 @@ export const ClientLoginOptions = (): JSX.Element => {
               </p>
             </button>
           </div>
+
+          {/* Terms and Agreement Modal */}
+      {showTerms && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          {/* Close Button - Positioned at the Outer Right */}
+        <button 
+          className="absolute top-4 right-4 text-4xl text-black md:text-white hover:text-gray-300"
+          onClick={handleLogout}
+        >
+          ✖
+        </button>
+          <div className="bg-white w-full h-full md:max-h-[650px] md:max-w-[1000px] md:rounded-[30px] shadow-[30px] py-20 px-5 md:p-10">
+            <div ref={contractRef} onScroll={handleScroll} className="bg-[#191919] bg-opacity-[10%] p-8 md:p-10 h-[550px] md:h-[450px] overflow-y-auto border border-gray-300 rounded-[30px]">
+              <p className="text-5xl text-center font-bold [font-family:'Khula',Helvetica]">CREATIFY CLIENT TERMS AND AGREEMENT</p>
+              <p className="text-lg md:text-[15px] mt-6 leading-[40px] md:leading-[30px] [font-family:'Khula',Helvetica]">By using <span className="font-bold [font-family:'Khula',Helvetica]">Creatify</span>, you agree to the following terms:<br></br><br></br> 
+            (This platform is part of a <span className="font-bold [font-family:'Khula',Helvetica]">capstone project</span> focused on testing and gathering data on a creative service platform. By using Creatify, you acknowledge that it is an academic project and may undergo changes or improvements.)<br></br><br></br> 
+            
+            1. <span className="font-bold [font-family:'Khula',Helvetica]">Platform Fee</span><br></br>
+              &nbsp;&nbsp;&nbsp;•	A <span className="font-bold [font-family:'Khula',Helvetica]">₱50</span> platform fee is charged only when an invoice is sent for a transaction.<br></br>
+              &nbsp;&nbsp;&nbsp;•	Booking an artist is free; the platform fee applies only when proceeding with a commission.<br></br>
+              &nbsp;&nbsp;&nbsp;•	This fee supports platform maintenance and is non-refundable once charged.<br></br><br></br>
+            
+            2. <span className="font-bold [font-family:'Khula',Helvetica]">Payment & Refund Policy</span><br></br>
+            &nbsp;&nbsp;&nbsp;•	Clients are required to pay the full commission price as per the invoice sent by the artist.<br></br>
+            &nbsp;&nbsp;&nbsp;•	Once a transaction has started, refunds will not be issued if the client decides to cancel.<br></br>
+            &nbsp;&nbsp;&nbsp;•	If a transaction has not yet begun, the client and artist may discuss a mutual cancellation.<br></br>
+            &nbsp;&nbsp;&nbsp;•	If an artist fails to deliver the agreed work, Creatify may review the case and take necessary action.<br></br><br></br>
+            
+            3. <span className="font-bold [font-family:'Khula',Helvetica]">Payment Release Process</span><br></br>
+            &nbsp;&nbsp;&nbsp;•	<span className="font-bold [font-family:'Khula',Helvetica]">First Payment Release</span>: The 50% down payment is transferred to the Artist upon confirmation of substantial progress &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(e.g., an initial draft, sketch, or progress update).<br></br>
+            &nbsp;&nbsp;&nbsp;•	<span className="font-bold [font-family:'Khula',Helvetica]">Final Payment Release</span>: The remaining 50% balance is transferred once the Client confirms the final deliverables and &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;approves the completed work.<br></br><br></br>
+            
+            4. <span className="font-bold [font-family:'Khula',Helvetica]">Commission Ownership & Usage</span><br></br>
+            &nbsp;&nbsp;&nbsp;•	The artist retains ownership of the commissioned work unless a commercial license or transfer of rights is agreed upon.<br></br>
+            &nbsp;&nbsp;&nbsp;•	Clients cannot resell, modify, or redistribute the work without the artist’s explicit permission.<br></br>
+            &nbsp;&nbsp;&nbsp;•	If an artist provides specific terms for their work, the client must respect and follow those terms.<br></br><br></br>
+            
+            5. <span className="font-bold [font-family:'Khula',Helvetica]">Client Responsibilities</span><br></br>
+            &nbsp;&nbsp;&nbsp;•	Clients must communicate professionally and respectfully with artists.<br></br>
+            &nbsp;&nbsp;&nbsp;•	Ghosting an artist (failing to respond without notice) may result in account suspension or banning.<br></br>
+            &nbsp;&nbsp;&nbsp;•	Clients must provide clear instructions and expectations when commissioning work.<br></br>
+            &nbsp;&nbsp;&nbsp;•	Payment must be completed as per the agreed terms to avoid disputes.<br></br><br></br>
+            
+            6. <span className="font-bold [font-family:'Khula',Helvetica]">Dispute Resolution</span><br></br>
+            &nbsp;&nbsp;&nbsp;•	Clients and artists should first attempt to resolve disputes directly.<br></br>
+            &nbsp;&nbsp;&nbsp;•	If unresolved, Creatify may review the situation but is not responsible for arbitration or legal matters.<br></br><br></br>
+           
+            7. <span className="font-bold [font-family:'Khula',Helvetica]">Account Suspension & Termination</span><br></br>
+            &nbsp;&nbsp;&nbsp;•	Clients who repeatedly violate terms, ghost artists, or engage in misconduct may have their accounts suspended or &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;permanently banned.<br></br>
+            &nbsp;&nbsp;&nbsp;•	Creatify reserves the right to update these terms as necessary. Continued use of the platform constitutes acceptance of &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;any updates.</p>
+              <p className="text-lg md:text-[15px] mt-6">By proceeding, you confirm that you have read and agreed to the <span className="font-bold [font-family:'Khula',Helvetica]">Terms and Agreement</span>. If you do not agree to these terms, you may not proceed or create an account.</p>
+            </div>
+            <div className="mt-4 p-4 flex flex-col items-center">
+              <div className="flex items-center gap-2">
+                <input type="checkbox" id="termsCheckbox" disabled={!hasScrolled} checked={agreedToTerms} onChange={() => setAgreedToTerms(!agreedToTerms)} className="w-4 h-4 cursor-pointer" />
+                <label htmlFor="termsCheckbox" className="text-lg md:text-[15px]">I have read and agree to the <span className="font-bold [font-family:'Khula',Helvetica]">Terms and Agreement</span></label>
+              </div>
+              <button onClick={handleAgreeToTerms} disabled={!agreedToTerms || !hasScrolled || buttonLoading} className={`mt-4 px-6 py-2 w-full rounded-full text-lg md:text-[18px] font-semibold text-white ${agreedToTerms ? "bg-[#7db23a]" : "bg-gray-400 cursor-not-allowed"}`}>{buttonLoading ? <ClipLoader size={20} color="white" /> : "Continue"}</button>
+            </div>
+          </div>
+        </div>
+      )}
+
 
            {/* Terms and Privacy Policy (Smaller for Mobile) */}
         <p className="[font-family:'Khula',Helvetica] font-normal text-[#19191980] text-[11px] md:text-[13px] tracking-[0] leading-[15.6px] text-left">

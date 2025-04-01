@@ -22,6 +22,7 @@ interface Artist {
   active: boolean;
   unavailableDates: string[];
   bookedDates: string[]; // ✅ Add bookedDates to the type definition
+  pendingDates: string[]; // ✅ Add pendingDates to the type definition
 }
 
 const ArtistGallery = () => {
@@ -48,98 +49,107 @@ const indexOfFirstArtist = indexOfLastArtist - artistsPerPage;
 const currentArtists = filteredArtists.slice(indexOfFirstArtist, indexOfLastArtist);
 
 const handlePageChange = (newPage: number) => {
-  setSearchParams({ page: newPage.toString() }); // ✅ Updates URL
-  window.location.reload(); // ✅ Ensures full reload only after URL update
+  setSearchParams({ page: newPage.toString() }); // ✅ Updates URL with new page number
 };
 
   useEffect(() => {
       const fetchArtists = async () => {
-          try {
-              console.log("🚀 Fetching artists...");
-  
-              // ✅ Query Firestore to get only active artists
-              const q = query(collection(db, "artists"), where("active", "==", true), limit(50));
-              const snapshot = await getDocs(q);
-  
-              if (snapshot.empty) {
-                  console.warn("⚠️ No active artists found!");
-              }
-  
-              const artistData: Artist[] = await Promise.all(snapshot.docs.map(async (docSnap) => {
-                  const data = docSnap.data();
-  
-                  // 🔹 Fetch unavailable dates
-                  const unavailableDates = Array.isArray(data.unavailableDates) ? data.unavailableDates : [];
-  
-                  // 🔹 Fetch booked dates for this artist
-                  const bookingsQuery = query(
-                      collection(db, "bookings"),
-                      where("artistId", "==", docSnap.id),
-                      where("status", "==", "active") // ✅ Only fetch ACTIVE bookings
-                  );
-                  const bookingsSnap = await getDocs(bookingsQuery);
-  
-                  let bookedDates: string[] = [];
-                  bookingsSnap.forEach((doc) => {
-                      const bookingData = doc.data();
-                      if (Array.isArray(bookingData.selectedDates)) {
-                          bookedDates.push(...bookingData.selectedDates);
-                      }
-                  });
-  
-                  // ✅ Remove duplicate booked dates
-                  const uniqueBookedDates = Array.from(new Set(bookedDates));
+  try {
+    console.log("🚀 Fetching artists...");
 
-                  // 🔹 Fetch artist's feedback to calculate average rating
-                const feedbackQuery = query(collection(db, "feedback"), where("artistId", "==", docSnap.id));
-                const feedbackSnap = await getDocs(feedbackQuery);
+    // ✅ Query Firestore to get only active artists
+    const q = query(collection(db, "artists"), where("active", "==", true), limit(50));
+    const snapshot = await getDocs(q);
 
-                let totalRating = 0;
-                let feedbackCount = 0;
+    if (snapshot.empty) {
+      console.warn("⚠️ No active artists found!");
+    }
 
-                feedbackSnap.forEach((doc) => {
-                    const feedbackData = doc.data();
-                    if (feedbackData.rating) {
-                        totalRating += feedbackData.rating;
-                        feedbackCount++;
-                    }
-                });
+    const artistData: Artist[] = await Promise.all(snapshot.docs.map(async (docSnap) => {
+      const data = docSnap.data();
 
-                // ✅ Compute average rating (with 1 decimal place)
-                const avgRating = feedbackCount > 0 ? parseFloat((totalRating / feedbackCount).toFixed(1)) : 0;
-  
-                  return {
-                      id: docSnap.id,
-                      fullName: data.fullName || "Unknown Artist",
-                      profilePicture: data.profilePicture || "",
-                      rating: avgRating, // ✅ Store computed rating
-                      genres: Array.isArray(data.genre) ? data.genre : [],
-                      portfolioImages: Array.isArray(data.portfolioImages) ? data.portfolioImages : [],
-                      active: data.active ?? false,
-                      unavailableDates,
-                      bookedDates: uniqueBookedDates, // ✅ Fix booked dates
-                  };
-              }));
-  
-              console.log("✅ Artists fetched:", artistData);
-  
-              // ✅ Set the state for artists
-              setArtists(artistData);
-              setFilteredArtists(artistData);
-  
-              // ✅ Extract unique genres from active artists
-              const genresSet = new Set<string>();
-              artistData.forEach((artist) => {
-                  artist.genres.forEach((g) => genresSet.add(g));
-              });
-  
-              setAvailableGenres(Array.from(genresSet));
-          } catch (error) {
-              console.error("❌ Error fetching artists:", error);
-          } finally {
-              setLoading(false);
+      // 🔹 Fetch unavailable dates
+      const unavailableDates = Array.isArray(data.unavailableDates) ? data.unavailableDates : [];
+
+      // 🔹 Fetch booked dates for this artist
+      const bookingsQuery = query(
+        collection(db, "bookings"),
+        where("artistId", "==", docSnap.id),
+        where("status", "in", ["active", "pending"]),
+        where("completed", "==", false) // ✅ Exclude completed bookings
+      );
+
+      const bookingsSnap = await getDocs(bookingsQuery);
+
+      let fetchedBookedDates: string[] = [];
+      let fetchedPendingDates: string[] = []; // ✅ Separate pending dates
+
+      bookingsSnap.forEach((doc) => {
+        const bookingData = doc.data();
+        if (Array.isArray(bookingData.selectedDates)) {
+          if (bookingData.status === "active") {
+            fetchedBookedDates.push(...bookingData.selectedDates);
+          } else if (bookingData.status === "pending") {
+            fetchedPendingDates.push(...bookingData.selectedDates);
           }
+        }
+      });
+
+      // ✅ Remove Duplicate Dates
+      const uniqueBookedDates = Array.from(new Set(fetchedBookedDates));
+      const uniquePendingDates = Array.from(new Set(fetchedPendingDates));
+
+      // 🔹 Fetch artist's feedback to calculate average rating
+      const feedbackQuery = query(collection(db, "feedback"), where("artistId", "==", docSnap.id));
+      const feedbackSnap = await getDocs(feedbackQuery);
+
+      let totalRating = 0;
+      let feedbackCount = 0;
+
+      feedbackSnap.forEach((doc) => {
+        const feedbackData = doc.data();
+        if (feedbackData.rating) {
+          totalRating += feedbackData.rating;
+          feedbackCount++;
+        }
+      });
+
+      // ✅ Compute average rating (with 1 decimal place)
+      const avgRating = feedbackCount > 0 ? parseFloat((totalRating / feedbackCount).toFixed(1)) : 0;
+
+      return {
+        id: docSnap.id,
+        fullName: data.fullName || "Unknown Artist",
+        profilePicture: data.profilePicture || "",
+        rating: avgRating, // ✅ Store computed rating
+        genres: Array.isArray(data.genre) ? data.genre : [],
+        portfolioImages: Array.isArray(data.portfolioImages) ? data.portfolioImages : [],
+        active: data.active ?? false,
+        unavailableDates, // ✅ Keep original unavailable dates
+        bookedDates: uniqueBookedDates, // ✅ Fix booked dates
+        pendingDates: uniquePendingDates, // ✅ Fix pending dates
       };
+    }));
+
+    console.log("✅ Artists fetched:", artistData);
+
+    // ✅ Set the state for artists
+    setArtists(artistData);
+    setFilteredArtists(artistData);
+
+    // ✅ Extract unique genres from active artists
+    const genresSet = new Set<string>();
+    artistData.forEach((artist) => {
+      artist.genres.forEach((g) => genresSet.add(g));
+    });
+
+    setAvailableGenres(Array.from(genresSet));
+  } catch (error) {
+    console.error("❌ Error fetching artists:", error);
+  } finally {
+    setLoading(false);
+  }
+};
   
       fetchArtists();
   }, []);
@@ -207,24 +217,24 @@ const toggleDropdown = () => {
   setIsDropdownOpen(!isDropdownOpen);
 };
 
-// ✅ Filter Genres to Exclude "Admin Test Account"
+// ✅ Filter Genres to Exclude "Admin Test Account" and "User Test Account"
 const uniqueGenres = Array.from(
   new Set(artists.flatMap((artist) => artist.genres))
-).filter((genre) => genre !== "Admin Test Account"); // ✅ Exclude "Admin Test Account"
+).filter((genre) => genre !== "Admin Test Account" && genre !== "User Test Account"); // ✅ Exclude both accounts
 
 // ✅ Handle Genre Selection (Excludes "Admin Test Account")
 const handleFilterByGenre = (genre: string | null) => {
   if (genre === null) {
     setSelectedGenre(null);
     setFilteredArtists(
-      artists.filter((artist) => !artist.genres.includes("Admin Test Account")) // ✅ Exclude "Admin Test Account"
+      artists.filter((artist) => !artist.genres.includes("Admin Test Account") && !artist.genres.includes("User Test Account")) // ✅ Exclude "Admin Test Account"
     ); 
   } else {
     setSelectedGenre(genre);
     setFilteredArtists(
       artists.filter(
         (artist) =>
-          artist.genres.includes(genre) && !artist.genres.includes("Admin Test Account") // ✅ Exclude "Admin Test Account"
+          artist.genres.includes(genre) && !artist.genres.includes("Admin Test Account") && !artist.genres.includes("User Test Account") // ✅ Exclude "Admin Test Account"
       )
     );
   }
@@ -421,6 +431,7 @@ const handleOpenCalendar = async (artist: Artist, e: React.MouseEvent) => {
                 <ArtistCalendar
                     unavailableDates={selectedArtist?.unavailableDates ?? []} // ✅ Ensure fallback value
                     bookedDates={selectedArtist?.bookedDates ?? []} // ✅ Ensure fallback value
+                    pendingDates={selectedArtist?.pendingDates ?? []} // ✅ Ensure fallback value
                     setUnavailableDates={() => {}} // Read-only mode
                     setChangesMade={() => {}} // Read-only mode
                     isReadOnly={true} // ✅ Pass Read-Only Flag
@@ -430,6 +441,7 @@ const handleOpenCalendar = async (artist: Artist, e: React.MouseEvent) => {
         <div className="[font-family:'Khula',Helvetica] text-xs text-center space-x-2">
           <span className="text-[#191919] text-opacity-50 text-lg">●</span> Unavailable
           <span className="text-red-500 text-lg">●</span> Booked
+          <span className="text-[#e1ad01] text-lg">●</span> Pending
         </div>
         </div>
     </div>

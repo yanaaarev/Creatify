@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { db } from "../../config/firebaseConfig";
+import { useNavigate } from "react-router-dom";
+import { auth, db } from "../../config/firebaseConfig";
 import { collection, onSnapshot, deleteDoc, doc } from "firebase/firestore";
 import { MdDelete } from "react-icons/md";
 import AdminSidebar from "./AdminSidebar";
@@ -7,8 +8,55 @@ import AdminSidebar from "./AdminSidebar";
 const ITEMS_PER_PAGE = 6; // 🔹 Show only 10 artists per page
 
 const RegisteredArtists = () => {
+  const navigate = useNavigate();
+  const [, setIsAdmin] = useState(false);
+  const [, setLoading] = useState(true);
   const [artists, setArtists] = useState<any[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
+
+// 🔹 Ensure Admin Authentication
+useEffect(() => {
+  const checkAdminStatus = async () => {
+    try {
+      const user = auth.currentUser;
+      if (!user) {
+        navigate("/admin-login");
+        return;
+      }
+
+      const idTokenResult = await user.getIdTokenResult(true);
+      if (idTokenResult.claims.admin) {
+        setIsAdmin(true);
+      } else {
+        alert("Access Denied: You are not an admin.");
+        navigate("/admin-login");
+      }
+    } catch (error) {
+      console.error("Admin Check Failed:", error);
+      navigate("/admin-login");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  checkAdminStatus();
+}, [navigate]);
+
+useEffect(() => {
+  const handleUnload = async () => {
+    try {
+      await auth.signOut(); // Sign out admin when tab is closed
+    } catch (error) {
+      console.error("Error during auto logout:", error);
+    }
+  };
+
+  window.addEventListener("beforeunload", handleUnload);
+
+  return () => {
+    window.removeEventListener("beforeunload", handleUnload);
+  };
+}, []);
 
   useEffect(() => {
     const unsubscribe = onSnapshot(collection(db, "artists"), (snapshot) => {
@@ -33,6 +81,11 @@ const RegisteredArtists = () => {
 
   // 🔹 Calculate total pages
   const totalPages = Math.ceil(artists.length / ITEMS_PER_PAGE);
+
+ // 🔹 Ensure Firebase Token is Up-to-Date
+  auth.currentUser?.getIdToken(true).then((idToken) => {
+    console.log("🔄 New Token Fetched:", idToken);
+  });
 
 
   return (

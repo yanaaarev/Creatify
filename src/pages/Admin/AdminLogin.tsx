@@ -11,7 +11,7 @@ const AdminLogin = (): JSX.Element => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [error] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [buttonLoading, setButtonLoading] = useState(false);
 
@@ -31,11 +31,11 @@ const AdminLogin = (): JSX.Element => {
         navigate("/admin-panel"); // Redirect to Admin Panel
       } else {
         setButtonLoading(false);
-        setError("❌ Access Denied: You are not an admin.");
+        alert("❌ Access Denied: You are not an admin.");
       }
     } catch (err) {
       setButtonLoading(false);
-      setError("❌ Invalid credentials. Please try again.");
+      alert("❌ Invalid credentials. Please try again.");
     }
   };
 

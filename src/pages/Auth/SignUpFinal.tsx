@@ -14,7 +14,7 @@ interface LocationState {
 
 export const SignUpFinal = (): JSX.Element => {
   const [username, setUsername] = useState("");
-  const [error, setError] = useState("");
+  const [error] = useState("");
   const [uid, setUid] = useState<string | null>(null);
   const navigate = useNavigate();
   const location = useLocation();
@@ -30,11 +30,11 @@ export const SignUpFinal = (): JSX.Element => {
         const userDoc = await getDoc(userDocRef);
   
         if (!userDoc.exists() || !userDoc.data().agreedToTerms) {
-          setError("You must agree to the terms before proceeding.");
+          alert("You must agree to the terms before proceeding.");
           navigate("/signup-options"); // Redirect if agreement is missing
         }
       } else {
-        setError("You need to log in to complete registration.");
+        alert("You need to log in to complete registration.");
         navigate("/signup-options");
       }
     });
@@ -44,16 +44,16 @@ export const SignUpFinal = (): JSX.Element => {
 
   useEffect(() => {
     if (!email) {
-      setError("Missing email. Please start the sign-up process again.");
+      alert("Missing email. Please start the sign-up process again.");
       navigate("/signup-options"); // Redirect back to options
     }
   }, [email, navigate]);
 
   const handleCreateAccount = async () => {
-    setError("");
+    alert("");
 
     if (!username) {
-      setError("Please enter a username.");
+      alert("Please enter a username.");
       return;
     }
 
@@ -97,7 +97,7 @@ export const SignUpFinal = (): JSX.Element => {
       window.location.reload();
     } catch (err: any) {
       setButtonLoading(false);
-      setError(err.message || "An error occurred during account creation.");
+      alert(err.message || "An error occurred during account creation.");
       console.error("Error updating user profile:", err);
     }
   };
