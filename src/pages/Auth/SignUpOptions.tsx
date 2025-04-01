@@ -147,37 +147,37 @@ export const SignUpOptions = (): JSX.Element => {
               <p className="text-lg md:text-[15px] mt-6 leading-[40px] md:leading-[30px] [font-family:'Khula',Helvetica]">By using <span className="font-bold [font-family:'Khula',Helvetica]">Creatify</span>, you agree to the following terms:<br></br><br></br> 
             (This platform is part of a <span className="font-bold [font-family:'Khula',Helvetica]">capstone project</span> focused on testing and gathering data on a creative service platform. By using Creatify, you acknowledge that it is an academic project and may undergo changes or improvements.)<br></br><br></br> 
             
-            1. <span className="font-bold [font-family:'Khula',Helvetica]">Platform Fee</span><br></br>
+            <span className="font-bold text-3xl [font-family:'Khula',Helvetica]">1. Platform Fee</span><br></br>
               &nbsp;&nbsp;&nbsp;•	A <span className="font-bold [font-family:'Khula',Helvetica]">₱50</span> platform fee is charged only when an invoice is sent for a transaction.<br></br>
               &nbsp;&nbsp;&nbsp;•	Booking an artist is free; the platform fee applies only when proceeding with a commission.<br></br>
               &nbsp;&nbsp;&nbsp;•	This fee supports platform maintenance and is non-refundable once charged.<br></br><br></br>
             
-            2. <span className="font-bold [font-family:'Khula',Helvetica]">Payment & Refund Policy</span><br></br>
+            <span className="font-bold text-3xl [font-family:'Khula',Helvetica]">2. Payment & Refund Policy</span><br></br>
             &nbsp;&nbsp;&nbsp;•	Clients are required to pay the full commission price as per the invoice sent by the artist.<br></br>
             &nbsp;&nbsp;&nbsp;•	Once a transaction has started, refunds will not be issued if the client decides to cancel.<br></br>
             &nbsp;&nbsp;&nbsp;•	If a transaction has not yet begun, the client and artist may discuss a mutual cancellation.<br></br>
             &nbsp;&nbsp;&nbsp;•	If an artist fails to deliver the agreed work, Creatify may review the case and take necessary action.<br></br><br></br>
             
-            3. <span className="font-bold [font-family:'Khula',Helvetica]">Payment Release Process</span><br></br>
+            <span className="font-bold text-3xl [font-family:'Khula',Helvetica]">3. Payment Release Process</span><br></br>
             &nbsp;&nbsp;&nbsp;•	<span className="font-bold [font-family:'Khula',Helvetica]">First Payment Release</span>: The 50% down payment is transferred to the Artist upon confirmation of substantial progress (e.g., an initial draft, sketch, or progress update).<br></br>
             &nbsp;&nbsp;&nbsp;•	<span className="font-bold [font-family:'Khula',Helvetica]">Final Payment Release</span>: The remaining 50% balance is transferred once the Client confirms the final deliverables and approves the completed work.<br></br><br></br>
             
-            4. <span className="font-bold [font-family:'Khula',Helvetica]">Commission Ownership & Usage</span><br></br>
+            <span className="font-bold text-3xl [font-family:'Khula',Helvetica]">4. Commission Ownership & Usage</span><br></br>
             &nbsp;&nbsp;&nbsp;•	The artist retains ownership of the commissioned work unless a commercial license or transfer of rights is agreed upon.<br></br>
             &nbsp;&nbsp;&nbsp;•	Clients cannot resell, modify, or redistribute the work without the artist’s explicit permission.<br></br>
             &nbsp;&nbsp;&nbsp;•	If an artist provides specific terms for their work, the client must respect and follow those terms.<br></br><br></br>
             
-            5. <span className="font-bold [font-family:'Khula',Helvetica]">Client Responsibilities</span><br></br>
+            <span className="font-bold text-3xl [font-family:'Khula',Helvetica]">5. Client Responsibilities</span><br></br>
             &nbsp;&nbsp;&nbsp;•	Clients must communicate professionally and respectfully with artists.<br></br>
             &nbsp;&nbsp;&nbsp;•	Ghosting an artist (failing to respond without notice) may result in account suspension or banning.<br></br>
             &nbsp;&nbsp;&nbsp;•	Clients must provide clear instructions and expectations when commissioning work.<br></br>
             &nbsp;&nbsp;&nbsp;•	Payment must be completed as per the agreed terms to avoid disputes.<br></br><br></br>
             
-            6. <span className="font-bold [font-family:'Khula',Helvetica]">Dispute Resolution</span><br></br>
+            <span className="font-bold text-3xl [font-family:'Khula',Helvetica]">6. Dispute Resolution</span><br></br>
             &nbsp;&nbsp;&nbsp;•	Clients and artists should first attempt to resolve disputes directly.<br></br>
             &nbsp;&nbsp;&nbsp;•	If unresolved, Creatify may review the situation but is not responsible for arbitration or legal matters.<br></br><br></br>
            
-            7. <span className="font-bold [font-family:'Khula',Helvetica]">Account Suspension & Termination</span><br></br>
+            <span className="font-bold text-3xl [font-family:'Khula',Helvetica]">7. Account Suspension & Termination</span><br></br>
             &nbsp;&nbsp;&nbsp;•	Clients who repeatedly violate terms, ghost artists, or engage in misconduct may have their accounts suspended or permanently banned.<br></br>
             &nbsp;&nbsp;&nbsp;•	Creatify reserves the right to update these terms as necessary. Continued use of the platform constitutes acceptance of any updates.</p>
               <p className="text-lg md:text-[15px] mt-6">By proceeding, you confirm that you have read and agreed to the <span className="font-bold [font-family:'Khula',Helvetica]">Terms and Agreement</span>. If you do not agree to these terms, you may not proceed or create an account.</p>
