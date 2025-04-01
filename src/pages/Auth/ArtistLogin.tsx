@@ -272,10 +272,10 @@ const handleScroll = () => {
         </div>
       </div>
 
-      {/* ✅ Contract Overlay */}
+      {/* Contract Overlay */}
       {showContract && (
        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-       {/* Close Button - Positioned at the Outer Right */}
+       {/* Close Button */}
       <button 
         className="absolute top-4 right-4 text-4xl text-black md:text-white hover:text-gray-300"
         onClick={handleLogout}
@@ -284,7 +284,7 @@ const handleScroll = () => {
       </button>
 
        <div className="bg-white w-full h-full md:max-h-[700px] md:max-w-[1000px] md:rounded-[30px] shadow-[30px] py-16 px-5 md:p-10">
-         <div ref={contractRef} onScroll={handleScroll} className="bg-[#191919] bg-opacity-[10%] p-8 md:p-10 h-[400px] md:h-[450px] overflow-y-auto border border-gray-300 rounded-[30px]">
+         <div ref={contractRef} onScroll={handleScroll} className="bg-[#191919] bg-opacity-[10%] p-8 md:p-10 h-[450px] md:h-[450px] overflow-y-auto border border-gray-300 rounded-[30px]">
            <p className="text-5xl text-center font-bold [font-family:'Khula',Helvetica]">CREATIFY ARTIST AGREEMENT</p>
            <p className="text-lg md:text-[15px] mt-6 leading-[40px] md:leading-[30px] [font-family:'Khula',Helvetica]"><span className="font-semibold italic [font-family:'Khula',Helvetica]">(For Capstone Project Participation)</span><br></br><br></br>
            This <span className="font-bold [font-family:'Khula',Helvetica]">Creatify Artist Agreement</span> (“Agreement”) is made between <span className="font-bold [font-family:'Khula',Helvetica]">Creatify</span> (“Platform”) and the undersigned <span className="font-bold [font-family:'Khula',Helvetica]">Artist</span> for participation in a <span className="font-bold [font-family:'Khula',Helvetica]">capstone project</span>.<br></br><br></br> 
