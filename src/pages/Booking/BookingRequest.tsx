@@ -264,7 +264,7 @@ const BookingRequest = () => {
       {/* 📎 Attachment Overlay */}
       {showAttachment && uploadedFile && (
         <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center">
-          <div className="p-6 rounded-lg shadow-lg w-full max-w-xl relative">
+          <div className="p-6 rounded-[30px] shadow-lg w-full max-w-xl relative">
             {/* ❌ Close Button */}
             <button
               className="absolute top-4 right-4 bg-black text-white p-2 rounded-full"
@@ -274,7 +274,7 @@ const BookingRequest = () => {
             </button>
 
             {/* 📎 Display Image */}
-            <img src={uploadedFile} alt="Attachment" className="w-full h-auto rounded-lg" />
+            <img src={uploadedFile} alt="Attachment" className="w-full h-auto rounded-[30px]" />
           </div>
         </div>
       )}

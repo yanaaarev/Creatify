@@ -331,7 +331,7 @@ const [currentMonth, setCurrentMonth] = useState<string>(new Date().toISOString(
       {/* ✅ Availability Overlay (Read-Only Calendar) */}
       {isAvailabilityOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50">
-        <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-3xl relative">
+        <div className="bg-white p-6 rounded-[30px] shadow-lg w-full max-w-3xl relative">
             {/* ❌ Close Button */}
             <button
               className="absolute top-3 right-3 text-gray-700 text-xl"

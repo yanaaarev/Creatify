@@ -474,7 +474,7 @@ const handleCancelBooking = async () => {
 {/* 📅 Calendar Overlay for Mobile */}
 {showCalendarOverlay && (
   <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-    <div className="bg-white rounded-lg shadow-lg p-3 border border-gray-300 w-full max-w-[400px] relative">
+    <div className="bg-white rounded-[30px] shadow-lg p-3 border border-gray-300 w-full max-w-[400px] relative">
       
       {/* ❌ Close Button */}
       <button 
@@ -559,7 +559,7 @@ const handleCancelBooking = async () => {
 {showStatusMenu && (
   <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
     {/* Status Menu Overlay */}
-    <div className="bg-white rounded-lg shadow-lg p-10 border border-gray-300 w-[300px] relative">
+    <div className="bg-white rounded-[30px] shadow-lg p-10 border border-gray-300 w-[300px] relative">
       
       {/* ❌ Close Button */}
       <button 
