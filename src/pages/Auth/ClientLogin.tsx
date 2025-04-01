@@ -297,8 +297,8 @@ export const ClientLogin = (): JSX.Element => {
             &nbsp;&nbsp;&nbsp;•	If an artist fails to deliver the agreed work, Creatify may review the case and take necessary action.<br></br><br></br>
             
             3. <span className="font-bold [font-family:'Khula',Helvetica]">Payment Release Process</span><br></br>
-            &nbsp;&nbsp;&nbsp;•	<span className="font-bold [font-family:'Khula',Helvetica]">First Payment Release</span>: The 50% down payment is transferred to the Artist upon confirmation of substantial progress &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(e.g., an initial draft, sketch, or progress update).<br></br>
-            &nbsp;&nbsp;&nbsp;•	<span className="font-bold [font-family:'Khula',Helvetica]">Final Payment Release</span>: The remaining 50% balance is transferred once the Client confirms the final deliverables and &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;approves the completed work.<br></br><br></br>
+            &nbsp;&nbsp;&nbsp;•	<span className="font-bold [font-family:'Khula',Helvetica]">First Payment Release</span>: The 50% down payment is transferred to the Artist upon confirmation of substantial progress (e.g., an initial draft, sketch, or progress update).<br></br>
+            &nbsp;&nbsp;&nbsp;•	<span className="font-bold [font-family:'Khula',Helvetica]">Final Payment Release</span>: The remaining 50% balance is transferred once the Client confirms the final deliverables and approves the completed work.<br></br><br></br>
             
             4. <span className="font-bold [font-family:'Khula',Helvetica]">Commission Ownership & Usage</span><br></br>
             &nbsp;&nbsp;&nbsp;•	The artist retains ownership of the commissioned work unless a commercial license or transfer of rights is agreed upon.<br></br>
@@ -316,8 +316,8 @@ export const ClientLogin = (): JSX.Element => {
             &nbsp;&nbsp;&nbsp;•	If unresolved, Creatify may review the situation but is not responsible for arbitration or legal matters.<br></br><br></br>
            
             7. <span className="font-bold [font-family:'Khula',Helvetica]">Account Suspension & Termination</span><br></br>
-            &nbsp;&nbsp;&nbsp;•	Clients who repeatedly violate terms, ghost artists, or engage in misconduct may have their accounts suspended or &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;permanently banned.<br></br>
-            &nbsp;&nbsp;&nbsp;•	Creatify reserves the right to update these terms as necessary. Continued use of the platform constitutes acceptance of &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;any updates.</p>
+            &nbsp;&nbsp;&nbsp;•	Clients who repeatedly violate terms, ghost artists, or engage in misconduct may have their accounts suspended or permanently banned.<br></br>
+            &nbsp;&nbsp;&nbsp;•	Creatify reserves the right to update these terms as necessary. Continued use of the platform constitutes acceptance of any updates.</p>
               <p className="text-lg md:text-[15px] mt-6">By proceeding, you confirm that you have read and agreed to the <span className="font-bold [font-family:'Khula',Helvetica]">Terms and Agreement</span>. If you do not agree to these terms, you may not proceed or create an account.</p>
             </div>
             <div className="mt-4 p-4 flex flex-col items-center">

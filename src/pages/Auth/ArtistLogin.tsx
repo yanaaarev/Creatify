@@ -284,7 +284,7 @@ const handleScroll = () => {
       </button>
 
        <div className="bg-white w-full h-full md:max-h-[700px] md:max-w-[1000px] md:rounded-[30px] shadow-[30px] py-16 px-5 md:p-10">
-         <div ref={contractRef} onScroll={handleScroll} className="bg-[#191919] bg-opacity-[10%] p-8 md:p-10 h-[500px] md:h-[450px] overflow-y-auto border border-gray-300 rounded-[30px]">
+         <div ref={contractRef} onScroll={handleScroll} className="bg-[#191919] bg-opacity-[10%] p-8 md:p-10 h-[400px] md:h-[450px] overflow-y-auto border border-gray-300 rounded-[30px]">
            <p className="text-5xl text-center font-bold [font-family:'Khula',Helvetica]">CREATIFY ARTIST AGREEMENT</p>
            <p className="text-lg md:text-[15px] mt-6 leading-[40px] md:leading-[30px] [font-family:'Khula',Helvetica]"><span className="font-semibold italic [font-family:'Khula',Helvetica]">(For Capstone Project Participation)</span><br></br><br></br>
            This <span className="font-bold [font-family:'Khula',Helvetica]">Creatify Artist Agreement</span> (“Agreement”) is made between <span className="font-bold [font-family:'Khula',Helvetica]">Creatify</span> (“Platform”) and the undersigned <span className="font-bold [font-family:'Khula',Helvetica]">Artist</span> for participation in a <span className="font-bold [font-family:'Khula',Helvetica]">capstone project</span>.<br></br><br></br> 
@@ -292,11 +292,11 @@ const handleScroll = () => {
          <p className="md:text-[15px] leading-[40px] md:leading-[35px] [font-family:'Khula',Helvetica]">
            <span className="font-bold text-3xl [font-family:'Khula',Helvetica]">1. Introduction</span><br></br>
            &nbsp;&nbsp;&nbsp;•	Creatify is a capstone project designed for academic purposes, focusing on testing and gathering data on a creative 
-           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;service platform. As an Artist, you are volunteering to participate in this project until the end of April. After this period, 
-           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;any continuation of the platform and artist involvement will be subject to further discussion.<br></br>
+           service platform. As an Artist, you are volunteering to participate in this project until the end of April. After this period, 
+           any continuation of the platform and artist involvement will be subject to further discussion.<br></br>
            &nbsp;&nbsp;&nbsp;•	This agreement is a formality, as Creatify serves only as a medium for transactions between clients and artists. You are not 
-           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;restricted from taking on other jobs or working outside of Creatify. Your personal information and data are secure and 
-           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;will not be shared outside the platform.<br></br><br></br>
+           restricted from taking on other jobs or working outside of Creatify. Your personal information and data are secure and 
+           will not be shared outside the platform.<br></br><br></br>
          
         <span className="font-bold text-3xl [font-family:'Khula',Helvetica]">2. Artist Obligations & Responsibilities</span><br></br>
         As a Creatify Artist, you agree to:<br></br>
@@ -308,21 +308,21 @@ const handleScroll = () => {
          
         <span className="font-bold text-3xl [font-family:'Khula',Helvetica]">3. Data Gathering & Documentation</span><br></br>
          &nbsp;&nbsp;&nbsp;•	As part of this capstone project, the Artist’s participation will be included in the platform’s data gathering for academic 
-         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;purposes.<br></br>
+         purposes.<br></br>
          &nbsp;&nbsp;&nbsp;•	The Artist’s name will be documented as part of the research and findings for this project.<br></br>
          &nbsp;&nbsp;&nbsp;•	This data will only be used within the scope of the capstone project and for evaluating the platform’s performance.<br></br><br></br>
          
         <span className="font-bold text-3xl [font-family:'Khula',Helvetica]">4. Duration & Termination</span><br></br>
         Artists may leave the platform under the following conditions:<br></br>
-         &nbsp;&nbsp;&nbsp;•	<span className="font-bold [font-family:'Khula',Helvetica]">Project End</span>: The official participation period ends in April, but Artists may choose to continue using the platform beyond &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;that.<br></br>
+         &nbsp;&nbsp;&nbsp;•	<span className="font-bold [font-family:'Khula',Helvetica]">Project End</span>: The official participation period ends in April, but Artists may choose to continue using the platform beyond that.<br></br>
          &nbsp;&nbsp;&nbsp;•	<span className="font-bold [font-family:'Khula',Helvetica]">Voluntary Exit</span>: Artists may leave at any time, provided they have no ongoing transactions with a client.<br></br>
-         &nbsp;&nbsp;&nbsp;•	<span className="font-bold [font-family:'Khula',Helvetica]">Forced Termination</span>: Artists may be removed from the platform if they repeatedly fail to follow platform rules or engage &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in misconduct.<br></br><br></br>
+         &nbsp;&nbsp;&nbsp;•	<span className="font-bold [font-family:'Khula',Helvetica]">Forced Termination</span>: Artists may be removed from the platform if they repeatedly fail to follow platform rules or engage in misconduct.<br></br><br></br>
          
         <span className="font-bold text-3xl [font-family:'Khula',Helvetica]">5. Payment Structure</span><br></br>
          &nbsp;&nbsp;&nbsp;•	Clients make a 50% down payment upon finalizing details before work begins.<br></br>
-         &nbsp;&nbsp;&nbsp;•	<span className="font-bold [font-family:'Khula',Helvetica]">First Payment Release</span>: The 50% down payment is transferred to the Artist only upon confirmation of substantial &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;progress (e.g., an initial draft, sketch, or progress update).<br></br>
-         &nbsp;&nbsp;&nbsp;•	<span className="font-bold [font-family:'Khula',Helvetica]">Final Payment Release</span>: The remaining 50% balance is transferred once the Client confirms the final deliverables and &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;approves the completed work.<br></br>
-         &nbsp;&nbsp;&nbsp;•	Payments are processed through Creatify for security and transparency. Instead of a percentage-based fee, a fixed ₱50 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;platform fee is applied per invoice. This is the only additional charge outside the commission price.<br></br><br></br>
+         &nbsp;&nbsp;&nbsp;•	<span className="font-bold [font-family:'Khula',Helvetica]">First Payment Release</span>: The 50% down payment is transferred to the Artist only upon confirmation of substantial progress (e.g., an initial draft, sketch, or progress update).<br></br>
+         &nbsp;&nbsp;&nbsp;•	<span className="font-bold [font-family:'Khula',Helvetica]">Final Payment Release</span>: The remaining 50% balance is transferred once the Client confirms the final deliverables and approves the completed work.<br></br>
+         &nbsp;&nbsp;&nbsp;•	Payments are processed through Creatify for security and transparency. Instead of a percentage-based fee, a fixed ₱50 platform fee is applied per invoice. This is the only additional charge outside the commission price.<br></br><br></br>
          
         <span className="font-bold text-3xl [font-family:'Khula',Helvetica]">6. Cancellations & Refund Policy</span><br></br>
          &nbsp;&nbsp;&nbsp;•	Once a transaction has started, the client cannot receive a refund if they cancel the commission.<br></br>
@@ -339,7 +339,7 @@ const handleScroll = () => {
          
          <span className="font-bold text-3xl [font-family:'Khula',Helvetica]">9. Dispute Resolution</span><br></br>
          &nbsp;&nbsp;&nbsp;•	Artists and clients should communicate in good faith to resolve any conflicts.<br></br>
-         &nbsp;&nbsp;&nbsp;•	If no resolution is reached, the platform may review the case and enforce its policies but is not responsible for arbitration &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;beyond this.<br></br><br></br>
+         &nbsp;&nbsp;&nbsp;•	If no resolution is reached, the platform may review the case and enforce its policies but is not responsible for arbitration beyond this.<br></br><br></br>
 
          <span className="font-bold text-3xl [font-family:'Khula',Helvetica]">10. Certification & Incentive</span><br></br>
          &nbsp;&nbsp;&nbsp;•	Artists <span className="font-bold [font-family:'Khula',Helvetica]">who fully comply and actively participate until April</span> will receive:<br></br>
