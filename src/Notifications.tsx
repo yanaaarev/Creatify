@@ -5,6 +5,7 @@ import { FaBell, FaStar } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { triggerNotification } from "./utils/triggerNotification";
 import { writeBatch } from "firebase/firestore"; // ✅ Import writeBatch
+import { ClipLoader } from "react-spinners";
 
 import creatifyFavicon from "/images/creatifyadmin.webp";
 import newMessageIcon from "/images/notificationtype/new_message.webp";
@@ -46,6 +47,7 @@ const NotificationComponent = () => {
   const [rating, setRating] = useState(0);
   const [userRole, setUserRole] = useState<string>(''); // Initialize userRole as an empty string
   const dropdownRef = useRef<HTMLDivElement>(null); // Ref for dropdown
+  const [buttonLoading, setButtonLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -375,6 +377,8 @@ else if (notification.title.includes("Feedback")) {
       return;
     }
 
+    setButtonLoading(true);
+
     const clientRef = doc(db, "users", clientId);
     const clientSnap = await getDoc(clientRef);
 
@@ -423,6 +427,7 @@ else if (notification.title.includes("Feedback")) {
        });
   
       alert("✅ Feedback submitted successfully!");
+      setButtonLoading(false); // ✅ Show loading state
       setShowFeedbackForm(false);
       setShowThankYou(true);
       setFeedback("");
@@ -599,9 +604,10 @@ else if (notification.title.includes("Feedback")) {
       {/* Submit Button */}
       <button
         onClick={submitFeedback}
+        disabled={buttonLoading}
         className="bg-[#7DB23A] text-white px-4 py-1 rounded-full mt-4 w-full text-lg font-medium"
       >
-        Send
+        {buttonLoading ? <ClipLoader size={20} color="white" /> : "Submit"}
       </button>
       {/* ✅ Close Button Inside the White Container */}
      <div className="flex justify-end -mt-[240px] -mr-8">

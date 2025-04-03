@@ -91,7 +91,7 @@ export const HomePage = (): JSX.Element => {
             <span className="font-bold">Creatify</span>.
           </p>
           <img
-            className="w-40 md:w-60 mx-auto cursor-pointer"
+            className="w-40 md:w-60 mx-auto cursor-pointer pointer-events-auto"
             onClick={() => navigate("/faqs")}
             src={CREATIFYElements111}
             alt="FAQs"

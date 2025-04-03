@@ -13,6 +13,7 @@ import Footer from "./pages/Footer/Footer";
 import { logEvent } from "firebase/analytics";
 import { analytics } from "./config/firebaseConfig";
 import { Analytics } from "@vercel/analytics/react";
+import LoadingScreen from "./LoadingScreen";
 
 // Lazy load pages
 const HomePage = lazy(() => import("./pages/Home/HomePage"));
@@ -83,8 +84,7 @@ const AppContent = (): JSX.Element => {
     console.log(`📌 Page View Logged: ${location.pathname}`);
   }, [location]);
 
-  if (loading)
-    return <p className="text-center text-white mt-[400px]">Loading...</p>;
+  if (loading) return <LoadingScreen />; // ✅ Apply LoadingScreen while loading
 
   // ✅ Redirect Artists Away from Homepage
   if (role === "artist" && location.pathname === "/") {
@@ -154,7 +154,7 @@ const AppContent = (): JSX.Element => {
       {/* Main Content */}
       <main className="flex-grow">
         <Suspense
-          fallback={<p className="text-center text-white">Loading...</p>}
+          fallback={<LoadingScreen />} // ✅ Use LoadingScreen as fallback
         >
           <Routes>
             <Route path="/" element={<HomePage />} />
