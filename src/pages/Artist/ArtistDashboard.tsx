@@ -169,6 +169,14 @@ const [currentMonth, setCurrentMonth] = useState<string>(new Date().toISOString(
     }, 0); // Small delay to prevent unnecessary fast triggers
   };
 
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen bg-gray-100">
+        <p className="text-lg text-gray-600">Loading artist data...</p>
+      </div>
+    );
+  }
+
   if (!artist) {
     return (
       <div className="flex justify-center items-center min-h-screen bg-gray-100">
