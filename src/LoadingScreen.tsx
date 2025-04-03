@@ -7,7 +7,7 @@ const LoadingScreen: React.FC = () => {
       <img
         src="images/logo.webp" // Update with the actual path
         alt="Creatify Logo"
-        className="w-40 h-40 animate-pulse-fast"
+        className="w-40 h-40 animate-pulse"
       />
       {/* Loading Text */}
       <p className="mt-4 text-lg font-semibold text-gray-600 animate-bounce">
