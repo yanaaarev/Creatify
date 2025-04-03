@@ -24,7 +24,7 @@ const DEFAULT_AVATAR_URL = "https://res.cloudinary.com/ddjnlhfnu/image/upload/v1
 export const UserDashboard = (): JSX.Element => {
   const [bookings, setBookings] = useState<any[]>([]);
   const [user, setUser] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
+  const [, setLoading] = useState(true);
   const [buttonLoading, setButtonLoading] = useState(false);
   const [showAllBookings, setShowAllBookings] = useState(false);
   const [selectedAvatar, setSelectedAvatar] = useState<string | null>(null);
@@ -240,9 +240,6 @@ const handleNavigate = (path: string) => {
   }, 0); // Small delay to prevent unnecessary fast triggers
 };
 
-  if (loading) {
-    return <p className="text-white text-lg text-center mt-10">Loading...</p>;
-  }
 
   return (
     <div className="relative w-full min-h-screen flex flex-col md:flex-row px-8 md:px-10 lg:px-20 py-10 gap-10">
