@@ -106,19 +106,36 @@ export const UserDashboard = (): JSX.Element => {
   }, []);
 
   // ✅ Handle Avatar Selection
-  const handleAvatarSelection = async (avatar: string) => {
-    if (!auth.currentUser) return;
-    try {
-      const userRef = doc(db, "users", auth.currentUser.uid);
-      await updateDoc(userRef, { avatar });
+const handleAvatarSelection = async (avatar: string) => {
+  if (!auth.currentUser) return;
 
-      setSelectedAvatar(avatar); // ✅ Update UI immediately
-      setShowAvatarOverlay(false); // ✅ Close overlay after selection
-      window.location.reload();
-    } catch (error) {
-      console.error("❌ Error updating avatar:", error);
+  try {
+    const userId = auth.currentUser.uid;
+
+    // ✅ Reference to both users and admins collections
+    const userRef = doc(db, "users", userId);
+    const adminRef = doc(db, "admins", userId);
+
+    // ✅ Update both users and admins (if they exist)
+    const userSnap = await getDoc(userRef);
+    const adminSnap = await getDoc(adminRef);
+
+    if (userSnap.exists()) {
+      await updateDoc(userRef, { avatar });
     }
-  };
+
+    if (adminSnap.exists()) {
+      await updateDoc(adminRef, { avatar });
+    }
+
+    setSelectedAvatar(avatar); // ✅ Update UI immediately
+    setShowAvatarOverlay(false); // ✅ Close overlay after selection
+    window.location.reload();
+  } catch (error) {
+    console.error("❌ Error updating avatar:", error);
+  }
+};
+
   
   const handleEdit = (field: "username" | "email" | "password") => {
     setShowOverlay(field);
