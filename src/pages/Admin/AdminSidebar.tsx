@@ -23,11 +23,18 @@ const AdminSidebar = () => {
    const handleLogout = async () => {
     try {
       await signOut(auth);
-      navigate("/"); // Redirect to homepage
+      handleNavigate("/"); // Redirect to homepage
     } catch (error) {
       console.error("❌ Failed to logout:", error);
       alert("Logout failed. Try again.");
     }
+  };
+
+  const handleNavigate = (path: string) => {
+    navigate(path);
+    setTimeout(() => {
+      window.location.reload(); // ✅ Ensures page reload
+    }, 0); // Small delay to prevent unnecessary fast triggers
   };
 
   return (
@@ -69,7 +76,7 @@ const AdminSidebar = () => {
 
     <nav className={`flex flex-col flex-1 mt-4 px-2 ${isOpen ? "" : "items-center"}`}>
       <button
-        onClick={() => navigate("/admin-panel")}
+        onClick={() => handleNavigate("/admin-panel")}
         className={`flex items-center py-3 px-4 transition text-xl ${
           isOpen ? "gap-3" : "justify-center"
         } ${isActive("/admin-panel") ? "text-gray-600" : "text-black hover:text-gray-600"}`}
@@ -79,7 +86,7 @@ const AdminSidebar = () => {
       </button>
 
       <button
-        onClick={() => navigate("/admin-artists")}
+        onClick={() => handleNavigate("/admin-artists")}
         className={`flex items-center py-3 px-4 transition text-xl ${
           isOpen ? "gap-3" : "justify-center"
         } ${isActive("/admin-artists") ? "text-gray-600" : "text-black hover:text-gray-600"}`}
@@ -89,7 +96,7 @@ const AdminSidebar = () => {
       </button>
 
       <button
-        onClick={() => navigate("/admin-booking-history")}
+        onClick={() => handleNavigate("/admin-booking-history")}
         className={`flex items-center py-3 px-4 transition text-xl ${
           isOpen ? "gap-3" : "justify-center"
         } ${isActive("/admin-booking-history") ? "text-gray-600" : "text-black hover:text-gray-600"}`}
@@ -99,7 +106,7 @@ const AdminSidebar = () => {
       </button>
 
       <button
-        onClick={() => navigate("/admin-payments")}
+        onClick={() => handleNavigate("/admin-payments")}
         className={`flex items-center py-3 px-4 transition text-xl ${
           isOpen ? "gap-3" : "justify-center"
         } ${isActive("/admin-payments") ? "text-gray-600" : "text-black hover:text-gray-600"}`}

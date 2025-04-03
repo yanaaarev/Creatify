@@ -28,7 +28,7 @@ const AdminLogin = (): JSX.Element => {
       if (idTokenResult.claims.admin) {
         console.log("✅ Admin Verified!");
         setButtonLoading(false);
-        navigate("/admin-panel"); // Redirect to Admin Panel
+        handleNavigate("/admin-panel"); // Redirect to Admin Panel
       } else {
         setButtonLoading(false);
         alert("❌ Access Denied: You are not an admin.");
@@ -37,6 +37,12 @@ const AdminLogin = (): JSX.Element => {
       setButtonLoading(false);
       alert("❌ Invalid credentials. Please try again.");
     }
+  };
+  const handleNavigate = (path: string) => {
+    navigate(path);
+    setTimeout(() => {
+      window.location.reload(); // ✅ Ensures page reload
+    }, 0); // Small delay to prevent unnecessary fast triggers
   };
 
   return (

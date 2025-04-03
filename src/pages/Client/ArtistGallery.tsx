@@ -259,6 +259,13 @@ const handleOpenCalendar = async (artist: Artist, e: React.MouseEvent) => {
   }
 };
 
+const handleNavigate = (path: string) => {
+  navigate(path);
+  setTimeout(() => {
+    window.location.reload(); // ✅ Ensures page reload
+  }, 0); // Small delay to prevent unnecessary fast triggers
+};
+
   return (
     <div 
   className="w-full min-h-screen bg-contain bg-center bg-no-repeat py-5 px-4 md:px-12 md:py-6"
@@ -326,7 +333,7 @@ const handleOpenCalendar = async (artist: Artist, e: React.MouseEvent) => {
           gridRow: isLandscape ? "span 16" : "span 24",  // ✅ FIX: Proper row-span control
           height: isLandscape ? "370px" : "560px", // ✅ FIX: Landscape 410px, Portrait 600px
         }}
-        onClick={() => navigate(`/artist-profile/${artist.id}`)}
+        onClick={() => handleNavigate(`/artist-profile/${artist.id}`)}
       >
     
       

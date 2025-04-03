@@ -8,6 +8,14 @@ import CREATIFYElements131 from "/images/ayaa.webp";
 export const HomePage = (): JSX.Element => {
   const navigate = useNavigate();
 
+  const handleNavigate = (path: string) => {
+    navigate(path);
+    setTimeout(() => {
+      window.location.reload(); // ✅ Ensures page reload
+    }, 0); // Small delay to prevent unnecessary fast triggers
+  };
+
+
   return (
     <div className="bg-[#1E1E1E] flex flex-col items-center w-full min-h-screen">
       <div className="w-full flex-grow">
@@ -19,7 +27,7 @@ export const HomePage = (): JSX.Element => {
           </h1>
           <button
             className="[font-family:'Khula',Helvetica] mt-6 w-[250px] h-[50px] md:w-[300px] md:h-[60px] flex items-center justify-center bg-[#7db23a] rounded-full shadow-lg text-white font-semibold text-lg md:text-xl text-center leading-none"
-            onClick={() => navigate("/artist-gallery")}
+            onClick={() => handleNavigate("/artist-gallery")}
           >
             DISCOVER OUR ARTISTS
           </button>
@@ -92,7 +100,7 @@ export const HomePage = (): JSX.Element => {
           </p>
           <img
             className="w-40 md:w-60 mx-auto cursor-pointer pointer-events-auto"
-            onClick={() => navigate("/faqs")}
+            onClick={() => handleNavigate("/faqs")}
             src={CREATIFYElements111}
             alt="FAQs"
           />

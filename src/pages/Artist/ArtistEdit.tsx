@@ -7,6 +7,7 @@ import { doc, getDoc, updateDoc, collection, query, where, getDocs } from "fireb
 import { ClipLoader } from "react-spinners";
 import axios from "axios";
 import ArtistCalendar from "./ArtistCalendar"; // Import calendar component
+import LoadingScreen from "../../LoadingScreen"; // Import loading screen component
 
 const DEFAULT_AVATAR_URL = "https://res.cloudinary.com/ddjnlhfnu/image/upload/v1740737790/samplepfp_gg1dmq.png";
 const DEFAULT_BANNER_URL = "https://res.cloudinary.com/ddjnlhfnu/image/upload/v1741784288/creatifybanner_m5gysx.png";
@@ -425,7 +426,7 @@ const handleSaveChanges = async () => {
 };
 
 
-  if (loading) return <div className="text-white text-center mt-10">Loading...</div>;
+  if (loading) return <LoadingScreen />;
 
   return (
     <div className="bg-[#191919] flex flex-col items-center w-full h-full overflow-y-auto relative">
