@@ -5,7 +5,7 @@ const LoadingScreen: React.FC = () => {
     <div className="fixed inset-0 flex flex-col items-center justify-center bg-white z-50">
       {/* Pulsing Logo */}
       <img
-        src="images/logo.webp" // Update with the actual path
+        src="/images/logo.webp" // Update with the actual path
         alt="Creatify Logo"
         className="w-40 h-40 animate-pulse"
       />
