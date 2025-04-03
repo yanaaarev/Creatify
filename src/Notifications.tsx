@@ -374,12 +374,17 @@ else if (notification.title.includes("Feedback")) {
       alert("Error: Artist details missing. Please try again.");
       return;
     }
+
+    const clientRef = doc(db, "users", clientId);
+    const clientSnap = await getDoc(clientRef);
+
+    const username = clientSnap.exists() ? clientSnap.data()?.username || "Anonymous" : "Anonymous";
   
     console.log("📌 Submitting Feedback with Data:", {
       artistId: feedbackData.artistId,
       bookingId: feedbackData.bookingId,
       clientId,
-      username: auth.currentUser?.displayName || "Anonymous",
+      username,
       rating,
       comment: feedback.trim(),
       date: Timestamp.now(),
@@ -390,7 +395,7 @@ else if (notification.title.includes("Feedback")) {
         artistId: feedbackData.artistId,
         bookingId: feedbackData.bookingId,
         clientId, // 🔥 Ensure `clientId` is included
-        username: auth.currentUser?.displayName || "Anonymous",
+        username,
         rating,
         comment: feedback.trim(),
         date: Timestamp.now(),
@@ -410,7 +415,7 @@ else if (notification.title.includes("Feedback")) {
            artistId: feedbackData.artistId,
            clientId,
            artistName: artistData?.fullName || "Unknown Artist",
-           clientUsername: auth.currentUser?.displayName || "Anonymous",
+           clientUsername: username,
            bookingId: feedbackData.bookingId,
            senderId: clientId,
            avatarUrl: artistData?.profilePicture || DEFAULT_AVATAR_URL,
