@@ -94,12 +94,31 @@ export const UserDashboard = (): JSX.Element => {
   useEffect(() => {
     const fetchUser = async () => {
       if (!auth.currentUser) return;
-      const userRef = doc(db, "users", auth.currentUser.uid);
-      const userSnap = await getDoc(userRef);
-      if (userSnap.exists()) {
-        const userData = userSnap.data();
-        setUser(userData);
-        setSelectedAvatar(userData.avatar || null);
+    
+      const userId = auth.currentUser.uid;
+    
+      // ✅ References to both users and admins collections
+      const userRef = doc(db, "users", userId);
+      const adminRef = doc(db, "admins", userId);
+    
+      try {
+        const userSnap = await getDoc(userRef);
+        const adminSnap = await getDoc(adminRef);
+    
+        let userData = null;
+    
+        if (userSnap.exists()) {
+          userData = userSnap.data();
+        } else if (adminSnap.exists()) {
+          userData = adminSnap.data(); // ✅ If not found in users, fetch from admins
+        }
+    
+        if (userData) {
+          setUser(userData);
+          setSelectedAvatar(userData.avatar || null);
+        }
+      } catch (error) {
+        console.error("❌ Error fetching user:", error);
       }
     };
     fetchUser();
