@@ -111,11 +111,6 @@ const BookingHistory = () => {
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentBookings = filteredBookings.slice(indexOfFirstItem, indexOfLastItem);
 
-  // 🔹 Ensure Firebase Token is Up-to-Date
-  auth.currentUser?.getIdToken(true).then((idToken) => {
-    console.log("🔄 New Token Fetched:", idToken);
-  });
-
   return (
     <div className="flex">
       <AdminSidebar />
