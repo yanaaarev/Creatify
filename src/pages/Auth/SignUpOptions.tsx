@@ -194,7 +194,7 @@ export const SignUpOptions = (): JSX.Element => {
       )}
 
             {/* Terms and Privacy Policy (Smaller for Mobile) */}
-        <p className="[font-family:'Khula',Helvetica] font-normal text-[#191919] text-[11px] md:text-[13px] tracking-[0] leading-[15.6px] text-left">
+        <p className="[font-family:'Khula',Helvetica] font-normal text-[#19191980] text-opacity-30 text-[11px] md:text-[13px] tracking-[0] leading-[15.6px] text-left">
           By joining <span className="font-semibold">Creatify</span>, you agree
           to our{" "}
           <button className="[font-family:'Khula',Helvetica] font-semibold hover:underline" onClick={() => handleNavigate("/terms-and-conditions")}>

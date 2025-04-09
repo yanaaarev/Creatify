@@ -50,8 +50,6 @@ export const SignUpFinal = (): JSX.Element => {
   }, [email, navigate]);
 
   const handleCreateAccount = async () => {
-    alert("");
-
     if (!username) {
       alert("Please enter a username.");
       return;

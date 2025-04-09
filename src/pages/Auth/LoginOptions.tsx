@@ -32,7 +32,7 @@ export const LoginOptions = (): JSX.Element => {
 
         {/* Client Login Button */}
         <button
-          onClick={() => handleNavigate("/client-login")}
+          onClick={() => navigate("/client-login")}
           className="w-full max-w-[100%] md:max-w-[100%] bg-[#7db23a] rounded-[30px] py-3 md:py-4 flex justify-center items-center"
         >
           <span className="[font-family:'Khula',Helvetica] font-semibold text-white text-lg md:text-2xl tracking-[0] leading-[normal]">
@@ -42,7 +42,7 @@ export const LoginOptions = (): JSX.Element => {
 
         {/* Artist Login Button */}
         <button
-          onClick={() => handleNavigate("/artist-login")}
+          onClick={() => navigate("/artist-login")}
           className="w-full max-w-[100%] md:max-w-[100%] border border-solid border-[#7db23a] rounded-[30px] py-3 md:py-4 flex justify-center items-center"
         >
           <span className="[font-family:'Khula',Helvetica] font-semibold text-[#7db23a] text-lg md:text-2xl tracking-[0] leading-[normal]">
