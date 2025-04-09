@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from "react-router-dom";
 import { collection, getDocs, updateDoc, doc, query, orderBy, getDoc, Timestamp, where } from 'firebase/firestore';
 import { auth, db } from '../../config/firebaseConfig';
 import { triggerNotification } from '../../utils/triggerNotification';
@@ -24,40 +23,9 @@ interface Payment {
   }
   
   const PaymentVerifier = () => {
-    const navigate = useNavigate();
-  const [, setIsAdmin] = useState(false);
-  const [, setLoading] = useState(true);
     const [payments, setPayments] = useState<Payment[]>([]);
     const [selectedProof, setSelectedProof] = useState<string | null>(null);
     const [verifiedPayments, setVerifiedPayments] = useState<{ [key: string]: boolean }>({});
-  
-// 🔹 Ensure Admin Authentication
-useEffect(() => {
-  const checkAdminStatus = async () => {
-    try {
-      const user = auth.currentUser;
-      if (!user) {
-        navigate("/admin-login");
-        return;
-      }
-
-      const idTokenResult = await user.getIdTokenResult(true);
-      if (idTokenResult.claims.admin) {
-        setIsAdmin(true);
-      } else {
-        alert("Access Denied: You are not an admin.");
-        navigate("/admin-login");
-      }
-    } catch (error) {
-      console.error("Admin Check Failed:", error);
-      navigate("/admin-login");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  checkAdminStatus();
-}, [navigate]);
 
 useEffect(() => {
   const handleUnload = async () => {
