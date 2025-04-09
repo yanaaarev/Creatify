@@ -24,17 +24,17 @@ type Props = {
     };
   
     return (
-      <div className="min-h-screen flex flex-col justify-center items-center text-center p-6 bg-gray-100">
-        <h1 className="text-4xl font-bold mb-4 text-gray-700"><span className="text-[#7db23a]">CREATIFY</span> IS UNDER MAINTENANCE!🚧</h1>
+      <div className="min-h-screen flex flex-col justify-center items-center text-center md:p-6 p-8 bg-gray-100">
+        <h1 className="md:text-6xl text-4xl font-bold mb-4 text-gray-700"><span className="text-[#7db23a]">CREATIFY</span> IS UNDER MAINTENANCE!🚧</h1>
         <p className="mb-6 text-gray-600">We’re currently doing some updates. Come back soon!</p>
   
-        <form onSubmit={handleSubmit} className="flex flex-col items-center gap-2">
-        <p className="text-gray-600 font-semibold mb-1">Are you an admin?</p>
+        <form onSubmit={handleSubmit} className="flex flex-col items-center gap-3">
+        <p className="text-gray-600 font-semibold">Are you an admin?</p>
         <div className="relative w-[300px]">
           <input
             type={showPassword ? "text" : "password"} // Toggle input type
             placeholder="Enter admin password"
-            className="p-4 border rounded-full w-full mb-2"
+            className="p-4 border rounded-full w-full"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
