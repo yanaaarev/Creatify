@@ -32,9 +32,6 @@ const AdminSidebar = () => {
 
   const handleNavigate = (path: string) => {
     navigate(path);
-    setTimeout(() => {
-      window.location.reload(); // ✅ Ensures page reload
-    }, 0); // Small delay to prevent unnecessary fast triggers
   };
 
   return (

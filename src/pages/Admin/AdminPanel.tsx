@@ -1,15 +1,12 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { auth, db } from "../../config/firebaseConfig";
 import { setDoc, doc } from "firebase/firestore";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { ClipLoader } from "react-spinners";
 import AdminSidebar from "./AdminSidebar"; // Adjust path based on folder structure
+import ProtectedRoute from "./ProtectedRoute";
 
 const AdminPanel = (): JSX.Element => {
-  const navigate = useNavigate();
-  const [, setIsAdmin] = useState(false);
-  const [, setLoading] = useState(true);
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState(generateRandomPassword());
@@ -21,34 +18,6 @@ const AdminPanel = (): JSX.Element => {
   function generateRandomPassword(): string {
     return Math.random().toString(36).slice(-10); // Generate a 10-character password
   }
-
-  // 🔹 Ensure Admin Authentication
-  useEffect(() => {
-    const checkAdminStatus = async () => {
-      try {
-        const user = auth.currentUser;
-        if (!user) {
-          navigate("/admin-login");
-          return;
-        }
-
-        const idTokenResult = await user.getIdTokenResult(true);
-        if (idTokenResult.claims.admin) {
-          setIsAdmin(true);
-        } else {
-          alert("Access Denied: You are not an admin.");
-          navigate("/admin-login");
-        }
-      } catch (error) {
-        console.error("Admin Check Failed:", error);
-        navigate("/admin-login");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    checkAdminStatus();
-  }, [navigate]);
 
   useEffect(() => {
     const handleUnload = async () => {
@@ -114,13 +83,8 @@ const AdminPanel = (): JSX.Element => {
     }
   };
 
-
-  // 🔹 Ensure Firebase Token is Up-to-Date
-  auth.currentUser?.getIdToken(true).then((idToken) => {
-    console.log("🔄 New Token Fetched:", idToken);
-  });
-
   return (
+    <ProtectedRoute>
     <div className="flex">
     {/* 🔹 Sidebar */}
     <AdminSidebar />
@@ -180,6 +144,7 @@ const AdminPanel = (): JSX.Element => {
         </div>
       </div>
     </div>
+    </ProtectedRoute>
 );
 };
 

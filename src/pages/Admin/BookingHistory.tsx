@@ -5,6 +5,7 @@ import AdminSidebar from "./AdminSidebar";
 import ArtistCalendar from '../Artist/ArtistCalendar';
 import { FaSearch } from "react-icons/fa";
 import { IoFilter } from "react-icons/io5";
+import ProtectedRoute from "./ProtectedRoute";
 
 
 interface Booking {
@@ -42,61 +43,56 @@ const BookingHistory = () => {
       };
     }, []);
 
-  useEffect(() => {
-    const fetchBookings = async () => {
-      try {
-        const q = query(collection(db, "bookings"), orderBy("createdAt", "desc"));
-        const snapshot = await getDocs(q);
-
-        if (snapshot.empty) {
-          setBookings([]);
-          return;
+    useEffect(() => {
+      const fetchBookings = async () => {
+        try {
+          const q = query(collection(db, "bookings"), orderBy("createdAt", "desc"));
+          const snapshot = await getDocs(q);
+    
+          if (snapshot.empty) {
+            setBookings([]);
+            return;
+          }
+    
+          const artistIds = new Set<string>();
+    
+          snapshot.docs.forEach((docSnap) => {
+            const data = docSnap.data();
+            if (data.artistId) artistIds.add(data.artistId);
+          });
+    
+          const artistDocs = await getDocs(
+            query(collection(db, "artists"), where("__name__", "in", [...artistIds]))
+          );
+    
+          const artistMap = artistDocs.docs.reduce((acc, doc) => {
+            acc[doc.id] = doc.data().fullName || "Unknown Artist";
+            return acc;
+          }, {} as Record<string, string>);
+    
+          const bookingsData: Booking[] = snapshot.docs.map((docSnap) => {
+            const data = docSnap.data();
+    
+            return {
+              id: docSnap.id,
+              requestId: data.requestId || "N/A",
+              artistName: artistMap[data.artistId] || "Unknown Artist",
+              clientUsername: data.fullName || "Unknown Client", // ✅ Directly from bookings
+              selectedDates: data.selectedDates || "N/A",
+              status: data.status || "pending",
+              createdAt: data.createdAt || Timestamp.now(),
+            };
+          });
+    
+          setBookings(bookingsData);
+        } catch (error) {
+          console.error("❌ Error fetching bookings:", error);
         }
-
-        const artistIds = new Set<string>();
-        const clientIds = new Set<string>();
-
-        snapshot.docs.forEach((docSnap) => {
-          const data = docSnap.data();
-          if (data.artistId) artistIds.add(data.artistId);
-          if (data.clientId) clientIds.add(data.clientId);
-        });
-
-        const artistDocs = await getDocs(query(collection(db, "artists"), where("__name__", "in", [...artistIds])));
-        const clientDocs = await getDocs(query(collection(db, "users"), where("__name__", "in", [...clientIds])));
-
-        const artistMap = artistDocs.docs.reduce((acc, doc) => {
-          acc[doc.id] = doc.data().fullName || "Unknown Artist";
-          return acc;
-        }, {} as Record<string, string>);
-
-        const clientMap = clientDocs.docs.reduce((acc, doc) => {
-          acc[doc.id] = doc.data().username || "Unknown Client";
-          return acc;
-        }, {} as Record<string, string>);
-
-        const bookingsData: Booking[] = snapshot.docs.map((docSnap) => {
-          const data = docSnap.data();
-
-          return {
-            id: docSnap.id,
-            requestId: data.requestId || "N/A",
-            artistName: artistMap[data.artistId] || "Unknown Artist",
-            clientUsername: clientMap[data.clientId] || "Unknown Client",
-            selectedDates: data.selectedDates || "N/A",
-            status: data.status || "pending",
-            createdAt: data.createdAt || Timestamp.now(),
-          };
-        });
-
-        setBookings(bookingsData);
-      } catch (error) {
-        console.error("Error fetching bookings:", error);
-      }
-    };
-
-    fetchBookings();
-  }, []);
+      };
+    
+      fetchBookings();
+    }, []);
+    
 
   const filteredBookings = bookings.filter((booking) =>
     (filterStatus === "all" || booking.status === filterStatus) &&
@@ -111,12 +107,8 @@ const BookingHistory = () => {
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentBookings = filteredBookings.slice(indexOfFirstItem, indexOfLastItem);
 
-  // 🔹 Ensure Firebase Token is Up-to-Date
-  auth.currentUser?.getIdToken(true).then((idToken) => {
-    console.log("🔄 New Token Fetched:", idToken);
-  });
-
   return (
+    <ProtectedRoute>
     <div className="flex">
       <AdminSidebar />
       <div className="flex w-full justify-center items-center min-h-screen bg-white">
@@ -160,8 +152,8 @@ const BookingHistory = () => {
                 <tr className="bg-[#7db23a] text-white text-center">
                   <th className="border p-2">Booking ID</th>
                   <th className="border p-2">Request ID</th>
-                  <th className="border p-2">Artist</th>
-                  <th className="border p-2">Client</th>
+                  <th className="border p-2">Artist Name</th>
+                  <th className="border p-2">Client Name</th>
                   <th className="border p-2">Selected Dates</th>
                   <th className="border p-2">Status</th>
                 </tr>
@@ -260,6 +252,7 @@ const BookingHistory = () => {
         </div>
       </div>
     </div>
+    </ProtectedRoute>
   );
 };
 

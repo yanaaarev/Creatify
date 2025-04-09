@@ -4,6 +4,7 @@ import { auth, db } from '../../config/firebaseConfig';
 import { triggerNotification } from '../../utils/triggerNotification';
 import AdminSidebar from './AdminSidebar';
 import { FaCircleMinus,FaCircleCheck } from "react-icons/fa6";
+import ProtectedRoute from "./ProtectedRoute";
 
 
 interface Payment {
@@ -186,13 +187,9 @@ const indexOfLastItem = currentPage * itemsPerPage;
 const indexOfFirstItem = indexOfLastItem - itemsPerPage;
 const currentPayments = payments.slice(indexOfFirstItem, indexOfLastItem);
 
- // 🔹 Ensure Firebase Token is Up-to-Date
- auth.currentUser?.getIdToken(true).then((idToken) => {
-  console.log("🔄 New Token Fetched:", idToken);
-});
 
-  
   return (
+    <ProtectedRoute>
     <div className="flex">
       {/* 🔹 Sidebar */}
       <AdminSidebar />
@@ -319,6 +316,7 @@ const currentPayments = payments.slice(indexOfFirstItem, indexOfLastItem);
         </div>
       </div>
     </div>
+    </ProtectedRoute>
   );
 };
 
