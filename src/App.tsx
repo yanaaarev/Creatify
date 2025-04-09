@@ -5,15 +5,18 @@ import {
   useLocation,
   Navigate,
 } from "react-router-dom";
-import { lazy, Suspense, useEffect } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { useUser } from "./pages/context/UserContext"; // 🔴 Import UserContext
 import ClientNavBar from "./pages/NavBar/ClientNavBar"; // Client Navbar
 import ArtistNavBar from "./pages/NavBar/ArtistNavBar"; // Artist Navbar
 import Footer from "./pages/Footer/Footer";
 import { logEvent } from "firebase/analytics";
 import { analytics } from "./config/firebaseConfig";
+import { auth, db } from "./config/firebaseConfig";
+import { doc, getDoc } from "firebase/firestore";
 import { Analytics } from "@vercel/analytics/react";
 import LoadingScreen from "./LoadingScreen";
+import MaintenancePage from "./pages/Admin/MaintenancePage";
 
 // Lazy load pages
 const HomePage = lazy(() => import("./pages/Home/HomePage"));
@@ -63,6 +66,41 @@ const ArtistEdit = lazy(async () => {
 const AppContent = (): JSX.Element => {
   const location = useLocation();
   const { role, loading } = useUser(); // 🔴 Get user role and loading state from context
+  const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
+  const [isMaintenance, setIsMaintenance] = useState<boolean>(false);
+  const [checkingAuth, setCheckingAuth] = useState(true);
+  const [isUnlocked, setIsUnlocked] = useState(() => {
+    return sessionStorage.getItem("maintenanceBypass") === "true";
+  });
+  
+
+  useEffect(() => {
+    const checkMaintenanceAndAdmin = async () => {
+      try {
+        // 🔍 Get maintenance mode from Firestore
+        const docSnap = await getDoc(doc(db, "config", "site"));
+        if (docSnap.exists()) {
+          setIsMaintenance(docSnap.data().maintenance === true);
+        }
+
+        // 🔐 Check if user is admin
+        const user = auth.currentUser;
+        if (!user) {
+          setIsAdmin(false);
+        } else {
+          const idTokenResult = await user.getIdTokenResult(true);
+          setIsAdmin(!!idTokenResult.claims.admin);
+        }
+      } catch (err) {
+        console.error("Error checking maintenance or admin status:", err);
+        setIsAdmin(false);
+      } finally {
+        setCheckingAuth(false);
+      }
+    };
+
+    checkMaintenanceAndAdmin();
+  }, []);
 
   useEffect(() => {
     const disableRightClick = (event: MouseEvent) => {
@@ -83,6 +121,15 @@ const AppContent = (): JSX.Element => {
     });
     console.log(`📌 Page View Logged: ${location.pathname}`);
   }, [location]);
+
+  if (checkingAuth) return <LoadingScreen />;
+
+  if (isMaintenance && !isAdmin && !isUnlocked) {
+    return <MaintenancePage onUnlock={() => {
+      sessionStorage.setItem("maintenanceBypass", "true");
+      setIsUnlocked(true);
+    }} />;
+  }
 
   if (loading) return <LoadingScreen />; // ✅ Apply LoadingScreen while loading
 
