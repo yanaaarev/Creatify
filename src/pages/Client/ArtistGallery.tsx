@@ -24,14 +24,6 @@ interface Artist {
   pendingDates: string[]; // ✅ Add pendingDates to the type definition
 }
 
-// ✅ Function to Shuffle Array
-const shuffleArray = (array: Artist[]) => {
-  return array
-    .map((item) => ({ item, sort: Math.random() })) // Add a random sort key
-    .sort((a, b) => a.sort - b.sort) // Sort by the random key
-    .map(({ item }) => item); // Extract the shuffled items
-};
-
 const ArtistGallery = () => {
   const [artists, setArtists] = useState<Artist[]>([]);
   const [filteredArtists, setFilteredArtists] = useState<Artist[]>([]);
@@ -46,22 +38,14 @@ const ArtistGallery = () => {
   const navigate = useNavigate();
 
   // ✅ Pagination State
-const artistsPerPage = 9;
+const artistsPerPage = 12;
 const [searchParams, setSearchParams] = useSearchParams();
 const currentPage = Number(searchParams.get("page")) || 1;
-
-// ✅ Shuffle Artists Once When Artists Are Fetched
-useEffect(() => {
-  if (artists.length > 0) {
-    const shuffledArtists = shuffleArray(artists); // Shuffle the original artists array
-    setFilteredArtists(shuffledArtists); // Update the filteredArtists state
-  }
-}, [artists]);
 
 // ✅ Calculate the index range for pagination
 const indexOfLastArtist = currentPage * artistsPerPage;
 const indexOfFirstArtist = indexOfLastArtist - artistsPerPage;
-const paginatedArtists = filteredArtists.slice(indexOfFirstArtist, indexOfLastArtist); // ✅ Apply pagination to filteredArtists
+const currentArtists = filteredArtists.slice(indexOfFirstArtist, indexOfLastArtist);
 
 const handlePageChange = (newPage: number) => {
   setSearchParams({ page: newPage.toString() }); // ✅ Updates URL with new page number
@@ -256,6 +240,8 @@ const handleFilterByGenre = (genre: string | null) => {
   setIsDropdownOpen(false); // Close dropdown after selection
 };
 
+
+
 // ✅ Open availability calendar overlay
 const handleOpenCalendar = async (artist: Artist, e: React.MouseEvent) => {
   e.stopPropagation(); // Prevent navigation when clicking calendar button
@@ -330,7 +316,7 @@ const handleNavigate = (path: string) => {
         gridAutoRows: "8px",   // ✅ FIX: Ensures portrait items don't stretch
       }}
     >
-      {paginatedArtists.map((artist) => {
+      {currentArtists.map((artist) => {
     const featuredPortfolio =
       artist.portfolioImages.find((file) => file.type.startsWith("image")) || artist.portfolioImages[0];
 
