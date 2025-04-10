@@ -66,11 +66,7 @@ export const SignUpOptions = (): JSX.Element => {
   };
 
   return (
-    <div className="bg-[#191919] flex items-center justify-center w-full min-h-screen relative">
-  
-    {/* Responsive Background Image */}
-    <div className="absolute inset-0 bg-cover bg-center bg-no-repeat" 
-      style={{ backgroundImage: "url('/images/authp.webp')" }}></div>
+    <div className="flex items-center justify-center w-full min-h-screen relative">
   
     {/* White Rounded Container (Centered) */}
     <div className="relative z-10 w-screen h-screen md:h-auto md:max-w-[540px] bg-white shadow-[-4px_4px_40px_#00000040] rounded-none md:rounded-[30px] py-20 px-10 md:py-20 md:px-16 flex flex-col items-center gap-6">

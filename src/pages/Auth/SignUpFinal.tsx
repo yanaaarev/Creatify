@@ -109,11 +109,6 @@ export const SignUpFinal = (): JSX.Element => {
 
   return (
     <div className="relative w-full min-h-screen flex justify-center items-center">
-      {/* Background Image */}
-      <div
-        className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: "url('/images/authp.webp')" }}
-      ></div>
 
       {/* Main Container */}
       <div className="relative w-full max-w-[1536px] min-h-screen md:h-[745px] flex justify-center items-center">

@@ -102,6 +102,27 @@ const getClientUsername = async (clientId: string): Promise<string> => {
   return "Unknown User";
 };
 
+const formatMessageText = (text: string) => {
+  const urlRegex = /(https?:\/\/[^\s]+)/g;
+  return text.split(urlRegex).map((part, index) => {
+    if (part.match(urlRegex)) {
+      return (
+        <a
+          key={index}
+          href={part}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue-500 underline break-words"
+        >
+          {part}
+        </a>
+      );
+    }
+    return <span key={index}>{part}</span>;
+  });
+};
+
+
 // ✅ Handle Payment Request Submission
 const handleRequestPayment = async () => {
   if (!commissionAmount || !paymentDueDate) {
@@ -399,7 +420,10 @@ const handleViewPayment = async (paymentId: string) => {
                 View Request for Payment
               </button>
             ) : (
-              <p className="break-words">{msg.content}</p> 
+              <p className="break-words whitespace-pre-wrap">
+              {formatMessageText(msg.content ?? "")}
+            </p>
+ 
             )}
 
             {/* ✅ Clickable Attachments (Now Wrapped Properly) */}

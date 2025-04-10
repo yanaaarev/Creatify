@@ -14,7 +14,7 @@ interface Payment {
     commissionAmount: number;
     paymentStatus: string;
     createdAt: Timestamp;
-    dueDate: Timestamp;
+    paymentDueDate: Date;
     paymentType: string;
     platformFee: number;
     proofOfDate: Timestamp;
@@ -89,7 +89,7 @@ useEffect(() => {
               paymentStatus: typeof data.paymentStatus === "string" ? data.paymentStatus : "pending",
               totalAmount: data.totalAmount || 0,
               createdAt: data.createdAt || Timestamp.now(),
-              dueDate: data.dueDate || Timestamp.now(),
+              paymentDueDate: data.paymentDueDate || Timestamp.now(),
               paymentType: data.paymentType || "N/A",
               platformFee: data.platformFee || 0,
               proofOfDate: data.proofOfDate || Timestamp.now(),
@@ -230,7 +230,12 @@ const currentPayments = payments.slice(indexOfFirstItem, indexOfLastItem);
                     <td className="border p-2">₱{payment.platformFee}</td>
                     <td className="border p-2">₱{payment.totalAmount.toFixed(2)}</td>
                     <td className="border p-2">{payment.paymentType}</td>
-                    <td className="border p-2">{payment.dueDate ? new Date(payment.dueDate.toDate()).toLocaleDateString() : "N/A"}</td>
+                    <td className="border p-2">
+                      {payment.paymentDueDate ? 
+                        new Date(payment.paymentDueDate).toLocaleDateString() 
+                        : "N/A"}
+                    </td>
+
                     <td className="border p-2">{payment.referenceNumber}</td>
                     <td className="border p-2">{payment.paymentStatus}</td>
                     <td className="border p-2">

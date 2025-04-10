@@ -1,17 +1,7 @@
-import untitled11 from "/images/authp.webp"; // Adjust the path as needed
-
 export const PrivacyPolicy = (): JSX.Element => {
   return (
-    <div className="bg-[#191919] flex flex-col items-center justify-center w-full min-h-screen relative">
-      {/* Background Image */}
-      <div
-        className="absolute inset-0 bg-no-repeat bg-top bg-[length:100%_auto]"
-        style={{
-          backgroundImage: `url(${untitled11})`,
-          backgroundColor: "#191919",
-        }}
-      ></div>
-
+    <div className="flex flex-col items-center justify-center w-full min-h-screen relative">
+     
       {/* Content Section */}
       <div className="relative z-10 w-[90%] max-w-[1324px] mx-auto mt-32 md:mt-36 lg:mt-40 mb-20 flex flex-col items-center">
         <div className="w-full max-w-[900px] text-center">

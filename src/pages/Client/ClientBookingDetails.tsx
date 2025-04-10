@@ -5,7 +5,6 @@ import { doc, getDoc, updateDoc, collection, query, where, getDocs, addDoc } fro
 import { IoChevronBackCircleOutline } from "react-icons/io5";
 import { auth } from "../../config/firebaseConfig"; // Already imported db
 import ArtistCalendar from "../Artist/ArtistCalendar";
-import authp from "/images/authp.webp";
 import { triggerNotification, NotificationType } from "../../utils/triggerNotification";
 import { BsFillCalendar2WeekFill } from "react-icons/bs";
 import { Timestamp } from "firebase/firestore"; 
@@ -394,8 +393,7 @@ const handleCancelBooking = async () => {
 };
 
   return (
-    <div className="min-h-screen bg-cover bg-center flex items-center justify-center md:p-6"
-      style={{ backgroundImage: `url(${authp})` }}>
+    <div className="min-h-screen bg-cover bg-center flex items-center justify-center md:p-6">
       <div className="bg-white px-10 py-[120px] md:px-16 md:py-20 md:rounded-[30px] h-screen md:h-auto shadow-lg w-full max-w-3xl">
         {/* 🔙 Back Button */}
         <button className="text-[#8C8C8C] text-4xl mb-6 -mt-5" onClick={() => navigate(-1)}>

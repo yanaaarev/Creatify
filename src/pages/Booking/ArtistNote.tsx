@@ -3,7 +3,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import { doc, getDoc } from "firebase/firestore";
 import { IoChevronBackCircleOutline } from "react-icons/io5";
 import { db } from "../../config/firebaseConfig";
-import authp from "/images/authp.webp";
 
 const ArtistNote = () => {
   const { artistId } = useParams<{ artistId: string }>();
@@ -36,7 +35,6 @@ const ArtistNote = () => {
   return (
     <div
       className="min-h-screen w-full flex items-center justify-center bg-cover bg-center"
-      style={{ backgroundImage: `url(${authp})` }}
     >
       {/* ✅ White Rounded Container */}
       <div className="bg-white rounded-none md:rounded-3xl md:shadow-lg px-[30px] md:px-20 md:py-20 py-20 w-screen h-screen md:h-auto md:max-w-5xl md:mt-2">

@@ -6,7 +6,6 @@ import axios from "axios";
 import { ClipLoader } from "react-spinners";
 import { IoChevronBackCircleOutline } from "react-icons/io5";
 import { triggerNotification } from "../../utils/triggerNotification"; // Adjust path as needed
-import authp from "/images/authp.webp";
 import { logEvent } from "firebase/analytics";
 import { analytics } from "../../config/firebaseConfig"; // Import analytics
 
@@ -171,8 +170,7 @@ const BookingRequest = () => {
   
 
   return (
-    <div className="min-h-screen bg-cover bg-center flex items-center justify-center"
-      style={{ backgroundImage: `url(${authp})` }}>
+    <div className="min-h-screen bg-cover bg-center flex items-center justify-center">
       
       <div className="bg-white px-[30px] py-20 md:px-20 md:py-16 md:rounded-[30px] shadow-lg w-full max-w-3xl">
         {/* 🔙 Back Button */}

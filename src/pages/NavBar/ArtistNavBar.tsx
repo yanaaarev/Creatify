@@ -7,10 +7,11 @@ import {
   updatePassword,
   EmailAuthProvider
 } from "firebase/auth";
-import { doc, updateDoc, onSnapshot } from "firebase/firestore";
+import { doc, updateDoc, onSnapshot, getDoc, query, where, getDocs, collection } from "firebase/firestore";
 import { auth, db } from "../../config/firebaseConfig";
 
 import { BsFillCalendarCheckFill, BsPersonFill, BsQuestionCircle } from "react-icons/bs";
+import { IoCalendar } from "react-icons/io5";
 import { MdDashboard } from "react-icons/md";
 import { RiLockPasswordFill } from "react-icons/ri";
 import { IoLogOut } from "react-icons/io5";
@@ -21,11 +22,18 @@ import NotificationComponent from "../../Notifications";
 const DEFAULT_AVATAR_URL = "https://res.cloudinary.com/ddjnlhfnu/image/upload/v1740737790/samplepfp_gg1dmq.png";
 import LOGO from "/images/logo.webp";
 import { ClipLoader } from "react-spinners";
+import ArtistCalendar from "../Artist/ArtistCalendar";
 
 
 export const ArtistNavBar = (): JSX.Element => {
   const [user, setUser] = useState<any>(null);
+  const [currentMonth] = useState<string>(new Date().toISOString().slice(0, 7)); // Format: YYYY-MM
+  const [loading] = useState(false);
   const [artistData, setArtistData] = useState<any>(null);
+  const [unavailableDates, setUnavailableDates] = useState<string[]>([]);
+  const [bookedDates, setBookedDates] = useState<string[]>([]);  
+  const [pendingDates, setPendingDates] = useState<string[]>([]); 
+  const [isAvailabilityOpen, setIsAvailabilityOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false);
   const [oldPassword, setOldPassword] = useState("");
@@ -61,6 +69,67 @@ export const ArtistNavBar = (): JSX.Element => {
 
     return () => unsubscribeAuth();
   }, []);
+  
+  useEffect(() => {
+      const fetchAvailabilityData = async () => {
+        const artist = user?.uid;
+
+        if (!artist) return;
+        setLoading(true);
+  
+        try {
+          // 🔹 Fetch Unavailable Dates (Artist's set availability)
+          const artistRef = doc(db, "artists", artist);
+          const artistSnap = await getDoc(artistRef);
+  
+          let fetchedUnavailableDates: string[] = [];
+          if (artistSnap.exists()) {
+            const data = artistSnap.data();
+            fetchedUnavailableDates = Array.isArray(data.unavailableDates) ? data.unavailableDates : [];
+          }
+  
+          // 🔹 Fetch Active Booked Dates
+          const bookingsQuery = query(
+            collection(db, "bookings"),
+            where("artistId", "==", artist),
+            where("status", "in", ["active", "pending"]) // ✅ Fetch both ACTIVE and PENDING bookings
+          );
+          const bookingsSnap = await getDocs(bookingsQuery);
+  
+          let fetchedBookedDates: string[] = [];
+                let fetchedPendingDates: string[] = []; // ✅ Separate pending dates
+  
+                bookingsSnap.forEach((doc) => {
+                  const bookingData = doc.data();
+                  if (Array.isArray(bookingData.selectedDates)) {
+                    if (bookingData.status === "active") {
+                      fetchedBookedDates.push(...bookingData.selectedDates);
+                    } else if (bookingData.status === "pending") {
+                      fetchedPendingDates.push(...bookingData.selectedDates);
+                    }
+                  }
+                });
+    
+          // ✅ Remove Duplicate Dates
+          const uniqueBookedDates = Array.from(new Set(fetchedBookedDates));
+          const uniquePendingDates = Array.from(new Set(fetchedPendingDates));
+  
+          console.log("✅ Fetched Unavailable Dates:", fetchedUnavailableDates);
+          console.log("✅ Fetched Active Booked Dates:", uniqueBookedDates);
+  
+          // ✅ Update State with Fetched Data
+          setUnavailableDates(fetchedUnavailableDates);
+          setBookedDates(uniqueBookedDates);
+          setPendingDates(uniquePendingDates); // ✅ Update pending dates
+        } catch (error) {
+          console.error("❌ Error fetching availability data:", error);
+        } finally {
+          setLoading(false);
+        }
+      };
+  
+      fetchAvailabilityData();
+    }, [artistData, user]); // ✅ Added artistData and user as dependencies
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -228,56 +297,105 @@ export const ArtistNavBar = (): JSX.Element => {
                 </div>
 
                 {/* Dropdown Items */}
-<ul className="py-2">
-  {/* Artist Dashboard */}
-  <li className="flex items-center justify-between px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={() => handleNavigate("/artist-dashboard")}>
-    <div className="flex items-center">
-      <div className="w-8 h-8 flex items-center justify-center bg-gray-200 rounded-full">
-        <MdDashboard className="text-[#191919] text-lg" />
-      </div>
-      <span className="text-[#191919] ml-3">Artist Dashboard</span>
-    </div>
-    <FaChevronRight className="text-gray-400" />
-  </li>
+                <ul className="py-2">
+                  {/* Artist Dashboard */}
+                  <li className="flex items-center justify-between px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={() => handleNavigate("/artist-dashboard")}>
+                    <div className="flex items-center">
+                      <div className="w-8 h-8 flex items-center justify-center bg-gray-200 rounded-full">
+                        <MdDashboard className="text-[#191919] text-lg" />
+                      </div>
+                      <span className="text-[#191919] ml-3">Artist Dashboard</span>
+                    </div>
+                    <FaChevronRight className="text-gray-400" />
+                  </li>
 
-  {/* Change Password */}
-  <li className="flex items-center justify-between px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={() => {setIsChangePasswordOpen(true);}}>
-    <div className="flex items-center">
-      <div className="w-8 h-8 flex items-center justify-center bg-gray-200 rounded-full">
-        <RiLockPasswordFill className="text-[#191919] text-lg" />
-      </div>
-      <span className="text-[#191919] ml-3">Change Password</span>
-    </div>
-    <FaChevronRight className="text-gray-400" />
-  </li>
+                  {/* View Calendar */}
+                  <li className="flex items-center justify-between px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={() => setIsAvailabilityOpen(true)}>
+                    <div className="flex items-center">
+                      <div className="w-8 h-8 flex items-center justify-center bg-gray-200 rounded-full">
+                        <IoCalendar className="text-[#191919] text-lg" />
+                      </div>
+                      <span className="text-[#191919] ml-3">View Calendar</span>
+                    </div>
+                    <FaChevronRight className="text-gray-400" />
+                  </li>
 
-  {/* Help & Support */}
-  <li className="flex items-center justify-between px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={() => setShowHelpOverlay(true)}>
-    <div className="flex items-center">
-      <div className="w-8 h-8 flex items-center justify-center bg-gray-200 rounded-full">
-        <BsQuestionCircle className="text-[#191919] text-lg" />
-      </div>
-      <span className="text-[#191919] ml-3">Help & Support</span>
-    </div>
-    <FaChevronRight className="text-gray-400" />
-  </li>
+                  {/* Change Password */}
+                  <li className="flex items-center justify-between px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={() => {setIsChangePasswordOpen(true);}}>
+                    <div className="flex items-center">
+                      <div className="w-8 h-8 flex items-center justify-center bg-gray-200 rounded-full">
+                        <RiLockPasswordFill className="text-[#191919] text-lg" />
+                      </div>
+                      <span className="text-[#191919] ml-3">Change Password</span>
+                    </div>
+                    <FaChevronRight className="text-gray-400" />
+                  </li>
 
-  {/* Gray Line Separator */}
-  <hr className="border-gray-300 my-2" />
+                  {/* Help & Support */}
+                  <li className="flex items-center justify-between px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={() => setShowHelpOverlay(true)}>
+                    <div className="flex items-center">
+                      <div className="w-8 h-8 flex items-center justify-center bg-gray-200 rounded-full">
+                        <BsQuestionCircle className="text-[#191919] text-lg" />
+                      </div>
+                      <span className="text-[#191919] ml-3">Help & Support</span>
+                    </div>
+                    <FaChevronRight className="text-gray-400" />
+                  </li>
 
-  {/* Logout */}
-  <li className="flex items-center px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={handleLogout}>
-    <div className="w-8 h-8 flex items-center justify-center bg-gray-200 rounded-full">
-      <IoLogOut className="text-[#191919] text-lg" />
-    </div>
-    <span className="text-[#191919] ml-3">Logout</span>
-  </li>
-</ul>
-</div>
-)}
-</div>
-</div>
-</header>
+                  {/* Gray Line Separator */}
+                  <hr className="border-gray-300 my-2" />
+
+                  {/* Logout */}
+                  <li className="flex items-center px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={handleLogout}>
+                    <div className="w-8 h-8 flex items-center justify-center bg-gray-200 rounded-full">
+                      <IoLogOut className="text-[#191919] text-lg" />
+                    </div>
+                    <span className="text-[#191919] ml-3">Logout</span>
+                  </li>
+                </ul>
+                </div>
+                )}
+                </div>
+                </div>
+                </header>
+
+                {/* ✅ Availability Overlay (Read-Only Calendar) */}
+      {isAvailabilityOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50">
+        <div className="bg-white p-6 rounded-[30px] shadow-lg w-full max-w-3xl relative">
+            {/* ❌ Close Button */}
+            <button
+              className="absolute top-3 right-3 text-gray-700 text-xl"
+              onClick={() => setIsAvailabilityOpen(false)}
+            >
+              ✕
+            </button>
+
+            <br />
+
+            {/* ✅ Show Loading State Before Data Fetch */}
+            {loading ? (
+              <p className="text-center text-gray-500">Loading calendar...</p>
+            ) : (
+              <ArtistCalendar
+                unavailableDates={unavailableDates} // ✅ Pass Unavailable Dates
+                bookedDates={bookedDates} // ✅ Pass Active Booked Dates
+                pendingDates={pendingDates} // ✅ Pass Pending Dates
+                setUnavailableDates={() => {}} // Read-only mode
+                setChangesMade={() => {}} // Read-only mode
+                isReadOnly={true} // ✅ Read-Only Mode
+                currentMonth={new Date(`${currentMonth}-01`)}  // ✅ Pass current month to calendar
+              />
+            )}
+             {/* 📌 Date Indicators */}
+        <div className="[font-family:'Khula',Helvetica] text-xs text-center space-x-2">
+          <span className="text-[#191919] text-opacity-50 text-lg">●</span> Unavailable
+          <span className="text-red-500 text-lg">●</span> Booked
+          <span className="text-[#e1ad01] text-lg">●</span> Pending
+        </div>
+          </div>
+        </div>
+      )}
 
 {/* 🔹 SEPARATED Help & Support Overlay (Now outside dropdown) */}
 {showHelpOverlay && (

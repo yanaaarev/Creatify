@@ -429,20 +429,7 @@ const handleSaveChanges = async () => {
   if (loading) return <LoadingScreen />;
 
   return (
-    <div className="bg-[#191919] flex flex-col items-center w-full h-full overflow-y-auto relative">
-      {/* ✅ Fixed Background Image */}
-  <div className="absolute inset-0 h-full w-full">
-    <div 
-      className="absolute inset-0 bg-center bg-no-repeat h-full w-full bg-fixed md:bg-contain"
-      style={{ 
-        backgroundImage: "url('/images/authp.webp')", // ✅ Background Image URL
-        backgroundSize: "cover", // ✅ Default: Fills screen
-        backgroundPosition: "top center",
-      }} 
-    ></div>
-     {/* ✅ Gradient Overlay to Blend Image with Background */}
-  <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#1E1E1E]"></div>
-  </div>
+    <div className="flex flex-col items-center w-full h-full overflow-y-auto relative">
 
       {/* White Container */}
       <div className="relative w-[90%] max-w-[750px] bg-white rounded-[30px] p-10 mt-[160px] shadow-lg">

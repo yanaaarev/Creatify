@@ -12,12 +12,7 @@ export const LoginOptions = (): JSX.Element => {
   };
 
   return (
-    <div className="bg-[#191919] flex justify-center items-center w-full min-h-screen">
-      {/* Background Image (Full Screen Cover) */}
-      <div 
-        className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: "url('/images/authp.webp')" }}
-      ></div>
+    <div className="flex justify-center items-center w-full min-h-screen">
 
       {/* Login Options Container */}
       <div className="relative z-10 w-screen h-screen md:h-auto md:max-w-[540px] bg-white shadow-[-4px_4px_40px_#00000040] rounded-none md:rounded-[30px] py-[300px] px-10 flex flex-col items-center gap-3 md:py-16 md:px-10 md:gap-3">

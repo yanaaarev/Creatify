@@ -1,14 +1,7 @@
-import authp from "/images/authp.webp"; // Adjust path based on project structure
-
 export const About = (): JSX.Element => {
   return (
-    <div className="bg-[#191919] flex justify-center w-full">
+    <div className="flex justify-center w-full">
       <div className="relative flex justify-center items-center w-full min-h-screen overflow-x-hidden">
-        {/* Background Image */}
-        <div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: `url(${authp})` }}
-        />
 
         {/* Content */}
         <div className="relative w-[90%] max-w-[1324px] text-center mt-11">

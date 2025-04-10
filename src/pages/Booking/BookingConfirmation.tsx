@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { db } from "../../config/firebaseConfig";
 import { doc, getDoc } from "firebase/firestore";
-import authp from "/images/authp.webp";
 
 const BookingConfirmation = () => {
   const { artistId } = useParams();
@@ -34,8 +33,7 @@ const BookingConfirmation = () => {
   };
 
   return (
-    <div className="min-h-screen bg-cover bg-center flex items-center justify-center"
-      style={{ backgroundImage: `url(${authp})` }}>
+    <div className="min-h-screen bg-cover bg-center flex items-center justify-center">
       <div className="bg-white py-[300px] px-[30px] md:px-12 md:py-16 md:rounded-[30px] shadow-lg w-full md:h-auto h-screen md:max-w-3xl text-center">
         {/* ✅ Confirmation Message */}
         <p className="[font-family:'Khula',Helvetica] text-sm font-medium md:pt-0 pt-5 mt-5 text-gray-700">

@@ -3,7 +3,6 @@ import { FaSearch } from 'react-icons/fa';
 import { IoFilter } from 'react-icons/io5';
 import { db, auth } from '../../config/firebaseConfig';
 import { collection, query, where, getDocs, doc, getDoc, addDoc } from 'firebase/firestore';
-import authp from '/images/authp.webp'; // Background image path
 import { useNavigate } from 'react-router-dom';
 import { FaRegEye } from "react-icons/fa";
 import { MdMailOutline } from "react-icons/md";
@@ -156,7 +155,7 @@ interface Booking {
     };
   
   return (
-    <div className="min-h-screen bg-cover bg-center p-6 md:px-12 xl:px-16" style={{ backgroundImage: `url(${authp})` }}>
+    <div className="min-h-screen bg-cover bg-center p-6 md:px-12 xl:px-16">
   <div className="flex flex-row flex-wrap justify-between items-center mt-20 md:mt-28 p-1 pb-6 space-y-2 md:space-y-0">
   <h1 className="[font-family:'Khula',Helvetica] text-lg font-semibold text-white hidden md:block">
     Request Dashboard

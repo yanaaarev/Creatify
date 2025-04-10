@@ -33,7 +33,7 @@ const goBack = () => {
   return (
     <div className="flex w-full h-screen overflow-hidden">
       {/* ✅ Full-Screen Container */}
-      <div className="flex w-full h-full bg-[url('/images/authp.webp')] bg-cover bg-center gap-3 md:gap-6">
+      <div className="flex w-full h-full gap-3 md:gap-6">
         
         {/* ✅ Left Side Chat List (Desktop: Fixed Width, Mobile: Full-Screen Until Chat Selected) */}
         <div className={`w-full md:w-[490px] h-full ${selectedChat ? "hidden" : "block"} md:block`}>

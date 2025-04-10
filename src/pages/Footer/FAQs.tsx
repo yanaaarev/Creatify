@@ -1,5 +1,4 @@
 import { useReducer } from "react";
-import untitled11 from "/images/authp.webp";
 
 // DropdownFaqs Component
 interface Props {
@@ -54,16 +53,7 @@ function reducer(state: any, action: string) {
 // Main FAQs Component
 export const FAQs = (): JSX.Element => {
   return (
-    <div className="bg-[#191919] flex flex-col items-center w-full min-h-screen relative px-6 md:px-12 lg:px-20 py-12">
-      {/* Background Image */}
-<div
-  className="absolute inset-0 bg-no-repeat bg-top bg-[length:100%_auto]"
-  style={{
-    backgroundImage: `url(${untitled11})`,
-    backgroundColor: "#191919", // Blend with the page background
-  }}
-></div>
-
+    <div className="flex flex-col items-center w-full min-h-screen relative px-6 md:px-12 lg:px-20 py-12">
 
       {/* FAQ Container */}
       <div className="relative w-full max-w-[900px] z-10 space-y-12 mt-[100px]">

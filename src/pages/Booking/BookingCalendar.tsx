@@ -6,7 +6,6 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import { IoChevronBackCircleOutline } from "react-icons/io5";
-import authp from "/images/authp.webp";
 import "../Artist/ArtistCalendar.css";
 
 const BookingCalendar = () => {
@@ -226,8 +225,7 @@ const BookingCalendar = () => {
 `;
 
   return (
-    <div className="min-h-screen bg-cover bg-center flex items-center justify-center"
-      style={{ backgroundImage: `url(${authp})` }}>
+    <div className="min-h-screen bg-cover bg-center flex items-center justify-center">
       <div className="bg-white px-[30px] py-16 md:py-12 md:px-12 md:rounded-[30px] shadow-lg w-full max-w-3xl">
         {/* 🔙 Back Button */}
         <button className="text-[#8C8C8C] text-4xl mt-5" onClick={() => navigate(-1)}>
@@ -269,7 +267,6 @@ const BookingCalendar = () => {
 
         {/* 📌 Date Indicators */}
         <div className="[font-family:'Khula',Helvetica] text-xs text-center mt-2 space-x-2">
-          <span className="text-black text-lg">●</span> Available
           <span className="text-[#191919] text-opacity-50 text-lg">●</span> Not Available
           <span className="text-[#e1ad01] text-lg">●</span> Pending
           <span className="text-red-500 text-lg">●</span> Booked
