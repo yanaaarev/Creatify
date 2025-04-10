@@ -80,7 +80,6 @@ export const ClientLogin = (): JSX.Element => {
 
   // Handle Sign In with Password
   const handleSignInWithPassword = async () => {
-    alert("");
     if (!identifier || !password) {
       alert("Please enter your email/username and password.");
       return;

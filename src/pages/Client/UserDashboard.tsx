@@ -35,6 +35,8 @@ export const UserDashboard = (): JSX.Element => {
   const [newPassword, setNewPassword] = useState("");
   const [showOldPassword, setShowOldPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
+  const [loadingAvatarIndex, setLoadingAvatarIndex] = useState<number | null>(null);
+
 
   const navigate = useNavigate();
 
@@ -60,6 +62,9 @@ export const UserDashboard = (): JSX.Element => {
     if (!user) return;
   
     const fetchBookings = async () => {
+      if (!auth.currentUser) return;
+      const user = auth.currentUser;
+
       try {
         const bookingsQuery = query(collection(db, "bookings"), where("clientId", "==", user.uid));
         const querySnapshot = await getDocs(bookingsQuery);
@@ -125,8 +130,11 @@ export const UserDashboard = (): JSX.Element => {
   }, []);
 
   // ✅ Handle Avatar Selection
-const handleAvatarSelection = async (avatar: string) => {
+  const handleAvatarSelection = async (avatar: string, index: number) => {
+
   if (!auth.currentUser) return;
+
+  setLoadingAvatarIndex(index);
 
   try {
     const userId = auth.currentUser.uid;
@@ -152,30 +160,41 @@ const handleAvatarSelection = async (avatar: string) => {
     window.location.reload();
   } catch (error) {
     console.error("❌ Error updating avatar:", error);
+ } finally {
+    setLoadingAvatarIndex(null);
   }
 };
 
   
   const handleEdit = (field: "username" | "email" | "password") => {
     setShowOverlay(field);
-    setInputValue(field === "password" ? "" : user[field]);
+    setInputValue(field === "password" ? "" : user?.[field] || "");
   };
 
   const handleUpdate = async () => {
-    if (!inputValue) return;
+    if (!inputValue) {
+      alert("Input value cannot be empty.");
+      return;
+    }
     setButtonLoading(true);
   
     try {
+      // ✅ Ensure the user object is properly initialized
+      if (!auth.currentUser || !auth.currentUser.uid) {
+        throw new Error("User is not properly authenticated or UID is missing.");
+      }
+  
+      const userId = auth.currentUser.uid; // ✅ Get the UID from the authenticated user
       const isAdmin = user?.role === "admin"; // ✅ Check if the user is an admin
       const userCollection = isAdmin ? "admins" : "users"; // ✅ Use the correct collection
-      const userDoc = doc(db, userCollection, user.uid); // ✅ Reference the correct document
+      const userDoc = doc(db, userCollection, userId); // ✅ Reference the correct document
   
       if (showOverlay === "username") {
-        await updateProfile(auth.currentUser!, { displayName: inputValue });
+        await updateProfile(auth.currentUser, { displayName: inputValue });
         await updateDoc(userDoc, { username: inputValue });
         setUser((prev: any) => ({ ...prev, username: inputValue }));
       } else if (showOverlay === "email") {
-        await updateEmail(auth.currentUser!, inputValue);
+        await updateEmail(auth.currentUser, inputValue);
         await updateDoc(userDoc, { email: inputValue });
         alert("A confirmation email has been sent to your previous email.");
         setUser((prev: any) => ({ ...prev, email: inputValue }));
@@ -187,6 +206,7 @@ const handleAvatarSelection = async (avatar: string) => {
     } catch (error) {
       setButtonLoading(false);
       console.error("Update failed:", error);
+      alert("Failed to update. Please try again.");
     }
   };
   
@@ -279,19 +299,6 @@ const handleNavigate = (path: string) => {
 
   return (
     <div className="relative w-full min-h-screen flex flex-col md:flex-row px-8 md:px-10 lg:px-20 py-10 gap-10">
-    <div 
-  className="absolute inset-0 w-full h-full bg-no-repeat bg-center"
-  style={{ 
-    backgroundImage: "url('/images/authp.webp')",
-    backgroundSize: "cover", // ✅ Ensures the full image is visible without zooming
-    backgroundAttachment: "fixed", // ✅ Keeps the background consistent while scrolling
-    backdropFilter: "none",  
-    WebkitBackdropFilter: "none",
-    filter: "none"
-  }}
-></div>
-
-
     {/* Sticky Sidebar (Hidden on Mobile, Sticks on Desktop) */}
     <div className="hidden md:flex sticky top-10 h-screen">
       <UserDashboardSidebar />
@@ -342,7 +349,7 @@ const handleNavigate = (path: string) => {
 
                     {/* ✅ View Details Button */}
                     <button
-                      className="text-[#7db23a] text-[16px] hover:underline"
+                      className="md:text-[#7db23a] text-white text-[16px] underline md:hover:underline"
                       onClick={() => navigate(`/client-booking/${booking.bookingId}`)}
                     >
                       View Details
@@ -431,14 +438,22 @@ const handleNavigate = (path: string) => {
           <IoBanOutline size={120} />
         </button>
         {defaultAvatars.map((avatar, index) => (
-          <img
+        <div
           key={index}
-          src={avatar}
-          alt={`Avatar ${index + 1}`}
-          className="w-[50px] h-[50px] md:w-[100px] md:h-[100px] rounded-full cursor-pointer border-2 border-gray-300 hover:border-blue-500 pointer-events-auto"
-          onClick={() => handleAvatarSelection(avatar)}
-        />        
-        ))}
+          className="w-[50px] h-[50px] md:w-[100px] md:h-[100px] rounded-full border-2 border-gray-300 hover:border-blue-500 flex items-center justify-center cursor-pointer"
+          onClick={() => handleAvatarSelection(avatar, index)}
+        >
+          {loadingAvatarIndex === index ? (
+            <ClipLoader color="#3B82F6" size={30} /> // Blue spinner, size adjustable
+          ) : (
+            <img
+              src={avatar}
+              alt={`Avatar ${index + 1}`}
+              className="w-full h-full rounded-full pointer-events-auto"
+            />
+          )}
+        </div>
+      ))}
       </div>
     </div>
   </div>
@@ -544,7 +559,7 @@ const handleNavigate = (path: string) => {
 
   {/* Contact Support Note */}
   <div className="mt-4 bg-[#7db23a40] shadow-lg w-full max-w-[1000px] rounded-[30px] flex flex-wrap items-center px-6 md:px-8 py-4">
-    <p className="font-normal text-white text-[16px]">
+    <p className="font-normal text-white text-center text-[16px]">
       For assistance, contact us at{" "}
       <a href="mailto:ask.creatify@gmail.com" className="underline text-blue-400">
         ask.creatify@gmail.com
