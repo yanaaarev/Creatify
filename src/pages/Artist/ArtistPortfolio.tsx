@@ -119,7 +119,7 @@ const ArtistPortfolio: React.FC<ArtistPortfolioProps> = ({ portfolioImages = [] 
           />
         )}
         {/* Watermark for Thumbnails */}
-        <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center text-white text-opacity-30 text-xl md:text-2xl font-bold">
+        <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center text-white text-opacity-50 text-xl md:text-2xl font-bold">
           CREATIFY
         </div>
       </div>
@@ -167,7 +167,7 @@ const ArtistPortfolio: React.FC<ArtistPortfolioProps> = ({ portfolioImages = [] 
 
     <div className="relative flex items-center justify-center">
       {/* Watermark for Fullscreen View */}
-      <div className="absolute inset-0 flex items-center justify-center text-white text-3xl md:text-5xl font-bold opacity-30 pointer-events-none">
+      <div className="absolute inset-0 flex items-center justify-center text-white text-3xl md:text-5xl font-bold opacity-50 pointer-events-none">
         CREATIFY
       </div>
 

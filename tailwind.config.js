@@ -33,8 +33,23 @@ module.exports = {
         bold: ['"Khula-Bold"', 'Helvetica', 'Arial', 'sans-serif'],
         light: ['"Khula-Light"', 'Helvetica', 'Arial', 'sans-serif'],
         semiBold: ['"Khula-SemiBold"', 'Helvetica', 'Arial', 'sans-serif'],
+        zenmaru: ['Zen Maru Gothic', 'sans-serif'],
       },
-    },
+        animation: {
+          'float-slow': 'float-slow 5s ease-in-out infinite',
+          'float-slower': 'float-slower 6.5s ease-in-out infinite',
+        },
+        keyframes: {
+          'float-slow': {
+            '0%, 100%': { transform: 'translateY(0px)' },
+            '50%': { transform: 'translateY(-10px)' },
+          },
+          'float-slower': {
+            '0%, 100%': { transform: 'translateY(0px)' },
+            '50%': { transform: 'translateY(14px)' },
+          },
+        },
+      },
+    plugins: [],
   },
-  plugins: [],
-};
+  };

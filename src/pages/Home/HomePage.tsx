@@ -34,7 +34,7 @@ export const HomePage = (): JSX.Element => {
         </div>
 
         {/* What We Do Section */}
-        <div className="relative flex flex-row md:flex-row items-center w-full md:py-20 md:px-0 bg-[#1E1E1E]">
+        <div className="relative flex flex-row md:flex-row items-center w-full h-auto md:py-16 md:px-0">
           {/* Left Image */}
           <img
             className="w-full max-w-[220px] md:max-w-[600px] xl:max-w-full object-cover"
@@ -77,7 +77,7 @@ export const HomePage = (): JSX.Element => {
         </div>
 
         {/* Featured Artwork Section */}
-        <div className="relative w-full flex flex-col items-center bg-[#1E1E1E]">
+        <div className="relative w-full flex flex-col items-center">
           <img className="w-full" src={N1} alt="Artwork" />
           <div className="absolute -bottom-[110px] right-[10px] md:-bottom-[130px] md:right-[90px] bg-[#7db23a] rounded-full shadow-lg p-0 md:p-10 text-center w-[180px] h-[180px] md:w-[420px] md:h-[420px]">
             <p className="absolute top-[7px] left-1 md:top-[120px] md:left-[10px] text-white font-bold text-xs md:text-lg px-4 py-10 md:px-10 md:py-10">
@@ -108,8 +108,9 @@ export const HomePage = (): JSX.Element => {
 
         {/* Join Us Section */}
         <div
-          style={{ backgroundImage: "url('/images/ww-1.webp')" }}
-          className="relative w-full h-[500px] md:h-screen bg-cover bg-center bg-no-repeat bg-no-save flex flex-col items-center justify-center pt-4 md:py-24 md:px-6"
+          style={{ backgroundImage: "url('/images/ww-1.webp')"
+           }}
+          className="relative w-full h-[300px] md:h-[1000px] bg-cover bg-center bg-no-repeat bg-no-save flex flex-col items-center justify-center pt-4 md:py-20 md:px-6"
         >
           <img
             className="w-40 md:w-[350px] mb-4 md:mb-6"
@@ -125,6 +126,48 @@ export const HomePage = (): JSX.Element => {
             APPLY NOW!
           </a>
         </div>
+
+{/* Behind the Visuals Section */}
+<div  className="relative w-full h-[500px] md:min-h-screen flex flex-col items-center justify-center overflow-hidden">
+  {/* Backdrop and Title */}
+  <div className="w-full px-4 md:px-10 text-center z-10">
+    <h1 className="text-white font-zenmaru font-bold text-6xl md:text-[200px] md:leading-[160px] relative z-10">
+      BEHIND THE VISUALS
+    </h1>
+  </div>
+
+  {/* Floating Artist Cards */}
+  
+  {/* Left card */}
+<div className="absolute left-6 top-[90px] md:left-[160px] md:top-1/4 z-20 animate-float-slow">
+  <div className="backdrop-blur-md text-white md:py-5 md:px-5 py-3 px-3 rounded-2xl shadow-2xl flex flex-col items-center gap-y-1 max-w-fit -rotate-[25deg]">
+    <img
+      src="https://res.cloudinary.com/ddjnlhfnu/image/upload/v1742279040/qwebxtzk3up2hetbmwpc.png"
+      alt="drebsart"
+      className="md:w-[100px] md:h-[100px] w-16 h-16 rounded-full object-cover border-2 border-white"
+    />
+    <p className="[font-family:'Khula',Helvetica] md:mt-5 text-xs md:text-sm font-light text-white text-center">Traditional Illustration</p>
+    <p className="font-bold md:text-lg text-center -mt-2">@drebsart</p>
+  </div>
+</div>
+
+
+  {/* Right card */}
+  <div className="absolute right-6 bottom-[80px] md:right-[220px] md:bottom-[230px] z-20 animate-float-slower">
+    <div className="backdrop-blur-md text-white md:py-5 md:px-8 py-3 px-6 rounded-2xl shadow-2xl flex flex-col items-center gap-y-1 max-w-fit rotate-[25deg]">
+      <img
+        src="https://res.cloudinary.com/ddjnlhfnu/image/upload/v1744330602/w0etc8c5tk2tpdmorkjw.jpg"
+        alt="arts_xen"
+        className="md:w-[100px] md:h-[100px] w-16 h-16 rounded-full object-cover border-2 border-white"
+      />
+      <div>
+        <p className="[font-family:'Khula',Helvetica] md:mt-5 text-xs md:text-sm font-light text-white text-center">Digital Illustration</p>
+        <p className="font-bold md:text-lg text-center -mt-1">@arts_xen</p>
+      </div>
+    </div>
+  </div>
+</div>
+
       </div>
     </div>
   );

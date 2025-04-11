@@ -194,6 +194,9 @@ const handleRemoveImage = async (type: "pfp" | "banner") => {
 // 🔹 Predefined list of common artist genres
 const genreSuggestions = [
   "Graphic Designer",
+  "Illustrator",
+  "Digital Illustrator",
+  "Graphic Artist",
   "Videographer",
   "Video Editor",
   "Photographer",

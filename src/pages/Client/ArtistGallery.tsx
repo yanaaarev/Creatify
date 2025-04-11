@@ -10,6 +10,8 @@ import samplePortfolio from "/images/creatifyportfolio.webp"; // Sample portfoli
 import ArtistCalendar from "../Artist/ArtistCalendar"; // ✅ Import Calendar
 import { limit } from "firebase/firestore";
 import { useSearchParams } from "react-router-dom";
+import { ClipLoader } from "react-spinners";  // Assuming you're using react-spinners
+
 
 interface Artist {
   id: string;
@@ -33,6 +35,7 @@ const ArtistGallery = () => {
   const [, setAvailableGenres] = useState<string[]>([]);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [buttonLoading, setButtonLoading] = useState(false);
   const [selectedArtist, setSelectedArtist] = useState<Artist | null>(null); // ✅ Define type explicitly
   const [imageOrientations, setImageOrientations] = useState<Record<string, boolean>>({}); // ✅ Store orientations by artist ID
   const navigate = useNavigate();
@@ -54,6 +57,7 @@ const handlePageChange = (newPage: number) => {
   useEffect(() => {
       const fetchArtists = async () => {
   try {
+    setButtonLoading(true);
     console.log("🚀 Fetching artists...");
 
     // ✅ Query Firestore to get only active artists
@@ -146,6 +150,7 @@ const handlePageChange = (newPage: number) => {
   } catch (error) {
     console.error("❌ Error fetching artists:", error);
   } finally {
+    setButtonLoading(false);
     setLoading(false);
   }
 };
@@ -306,128 +311,138 @@ const handleNavigate = (path: string) => {
 )}
 </div>
 
-    {/* 🔹 Artist Containers (Fixed Masonry Layout with Proper Heights) */}
-    <div 
-      className="w-full grid gap-4 sm:px-4 md:px-6 lg:px-8"
-      style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(auto-fill, minmax(310px, 1fr))",  // ✅ Responsive Columns
-        gridAutoFlow: "dense",  // ✅ Ensures proper placement
-        gridAutoRows: "8px",   // ✅ FIX: Ensures portrait items don't stretch
-      }}
-    >
-      {currentArtists.map((artist) => {
-    const featuredPortfolio =
-      artist.portfolioImages.find((file) => file.type.startsWith("image")) || artist.portfolioImages[0];
+{/* Loading State */}
+{buttonLoading ? (
+  <div className="w-full h-full flex justify-center items-center py-40 flex-col">
+    <ClipLoader size={50} color="white" loading={buttonLoading} />
+    <p className="text-gray-300 mt-4 font-semibold text-sm animate-pulse">Loading Artists...</p>
+  </div>
+) : (
+  <div
+    className="w-full grid gap-4 sm:px-4 md:px-6 lg:px-8"
+    style={{
+      display: "grid",
+      gridTemplateColumns: "repeat(auto-fill, minmax(310px, 1fr))", // ✅ Responsive Columns
+      gridAutoFlow: "dense", // ✅ Ensures proper placement
+      gridAutoRows: "8px", // ✅ FIX: Ensures portrait items don't stretch
+    }}
+  >
+    {currentArtists.map((artist) => {
+      const featuredPortfolio =
+        artist.portfolioImages.find((file) => file.type.startsWith("image")) || artist.portfolioImages[0];
 
-    const isVideo = featuredPortfolio?.type.startsWith("video");
-    const isLandscape = imageOrientations[artist.id] ?? false; // ✅ Detect landscape orientation
+      const isVideo = featuredPortfolio?.type.startsWith("video");
+      const isLandscape = imageOrientations[artist.id] ?? false; // ✅ Detect landscape orientation
 
-    return (
-      <div 
-        key={artist.id}
-        className="rounded-[30px] border border-white border-opacity-50 p-4 cursor-pointer relative bg-[#ffffff10]"
-        style={{
-          gridRow: isLandscape ? "span 16" : "span 24",  // ✅ FIX: Proper row-span control
-          height: isLandscape ? "370px" : "560px", // ✅ FIX: Landscape 410px, Portrait 600px
-        }}
-        onClick={() => handleNavigate(`/artist-profile/${artist.id}`)}
-      >
-    
-      
-        {/* 🔹 Featured Portfolio (Image or Video) */}
-        <div className="relative rounded-[30px] overflow-hidden w-full"
+      return (
+        <div
+          key={artist.id}
+          className="rounded-[30px] border border-white border-opacity-50 p-4 cursor-pointer relative bg-[#ffffff10]"
           style={{
-            height: isLandscape ? "200px" : "400px",  // ✅ FIX: Ensures correct height
+            gridRow: isLandscape ? "span 16" : "span 24", // ✅ FIX: Proper row-span control
+            height: isLandscape ? "370px" : "560px", // ✅ FIX: Landscape 410px, Portrait 600px
           }}
+          onClick={() => handleNavigate(`/artist-profile/${artist.id}`)}
         >
-          {isVideo ? (
-            <video
-              src={featuredPortfolio?.url || sampleVideo}
-              className="w-full h-full object-cover"
-              muted loop
-            />
-          ) : (
-            <img
-              src={featuredPortfolio?.url || samplePortfolio}
-              alt="Artist Work"
-              className="w-full h-full object-cover"
-            />
-          )}
-          
-          <div className="absolute inset-0 bg-black bg-opacity-30 flex justify-center items-center text-white text-4xl font-bold opacity-50">
-            CREATIFY
-          </div>
-        </div>
-
-        {/* 🔹 Artist Info */}
-        <div className="text-center mt-6">
-          <h3 className="text-white text-lg font-semibold">{artist.fullName}</h3>
-          <p className="text-[#7db23a] text-sm font-bold truncate max-w-[280px] mx-auto mt-2 bottom-5">
-            {artist.genres && artist.genres.length > 0 
-              ? artist.genres.length > 1 
-                ? `${artist.genres.slice(0, 2).join(", ")}...` 
-                : artist.genres.join(", ") 
-              : "No Genre Available"}
-          </p>
-        </div>
-
-        {/* 🔹 Bottom Section */}
-        <div className="flex justify-between items-center mt-4">
-          {/* 📅 Check Availability */}
-          <button
-            className="text-[#7db23a]"
-            onClick={(e) => handleOpenCalendar(artist, e)} // ✅ Pass full artist object
+          {/* 🔹 Featured Portfolio (Image or Video) */}
+          <div
+            className="relative rounded-[30px] overflow-hidden w-full"
+            style={{
+              height: isLandscape ? "200px" : "400px", // ✅ FIX: Ensures correct height
+            }}
           >
-            <BsFillCalendarCheckFill size={24} />
-          </button>
+            {isVideo ? (
+              <video
+                src={featuredPortfolio?.url || sampleVideo}
+                className="w-full h-full object-cover"
+                muted
+                loop
+              />
+            ) : (
+              <img
+                src={featuredPortfolio?.url || samplePortfolio}
+                alt="Artist Work"
+                className="w-full h-full object-cover"
+              />
+            )}
 
-          {/* ⭐ Rating */}
-          <div className="flex items-center gap-1">
-            <span className="text-white text-lg mt-2">
-              {typeof artist.rating === "number" && artist.rating > 0 ? artist.rating.toFixed(1) : "N/A"}
-            </span>
-            <img src={star1} alt="Star" className="w-5 h-5" />
+            <div className="absolute inset-0 bg-black bg-opacity-30 flex justify-center items-center text-white text-4xl font-bold opacity-50">
+              CREATIFY
+            </div>
+          </div>
+
+          {/* 🔹 Artist Info */}
+          <div className="text-center mt-6">
+            <h3 className="text-white text-lg font-semibold">{artist.fullName}</h3>
+            <p className="text-[#7db23a] text-sm font-bold truncate max-w-[280px] mx-auto mt-2 bottom-5">
+              {artist.genres && artist.genres.length > 0
+                ? artist.genres.length > 1
+                  ? `${artist.genres.slice(0, 2).join(", ")}...`
+                  : artist.genres.join(", ")
+                : "No Genre Available"}
+            </p>
+          </div>
+
+          {/* 🔹 Bottom Section */}
+          <div className="flex justify-between items-center mt-4">
+            {/* 📅 Check Availability */}
+            <button
+              className="text-[#7db23a]"
+              onClick={(e) => handleOpenCalendar(artist, e)} // ✅ Pass full artist object
+            >
+              <BsFillCalendarCheckFill size={24} />
+            </button>
+
+            {/* ⭐ Rating */}
+            <div className="flex items-center gap-1">
+              <span className="text-white text-lg mt-2">
+                {typeof artist.rating === "number" && artist.rating > 0 ? artist.rating.toFixed(1) : "N/A"}
+              </span>
+              <img src={star1} alt="Star" className="w-5 h-5" />
+            </div>
           </div>
         </div>
-      </div>
-    );
-  })}
-</div>
+      );
+    })}
+  </div>
+)}
 
-{/* 🔹 Pagination Controls */}
-<div className="flex justify-center items-center gap-4 mt-8">
-  <button
-    onClick={() => handlePageChange(Math.max(currentPage - 1, 1))}
-    className="bg-gray-700 text-white px-4 py-2 rounded-full text-sm md:text-lg disabled:opacity-50"
-    disabled={currentPage === 1}
-  >
-    ←
-  </button>
 
-  <span className="text-white text-sm md:text-lg font-semibold">
-    Page {currentPage} of {Math.ceil(filteredArtists.length / artistsPerPage)}
-  </span>
+{/* Loading State */}
+{!loading && !buttonLoading && (
+  <div className="flex justify-center items-center gap-4 mt-8">
+    <button
+      onClick={() => handlePageChange(Math.max(currentPage - 1, 1))}
+      className="bg-gray-700 text-white px-4 py-2 rounded-full text-sm md:text-lg disabled:opacity-50"
+      disabled={currentPage === 1}
+    >
+      ←
+    </button>
 
-  <button
-    onClick={() => handlePageChange(Math.min(currentPage + 1, Math.ceil(filteredArtists.length / artistsPerPage)))}
-    className="bg-gray-700 text-white px-4 py-2 rounded-full text-sm md:text-lg disabled:opacity-50"
-    disabled={indexOfLastArtist >= filteredArtists.length}
-  >
-  →
-  </button>
-</div>
+    <span className="text-white text-sm md:text-lg font-semibold">
+      Page {currentPage} of {Math.ceil(filteredArtists.length / artistsPerPage)}
+    </span>
+
+    <button
+      onClick={() => handlePageChange(Math.min(currentPage + 1, Math.ceil(filteredArtists.length / artistsPerPage)))}
+      className="bg-gray-700 text-white px-4 py-2 rounded-full text-sm md:text-lg disabled:opacity-50"
+      disabled={indexOfLastArtist >= filteredArtists.length}
+    >
+      →
+    </button>
+  </div>
+)}
+
 
       {/* ✅ Availability Overlay (Read-Only Calendar) */}
 {isCalendarOpen && selectedArtist && (
     <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50">
-        <div className="bg-white p-6 rounded-[30px] shadow-lg w-full max-w-3xl relative">
-            {/* ❌ Close Button */}
-            <button className="absolute top-2 right-3 text-gray-700 text-xl"
+      {/* ❌ Close Button */}
+      <button className="absolute top-4 right-4 text-white text-4xl"
                 onClick={() => setIsCalendarOpen(false)}>
                 ✕
             </button>
-            <br />
+        <div className="bg-white p-6 rounded-[30px] shadow-lg w-full max-w-3xl relative">
 
             {/* ✅ Show Loading State Before Data Fetch */}
             {loading ? (
