@@ -153,8 +153,16 @@ useEffect(() => {
     
         // ✅ Update local state to reflect changes
         setPayments((prev) =>
-          prev.map((p) => (p.id === paymentId ? { ...p, paymentStatus: "verified" } : p))
+          prev.map((p) =>
+            p.id === paymentId ? { ...p, paymentStatus: "verified" } : p
+          )
         );
+    
+        // ✅ Update verifiedPayments state
+        setVerifiedPayments((prev) => ({
+          ...prev,
+          [paymentId]: true,
+        }));
     
         alert("Payment Verified Successfully!");
     
@@ -168,7 +176,6 @@ useEffect(() => {
           senderId: auth.currentUser?.uid || "",
           timestamp: Timestamp.now(),
         });
-        window.location.reload();
       } catch (error) {
         console.error("Error verifying payment:", error);
         alert("Failed to verify payment. Please try again.");
