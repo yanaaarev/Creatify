@@ -26,21 +26,35 @@ export const ArtistLogin = (): JSX.Element => {
 
   useEffect(() => {
     const checkArtistAgreement = async () => {
-      if (auth.currentUser) {
+      if (!auth.currentUser) {
+        console.error("User is not authenticated.");
+        return;
+      }
+  
+      try {
         const artistRef = doc(db, "artists", auth.currentUser.uid);
         const artistSnap = await getDoc(artistRef);
-
+  
         if (artistSnap.exists() && artistSnap.data().agreedToTerms) {
           setAgreedToTerms(true);
+          setShowContract(false); // ✅ Ensure the contract overlay is hidden
         } else {
           setShowContract(true);
         }
+      } catch (error) {
+        console.error("Error checking artist agreement:", error);
       }
     };
-
-    checkArtistAgreement();
+  
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        checkArtistAgreement(); // ✅ Call the function only after the user is authenticated
+      }
+    });
+  
+    return () => unsubscribe(); // ✅ Clean up the listener
   }, []);
-
+  
 // Enable checkbox when user scrolls
 const handleScroll = () => {
   if (!contractRef.current) return;
