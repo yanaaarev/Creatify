@@ -108,7 +108,7 @@ export const HomePage = (): JSX.Element => {
 
         {/* Join Us Section */}
         <div
-          style={{ backgroundImage: "url('/images/ww-1.webp')"
+          style={{ backgroundImage: "url('/images/ww-1.webp')", backgroundPosition: "center", backgroundRepeat: "no-repeat", backgroundSize: "cover"
            }}
           className="relative w-full h-[300px] md:h-[1000px] bg-cover bg-center bg-no-repeat bg-no-save flex flex-col items-center justify-center pt-4 md:py-20 md:px-6"
         >
@@ -128,7 +128,9 @@ export const HomePage = (): JSX.Element => {
         </div>
 
 {/* Behind the Visuals Section */}
-<div  className="relative w-full h-[500px] md:min-h-screen flex flex-col items-center justify-center overflow-hidden">
+<div style={{ backgroundImage: "url('/images/ww-1.webp')", backgroundPosition: "top", backgroundRepeat: "no-repeat"
+           }}
+className="relative w-full h-[500px] md:min-h-screen flex flex-col items-center justify-center overflow-hidden">
   {/* Backdrop and Title */}
   <div className="w-full px-4 md:px-10 text-center z-10">
     <h1 className="text-white font-zenmaru font-bold text-6xl md:text-[200px] md:leading-[160px] relative z-10">
@@ -150,7 +152,6 @@ export const HomePage = (): JSX.Element => {
     <p className="font-bold md:text-lg text-center -mt-2">@drebsart</p>
   </div>
 </div>
-
 
   {/* Right card */}
   <div className="absolute right-6 bottom-[80px] md:right-[220px] md:bottom-[230px] z-20 animate-float-slower">
