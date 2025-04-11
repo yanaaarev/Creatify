@@ -128,7 +128,7 @@ export const HomePage = (): JSX.Element => {
         </div>
 
 {/* Behind the Visuals Section */}
-<div style={{ backgroundImage: "url('/images/ww-1.webp')", backgroundPosition: "top", backgroundRepeat: "no-repeat"
+<div style={{ backgroundImage: "url('/images/ww-1.webp')"
            }}
 className="relative w-full h-[500px] md:min-h-screen flex flex-col items-center justify-center overflow-hidden">
   {/* Backdrop and Title */}
