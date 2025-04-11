@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { auth, db } from "../config/firebaseConfig";
-import { doc, updateDoc, addDoc, collection, getDoc, getDocs, Timestamp, query, where, orderBy, limit } from "firebase/firestore";
+import { doc, updateDoc, addDoc, collection, getDoc, getDocs, Timestamp, query, where } from "firebase/firestore";
 import { listenForMessages, sendMessage } from "../functions/chatFunctions";
 import uploadtoCloudinary from "../functions/uploadtoCloudinary";
 import ChatInput from "./ChatInput";
@@ -261,32 +261,17 @@ const handleUploadProof = async () => {
       alert("❌ Invalid file format. Please select an image file.");
       return;
     }
+
     setButtonLoading(true);
-    // 🔹 Retrieve the most recent Payment Request from Firestore instead of `messages`
-    let paymentId = selectedPayment?.paymentId;
+
+    // 🔹 Use the `selectedPayment` to get the correct `paymentId`
+    const paymentId = selectedPayment?.paymentId || selectedPayment?.id;
 
     if (!paymentId) {
-      console.warn("⚠️ No Payment ID found in selectedPayment. Fetching latest from Firestore...");
-
-      const paymentsQuery = query(
-        collection(db, "payments"),
-        where("chatId", "==", chatId),
-        where("clientId", "==", auth.currentUser?.uid || ""), // ✅ Ensure only client's payments are retrieved
-        orderBy("createdAt", "desc"), // ✅ Fetch the latest payment request
-        limit(1) // ✅ Only retrieve the most recent payment request
-      );
-
-      const paymentsSnap = await getDocs(paymentsQuery);
-
-      if (!paymentsSnap.empty) {
-        const latestPayment = paymentsSnap.docs[0];
-        paymentId = latestPayment.id;
-        console.log("📌 Found Latest Payment ID from Firestore:", paymentId);
-      } else {
-        console.error("❌ No Payment Requests found for this chat.");
-        alert("❌ Payment request not found. Please try again.");
-        return;
-      }
+      console.error("❌ No Payment ID found in selectedPayment.");
+      alert("❌ Payment request not found. Please try again.");
+      setButtonLoading(false);
+      return;
     }
 
     // 🔹 Validate the payment document exists in Firestore
@@ -296,6 +281,7 @@ const handleUploadProof = async () => {
     if (!paymentSnap.exists()) {
       console.error("❌ Payment request document does NOT exist:", paymentId);
       alert("❌ Payment request not found. Please try again.");
+      setButtonLoading(false);
       return;
     }
 
@@ -313,51 +299,35 @@ const handleUploadProof = async () => {
     if (!proofUrl) {
       console.error("❌ Cloudinary upload failed. No URL received.");
       alert("❌ Failed to upload proof of payment. Please try again.");
+      setButtonLoading(false);
       return;
     }
 
     console.log("✅ Proof uploaded successfully:", proofUrl);
 
-    // 🔹 Ensure Firestore updates fields properly
-    try {
-      await updateDoc(paymentRef, {
-        proofOfPayment: proofUrl,
-        referenceNumber: referenceNumber.trim(),
-        proofDate,
-        paymentStatus: "pending", // ✅ Ensure the status updates
-      });
+    // 🔹 Update the correct payment document in Firestore
+    await updateDoc(paymentRef, {
+      proofOfPayment: proofUrl,
+      referenceNumber: referenceNumber.trim(),
+      proofDate,
+      paymentStatus: "pending", // ✅ Ensure the status updates
+    });
 
-      console.log("✅ Firestore updated with proof of payment");
+    console.log("✅ Firestore updated with proof of payment");
 
-      // 🔹 Fetch Updated Document to Verify Firestore Update Worked
-      const updatedPaymentSnap = await getDoc(paymentRef);
-      if (updatedPaymentSnap.exists()) {
-        const updatedPaymentData = updatedPaymentSnap.data();
-        console.log("✅ Payment document updated successfully!", updatedPaymentData);
+    // 🔹 Update the UI with the updated payment data
+    setSelectedPayment((prev: any) => ({
+      ...prev,
+      proofOfPayment: proofUrl,
+      referenceNumber: referenceNumber.trim(),
+      proofDate,
+      paymentStatus: "pending",
+    }));
 
-        // 🔹 Ensure UI updates correctly
-        setSelectedPayment((prev: any) => ({
-          ...prev,
-          proofOfPayment: updatedPaymentData.proofOfPayment,
-          referenceNumber: updatedPaymentData.referenceNumber,
-          proofDate: updatedPaymentData.proofDate,
-          paymentStatus: updatedPaymentData.paymentStatus,
-        }));
-
-        // 🔹 Ensure the button updates correctly
-        alert("✅ Proof of payment submitted successfully!");
-        setButtonLoading(false);
-        setShowProofForm(false);
-        window.location.reload(); // ✅ Refresh the page to reflect changes
-      } else {
-        console.error("❌ Updated payment document not found!");
-        alert("❌ Payment confirmation update failed. Please refresh and check.");
-      }
-    } catch (error) {
-      console.error("❌ Firestore update failed:", error);
-      alert("❌ Error updating payment document. Check permissions.");
-      return;
-    }
+    alert("✅ Proof of payment submitted successfully!");
+    setButtonLoading(false);
+    setShowProofForm(false);
+    window.location.reload(); // ✅ Refresh the page to reflect changes
 
     // 🔹 Trigger notification for "payment"
     await triggerNotification("payment", {
@@ -370,10 +340,10 @@ const handleUploadProof = async () => {
       avatarUrl: artistDetails.avatar,
       timestamp: Timestamp.now(),
     });
-
   } catch (error) {
     console.error("❌ Error uploading proof:", error);
     alert("❌ Failed to upload proof of payment. Please try again.");
+    setButtonLoading(false);
   }
 };
 
