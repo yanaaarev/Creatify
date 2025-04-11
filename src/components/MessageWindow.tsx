@@ -354,7 +354,7 @@ const handleViewPayment = async (paymentId: string) => {
     const paymentSnap = await getDoc(paymentRef);
 
     if (paymentSnap.exists()) {
-      setSelectedPayment(paymentSnap.data());
+      setSelectedPayment({ ...paymentSnap.data(), paymentId }); // ✅ Include paymentId in selectedPayment
       setShowPaymentDetails(true);
     } else {
       alert("❌ Payment request not found.");
