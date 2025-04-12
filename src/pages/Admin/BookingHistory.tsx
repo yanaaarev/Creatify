@@ -234,18 +234,18 @@ const BookingHistory = () => {
             <div className="flex justify-center mt-4">
               <button
                 onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-                className="px-4 py-2 mx-1 rounded bg-[#7db23a] text-white"
+                className={`px-4 py-2 rounded ${currentPage === 1 ? "bg-gray-300 cursor-not-allowed" : "bg-[#7db23a] text-white"}`}
                 disabled={currentPage === 1}
               >
-                Previous
+                ◄
               </button>
-              <span className="px-4 py-2 bg-gray-200 rounded">{currentPage}/{totalPages}</span>
+              <span className="px-4 py-2 text-gray-800">{currentPage}/{totalPages}</span>
               <button
                 onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-                className="px-4 py-2 mx-1 rounded bg-[#7db23a] text-white"
+                className={`px-4 py-2 rounded ${currentPage === totalPages ? "bg-gray-300 cursor-not-allowed" : "bg-[#7db23a] text-white"}`}
                 disabled={currentPage === totalPages}
               >
-                Next
+                ►
               </button>
             </div>
           )}
