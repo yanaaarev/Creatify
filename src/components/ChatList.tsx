@@ -48,7 +48,7 @@ const ChatList = ({ selectChat, goBack }: { selectChat: (chatId: string) => void
   };
 
   return (
-    <div className="w-full xl:w-[500px] h-full md:h-screen bg-white rounded-none md:rounded-[30px] shadow-md p-6 overflow-y-auto relative">
+    <div className="w-screen md:max-w-fit xl:w-[500px] h-full md:h-screen bg-white rounded-none md:rounded-[30px] shadow-md p-3 md:p-6 overflow-y-auto relative">
       {/* 🔹 Back Button & Search Bar */}
       <div className="flex items-center gap-2 mb-4 mt-5">
         {/* Back Button */}

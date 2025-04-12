@@ -374,8 +374,8 @@ const handleViewPayment = async (paymentId: string) => {
 };
 
 return (
-  <div className="w-full xl:w-[920px] h-full bg-white justify-self-center flex flex-col">
-    <div className="flex-1 overflow-y-auto space-y-3 p-4 py-5">
+  <div className="w-full max-w-fit xl:w-[920px] h-full justify-self-center flex flex-col">
+    <div className="flex-1 overflow-y-auto space-y-3 px-3 py-3">
       {messages.length > 0 ? (
         messages.map((msg, index) => {
           const currentMessageDate = msg.timestamp?.toDate().toDateString();

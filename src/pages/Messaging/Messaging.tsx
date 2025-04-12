@@ -31,21 +31,21 @@ const goBack = () => {
   }, [chatId]);
 
   return (
-    <div className="flex w-full h-screen overflow-hidden">
+    <div className="flex-1 w-full h-screen overflow-hidden">
       {/* ✅ Full-Screen Container */}
       <div className="flex w-full h-full gap-3 md:gap-6">
         
         {/* ✅ Left Side Chat List (Desktop: Fixed Width, Mobile: Full-Screen Until Chat Selected) */}
-        <div className={`w-full md:w-[490px] h-full ${selectedChat ? "hidden" : "block"} md:block`}>
+        <div className={`max-w-fit h-full ${selectedChat ? "hidden" : "block"} md:block`}>
           <ChatList selectChat={setSelectedChat} goBack={goBack} />
         </div>
 
         {/* ✅ Right Side Messaging Window (Expands on Large Screens, Full-Screen on Mobile When Selected) */}
-        <div className={`flex-1 h-full bg-white rounded-none md:rounded-[30px] shadow-md overflow-hidden px-6 py-6 ${selectedChat ? "block" : "hidden"} md:block`}>
+        <div className={`flex-1 h-full bg-white rounded-none md:rounded-[30px] overflow-hidden px-6 py-10 ${selectedChat ? "block" : "hidden"} md:block`}>
           {selectedChat ? (
             <>
               {/* ✅ Back Button for Mobile */}
-              <button onClick={goBack} className="md:hidden text-blue-500 text-xl absolute top-3 left-3">
+              <button onClick={goBack} className="md:hidden text-blue-500 text-2xl absolute top-3 left-3">
                 <IoChevronBackOutline />
               </button>
               <MessageWindow chatId={selectedChat} />
