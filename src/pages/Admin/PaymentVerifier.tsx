@@ -304,15 +304,15 @@ const currentPayments = payments.slice(indexOfFirstItem, indexOfLastItem);
           {/* 🔹 Proof of Payment Overlay */}
           {selectedProof && (
   <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 py-10">
-    <div className="relative w-full h-full max-w-[360px]">
-      
-      {/* Close Button (Positioned at Top Right Outside the White Background) */}
-      <button 
-        className="absolute -top-4 -right-10 text-white"
+    {/* Close Button (Positioned at Top Right Outside the White Background) */}
+    <button 
+        className="absolute top-4 right-4 text-white text-xl md:text-4xl"
         onClick={() => setSelectedProof(null)}
       >
         ✖
       </button>
+    <div className="relative w-full h-full max-w-fit">
+      
 
       {/* Proof of Payment Image */}
       <img 

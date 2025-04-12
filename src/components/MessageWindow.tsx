@@ -8,6 +8,7 @@ import { IoClose } from "react-icons/io5"; // ✅ Close Button Icon
 import { triggerNotification} from "../utils/triggerNotification";
 import { MdPayments } from "react-icons/md"; // ✅ Payment Icon
 import { ClipLoader } from "react-spinners";
+import { format } from "date-fns"; // ✅ Import date-fns for formatting timestamps
 
 const DEFAULT_AVATAR_URL = "https://res.cloudinary.com/ddjnlhfnu/image/upload/v1740737790/samplepfp_gg1dmq.png";
 
@@ -19,6 +20,7 @@ interface Message {
   attachmentUrl?: string
   type?: string; // ✅ Used to differentiate payment request messages
   paymentId?: string; // ✅ Reference to payment data in Firestore
+  timestamp?: Timestamp;
 }
 
 const MessageWindow = ({ chatId }: { chatId: string }) => {
@@ -393,8 +395,14 @@ const handleViewPayment = async (paymentId: string) => {
               <p className="break-words whitespace-pre-wrap">
               {formatMessageText(msg.content ?? "")}
             </p>
- 
             )}
+
+            {/* ✅ Timestamp */}
+            {msg.timestamp && (
+                    <span className="text-gray-400 text-xs mt-1 self-end">
+                      {format(new Date(msg.timestamp.toDate()), "hh:mm a")} {/* Format as "12:30 PM" */}
+                    </span>
+                  )}
 
             {/* ✅ Clickable Attachments (Now Wrapped Properly) */}
             {msg.attachmentUrl && (

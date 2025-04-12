@@ -54,7 +54,7 @@ const AdminLogin = (): JSX.Element => {
           
           {/* Back Button */}
           <button 
-            onClick={() => navigate(-1)} 
+            onClick={() => handleNavigate("/")} 
             className="absolute top-[130px] left-4 md:top-10 md:left-6 text-[#8C8C8C] text-4xl"
           >
             <IoChevronBackCircleOutline />
