@@ -574,6 +574,15 @@ else if (notification.title.includes("Feedback")) {
   
   {showFeedbackForm && userRole === "client" && (
   <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 min-h-screen">
+      
+      {/* ✅ Close Button */}
+    <button
+                className="absolute top-4 right-4 text-white text-4xl"
+                onClick={() => setShowFeedbackForm(false)}
+            >
+                ✖
+            </button>
+
     <div className="bg-white px-11 md:px-16 py-16 md:py-20 rounded-[30px] shadow-lg w-full max-w-[600px] h-full max-h-[350px] mx-auto">
       
       {/* Feedback Heading */}
@@ -593,31 +602,28 @@ else if (notification.title.includes("Feedback")) {
       </div>
 
       {/* Feedback Input */}
-      <input
-        type="text"
-        className="w-full mt-4 mb-1 px-4 py-2 border border-black rounded-full text-gray-600 text-sm"
-        placeholder="Leave a comment"
-        value={feedback}
-        onChange={(e) => setFeedback(e.target.value)}
-      />
+<textarea
+  className="w-full mt-4 mb-1 px-4 py-3 border border-black rounded-full text-gray-600 text-sm resize-none overflow-hidden"
+  placeholder="Leave a comment"
+  value={feedback}
+  onChange={(e) => {
+    setFeedback(e.target.value);
+    e.target.style.height = "auto"; // Reset height to calculate new height
+    e.target.style.height = `${e.target.scrollHeight}px`; // Adjust height dynamically
+  }}
+  rows={1} // Start with a single row
+  style={{ maxHeight: "50px" }} // ✅ Set maximum height
+/>
 
       {/* Submit Button */}
       <button
         onClick={submitFeedback}
         disabled={buttonLoading}
-        className="bg-[#7DB23A] text-white px-4 py-1 rounded-full mt-4 w-full text-lg font-medium"
+        className="bg-[#7DB23A] text-white px-4 py-2 rounded-full mt-2 w-full text-lg font-semibold"
       >
         {buttonLoading ? <ClipLoader size={20} color="white" /> : "Submit"}
       </button>
-      {/* ✅ Close Button Inside the White Container */}
-     <div className="flex justify-end -mt-[240px] -mr-8">
-        <button
-          onClick={() => setShowFeedbackForm(false)}
-          className="text-gray-600 hover:text-gray-900 text-xl"
-        >
-          ✕
-        </button>
-      </div>
+      
     </div>
   </div>
 )}
@@ -631,7 +637,7 @@ else if (notification.title.includes("Feedback")) {
       </p>
       <button
         onClick={() => setShowThankYou(false)}
-        className="bg-[#7DB23A] text-white px-4 py-1 rounded-full mt-4 w-full max-w-[480px] text-lg font-medium"
+        className="bg-[#7DB23A] text-white px-4 py-2 rounded-full mt-4 w-full max-w-[480px] text-lg font-semibold"
       >
         Back to Homepage
       </button>

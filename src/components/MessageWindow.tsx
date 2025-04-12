@@ -104,7 +104,7 @@ const getClientUsername = async (clientId: string): Promise<string> => {
   return "Unknown User";
 };
 
-const formatMessageText = (text: string) => {
+const formatMessageText = (text: string, isSender: boolean) => {
   const urlRegex = /(https?:\/\/[^\s]+)/g;
   return text.split(urlRegex).map((part, index) => {
     if (part.match(urlRegex)) {
@@ -114,7 +114,9 @@ const formatMessageText = (text: string) => {
           href={part}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-blue-500 underline break-words"
+          className={`underline break-words ${
+            isSender ? "text-white" : "text-blue-500"
+          }`} // ✅ White for sender, blue for receiver
         >
           {part}
         </a>
@@ -173,7 +175,12 @@ const bookingQuery = query(
 const bookingSnap = await getDocs(bookingQuery);
 
 if (bookingSnap.empty) {
-  alert("No active booking found between this artist and client.");
+  alert("There's no active booking found between you and this client.");
+  setButtonLoading(false);
+  setCommissionAmount("");
+  setPaymentDueDate("");
+  setPaymentNote("");
+  setShowPaymentForm(false);
   return;
 }
 
@@ -366,87 +373,120 @@ const handleViewPayment = async (paymentId: string) => {
   }
 };
 
-  return (
-    <div className="w-full xl:w-[920px] h-full bg-white justify-self-center flex flex-col">
-      <div className="flex-1 overflow-y-auto space-y-3 p-4 py-5">
-        {messages.length > 0 ? (
-          messages.map((msg, index) => (
-            <div key={msg.id} className={`flex items-end ${msg.senderId === userId ? "justify-end" : "justify-start"}`}
-            ref={index === messages.length - 10 ? lastMessageRef : null} // ✅ Attach ref to last message
-            >
+return (
+  <div className="w-full xl:w-[920px] h-full bg-white justify-self-center flex flex-col">
+    <div className="flex-1 overflow-y-auto space-y-3 p-4 py-5">
+      {messages.length > 0 ? (
+        messages.map((msg, index) => {
+          const currentMessageDate = msg.timestamp?.toDate().toDateString();
+          const previousMessageDate =
+            index > 0 ? messages[index - 1]?.timestamp?.toDate().toDateString() : null;
 
-              {/* ✅ Message Bubble */}
-          <div
-            className={`relative px-4 py-2 max-w-[85%] md:max-w-[65%] rounded-lg flex flex-col ${
-              msg.senderId === userId
-                ? "bg-[#7db23a] text-white rounded-br-none"
-                : "bg-[#E6E6E6] text-black rounded-bl-none"
-            }`}
-          >
-            {/* ✅ Normal Message Content */}
-            {msg.type === "payment-request" && msg.paymentId ? (
-              <button
-                className="text-[#0099D0] text-sm font-medium underline cursor-pointer"
-                onClick={() => handleViewPayment(msg.paymentId!)}
-              >
-                View Request for Payment
-              </button>
-            ) : (
-              <p className="break-words whitespace-pre-wrap">
-              {formatMessageText(msg.content ?? "")}
-            </p>
-            )}
+          const showDateSeparator = currentMessageDate !== previousMessageDate;
 
-            {/* ✅ Timestamp */}
-            {msg.timestamp && (
-                    <span className="text-gray-400 text-xs mt-1 self-end">
-                      {format(new Date(msg.timestamp.toDate()), "hh:mm a")} {/* Format as "12:30 PM" */}
-                    </span>
-                  )}
-
-            {/* ✅ Clickable Attachments (Now Wrapped Properly) */}
-            {msg.attachmentUrl && (
-              <div className="mt-2 flex flex-col gap-2 items-start"> {/* ✅ Ensures attachments stack properly */}
-                <img
-                  src={msg.attachmentUrl}
-                  alt="Attachment"
-                  className="w-full max-w-[240px] h-auto rounded-lg border border-gray-300 cursor-pointer object-cover"
-                  onClick={() => setSelectedImage(msg.attachmentUrl ?? null)}
-                />
+          return (
+            <div key={msg.id}>
+              {/* ✅ Date Separator */}
+            {showDateSeparator && (
+              <div className="flex items-center my-2">
+                <div className="flex-grow border-t border-gray-300"></div> {/* Left Line */}
+                <div className="px-3 text-center font-semibold text-gray-500 text-xs">
+                  {format(new Date(msg.timestamp?.toDate() ?? new Date()), "MMMM d, yyyy")} {/* Format as "Month Day, Year" */}
+                </div>
+                <div className="flex-grow border-t border-gray-300"></div> {/* Right Line */}
               </div>
             )}
 
-            {/* ✅ Message Tail */}
-            <div
-              className={`absolute w-0 h-0 border-t-8 border-transparent ${
-                msg.senderId === userId
-                  ? "right-0 bottom-0 border-r-8 border-[#7db23a]"
-                  : "left-0 bottom-0 border-l-8 border-[#E6E6E6]"
-              }`}
-            ></div>
-          </div>
+              <div
+                className={`flex items-end ${
+                  msg.senderId === userId ? "justify-end" : "justify-start"
+                }`}
+                ref={index === messages.length - 1 ? lastMessageRef : null} // ✅ Attach ref to the last message
+              >
+                {/* ✅ Message Bubble */}
+                <div
+  className={`relative px-4 py-2 max-w-[85%] md:max-w-[65%] rounded-lg flex flex-col ${
+    msg.type === "payment-request"
+      ? `bg-[#0099D0] text-white ${
+          msg.senderId === userId ? "rounded-br-none" : "rounded-bl-none"
+        }` // ✅ Blue bubble with conditional rounded corners
+      : msg.senderId === userId
+      ? "bg-[#7db23a] text-white rounded-br-none" // ✅ Green bubble for sender
+      : "bg-[#E6E6E6] text-black rounded-bl-none" // ✅ Gray bubble for receiver
+  }`}
+>
+  {/* ✅ Normal Message Content */}
+  {msg.type === "payment-request" && msg.paymentId ? (
+    <button
+      className="text-[15px] font-semibold underline cursor-pointer text-white" // ✅ White text for payment request
+      onClick={() => handleViewPayment(msg.paymentId!)}
+    >
+      View Request for Payment
+    </button>
+                  ) : (
+                    <p className="break-words whitespace-pre-wrap">
+                    {formatMessageText(msg.content ?? "", msg.senderId === userId)}
+                  </p>
+                  )}
+
+                  {/* ✅ Timestamp */}
+                {msg.timestamp && (
+                  <span
+                    className={`text-xs mt-1 self-end ${
+                      msg.senderId === userId ? "text-[#d9fdd3]" : "text-gray-500"
+                    }`}
+                  >
+                    {format(new Date(msg.timestamp.toDate()), "hh:mm a")} {/* Format as "12:30 PM" */}
+                  </span>
+                )}
+
+                  {/* ✅ Clickable Attachments */}
+                  {msg.attachmentUrl && (
+                    <div className="mt-2 flex flex-col gap-2 items-start">
+                      <img
+                        src={msg.attachmentUrl}
+                        alt="Attachment"
+                        className="w-full max-w-[240px] h-auto rounded-lg border border-gray-300 cursor-pointer object-cover"
+                        onClick={() => setSelectedImage(msg.attachmentUrl ?? null)}
+                      />
+                    </div>
+                  )}
+
+                  {/* ✅ Message Tail */}
+                  <div
+                    className={`absolute w-0 h-0 border-t-8 border-transparent ${
+                      msg.senderId === userId
+                        ? "right-0 bottom-0 border-r-8 border-[#7db23a]"
+                        : "left-0 bottom-0 border-l-8 border-[#E6E6E6]"
+                    }`}
+                  ></div>
+                </div>
+              </div>
             </div>
-          ))
-        ) : (
-          <p className="text-gray-500 text-center">No messages yet</p>
-        )}
+          );
+        })
+      ) : (
+        <p className="text-gray-500 text-center">No messages yet</p>
+      )}
       </div>
 
         {/* ✅ Chat Input & Payment Button Wrapper */}
-        <div className="flex justify-center items-center w-full pt-3 mx-auto">
-            {/* ✅ Payment Button (Visible for Artists Only) */}
-            {isArtist && (
-            <button
-              className="text-gray-600 hover:text-gray-700 px-3 md:px-4 transition mt-1"
-              onClick={() => setShowPaymentForm(true)}
-            >
-              <MdPayments size={24} />
-            </button>
-          )}
-          
-          {/* ✅ Chat Input */}
-          <ChatInput chatId={chatId} />
-        </div>
+<div className="flex items-center w-full pt-3 mx-auto bg-white">
+  {/* ✅ Payment Button (Visible for Artists Only) */}
+  {isArtist && (
+    <button
+      className="text-gray-600 hover:text-gray-700 px-3 md:px-4 transition"
+      onClick={() => setShowPaymentForm(true)}
+    >
+      <MdPayments size={24} />
+    </button>
+  )}
+
+  {/* ✅ Chat Input */}
+  <div className="flex-1 sticky bottom-0 bg-white">
+    <ChatInput chatId={chatId} />
+  </div>
+  </div>
 
 
       {/* ✅ Payment Request Form Overlay */}
@@ -758,17 +798,16 @@ const handleViewPayment = async (paymentId: string) => {
           {/* ✅ Proof of Payment Overlay (Fixed Issue) */}
           {showProofOverlay && proofAttachment && (
             <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50">
-              <div className="w-full max-w-md relative">
-
-                {/* ❌ Close Button */}
-                <button
-                  className="absolute top-6 -right-3 bg-red-500 text-white text-sm p-2 px-3 rounded-full"
+              
+              {/* ❌ Close Button */}
+              <button
+                  className="absolute top-4 -right-4 text-white text-3xl"
                   onClick={() => setShowProofOverlay(false)}
                 >
                   ✕
                 </button>
 
-                <h2 className="text-lg font-bold text-center">Proof of Payment</h2>
+              <div className="w-full max-w-md relative">
 
                 {/* 🖼️ View Proof Image */}
                 <div className="mt-4 flex justify-center">

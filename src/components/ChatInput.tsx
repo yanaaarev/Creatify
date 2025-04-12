@@ -43,41 +43,51 @@ const ChatInput = ({ chatId }: { chatId: string }) => {
   }
 };
 
-  return (
-    <div className="flex flex-grow justify-center items-center p-6 w-full md:max-w-[837px] md:w-full h-[50px] bg-gray-200 rounded-full">
-      {/* ✅ File Upload Button (Triggers Auto Send) */}
-      <button className="text-gray-600 p-1 cursor-pointer" disabled={uploading}>
-        <label>
-          <FaPaperclip size={20} />
-          <input
-            type="file"
-            className="hidden"
-            accept="image/*"
-            onChange={(e) => {
-              if (e.target.files?.[0]) {
-                handleFileUpload(e.target.files[0]); // ✅ Auto-send attachment
-              }
-            }}
-          />
-        </label>
-      </button>
+return (
+  <div className="flex items-center w-full px-4 py-2 rounded-full bg-gray-100 border-t border-gray-300">
+    {/* ✅ File Upload Button */}
+    <button className="text-gray-600 p-1 cursor-pointer" disabled={uploading}>
+      <label>
+        <FaPaperclip size={20} />
+        <input
+          type="file"
+          className="hidden"
+          accept="image/*"
+          onChange={(e) => {
+            if (e.target.files?.[0]) {
+              handleFileUpload(e.target.files[0]); // ✅ Auto-send attachment
+            }
+          }}
+        />
+      </label>
+    </button>
 
-      {/* ✅ Text Input */}
-      <input
-        type="text"
-        value={newMessage}
-        onChange={(e) => setNewMessage(e.target.value)}
-        placeholder="Start typing..."
-        className="flex-1 p-2 bg-transparent focus:outline-none"
-        onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
-        disabled={sending} // ✅ Disable input while sending
-      />
+    {/* ✅ Textarea for Dynamic Resizing */}
+    <textarea
+      value={newMessage}
+      onChange={(e) => setNewMessage(e.target.value)}
+      placeholder="Start typing..."
+      className="flex-1 resize-none bg-transparent border-none focus:outline-none p-2 text-sm"
+      rows={1}
+      style={{ maxHeight: "150px", overflowY: "auto" }} // ✅ Dynamic height with scroll for long messages
+      onKeyDown={(e) => {
+        if (e.key === "Enter" && !e.shiftKey) {
+          e.preventDefault(); // Prevent newline on Enter
+          handleSendMessage();
+        }
+      }}
+      disabled={sending} // ✅ Disable input while sending
+    />
 
-      {/* ✅ Send Button */}
-      <button onClick={handleSendMessage} className="text-blue-600 p-2" disabled={uploading || sending}>
-        {sending ? <ClipLoader size={20} color="blue" /> : <FaPaperPlane size={20} />}
-      </button>
-    </div>
+    {/* ✅ Send Button */}
+    <button
+      onClick={handleSendMessage}
+      className="text-blue-600 p-2"
+      disabled={uploading || sending}
+    >
+      {sending ? <ClipLoader size={20} color="blue" /> : <FaPaperPlane size={20} />}
+    </button>
+  </div>
   );
 };
 

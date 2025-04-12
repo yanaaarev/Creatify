@@ -31,7 +31,7 @@ const visibleFeedbacks = showAll ? sortedFeedbacks : sortedFeedbacks.slice(0, 3)
       {feedbacks.length > 0 ? (
         <>
           {visibleFeedbacks.map((feedback) => (
-            <div key={feedback.id} className="bg-[#7DB23A] rounded-[30px] w-full h-[150px] px-8 py-8 md:p-10 md:px-12 text-white shadow-md mb-4">
+            <div key={feedback.id} className="bg-[#7DB23A] rounded-[30px] w-full h-auto px-8 py-8 md:py-8 md:px-12 text-white shadow-md mb-4">
               {/* Header: Username, Date, and Rating */}
             <div className="flex justify-between items-center">
               <div className="flex items-center gap-3 md:gap-8">
@@ -49,7 +49,7 @@ const visibleFeedbacks = showAll ? sortedFeedbacks : sortedFeedbacks.slice(0, 3)
             </div>
 
               {/* Feedback Message */}
-              <p className="text-center text-sm mt-1 p-6">{feedback.comment}</p>
+              <p className="text-center text-sm mt-1 py-2 px-3 md:p-4">{feedback.comment}</p>
             </div>
           ))}
 

@@ -243,41 +243,44 @@ const BookingRequest = () => {
 
          {/* ✅ View Attachment & Remove Attachment Buttons (Centered with Gap) */}
 {uploadedFile && (
-  <div className="-mt-3 flex justify-center items-center space-x-4 mb-5">
-    <button
-      className="[font-family:'Khula',Helvetica] text-xs text-[#7db23a] hover:underline"
-      onClick={() => setShowAttachment(true)}
-    >
-      View Attachment
-    </button>
-    <button
-      className="[font-family:'Khula',Helvetica] text-xs text-[#c72b2b] hover:underline"
-      onClick={handleRemoveAttachment}
-    >
-      Remove Attachment
-    </button>
-  </div>
+  <>
+    <div className="flex justify-center items-center space-x-4 pt-3">
+      <button
+        className="[font-family:'Khula',Helvetica] text-xs text-[#7db23a] underline"
+        onClick={() => setShowAttachment(true)}
+      >
+        View Attachment
+      </button>
+      <button
+        className="[font-family:'Khula',Helvetica] text-xs text-[#c72b2b] underline"
+        onClick={handleRemoveAttachment}
+      >
+        Remove Attachment
+      </button>
+    </div>
+    <div className="border-b border-gray-300 my-4"></div> {/* ✅ Border only shows when buttons are present */}
+  </>
 )}
 
       {/* 📎 Attachment Overlay */}
       {showAttachment && uploadedFile && (
-        <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center">
-          <div className="p-6 rounded-[30px] shadow-lg w-full max-w-xl relative">
-            {/* ❌ Close Button */}
-            <button
-              className="absolute top-4 right-4 bg-black text-white p-2 rounded-full"
+        <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50">
+           {/* ❌ Close Button */}
+           <button
+              className="absolute top-4 right-4 text-3xl text-white"
               onClick={() => setShowAttachment(false)}
             >
-              ❌
+              ✕
             </button>
-
+          <div className="relative rounded w-full max-w-lg h-auto">
+          
             {/* 📎 Display Image */}
             <img src={uploadedFile} alt="Attachment" className="w-full h-auto rounded-[30px]" />
           </div>
         </div>
       )}
         {/* ✅ Confirm Booking Button */}
-        <div className="flex justify-center mt-3">
+        <div className="flex justify-center my-3 z-10">
         <button className={`bg-[#7db23a] text-white px-5 py-2 rounded-full w-[350px] md:w-[660px] mb-3 ${!agreeToTerms ? "opacity-50 cursor-not-allowed" : ""}`}
           onClick={handleConfirmBooking} 
           disabled={!agreeToTerms || buttonLoading}
