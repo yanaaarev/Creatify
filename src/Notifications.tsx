@@ -184,6 +184,7 @@ const NotificationComponent = () => {
 
   const handleNotificationClick = async (notification: Notification) => {
     try {
+      setButtonLoading(true);
       console.log("🔔 Notification Clicked:", notification);
       
       await markAsRead(notification.id);
@@ -256,11 +257,13 @@ const NotificationComponent = () => {
             } else {
               console.error("❌ Booking not found.");
               alert("Error: Booking data not found. Please try again.");
+              setButtonLoading(false);
               return;
             }
           } catch (error) {
             console.error("❌ Error retrieving artistId from Firestore:", error);
             alert("An error occurred. Please try again.");
+            setButtonLoading(false);
             return;
           }
         }
@@ -272,7 +275,8 @@ const NotificationComponent = () => {
           artistId,
           bookingId: notification.bookingId || "Unknown",
         });
-  
+        
+        setButtonLoading(false);
         return; // ✅ Prevent navigation
       }
       // ✅ Booking Notifications (Now for Both Clients and Artists)
@@ -489,6 +493,16 @@ else if (notification.title.includes("Feedback")) {
 
   return (
     <div className="relative">
+    {/* Loading State */}
+    {buttonLoading ? (
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 min-h-screen">
+        <div className="flex flex-col items-center">
+          <ClipLoader size={80} color="white" loading={buttonLoading} />
+          <p className="text-gray-300 mt-4 font-semibold text-lg animate-pulse">Processing Notification...</p>
+        </div>
+      </div>
+    ) : (
+      <>
         <div className="cursor-pointer" 
         onClick={(e) => {
           e.stopPropagation(); // Prevent event bubbling
@@ -571,7 +585,6 @@ else if (notification.title.includes("Feedback")) {
       )}
     </div>
   )}
-  
   {showFeedbackForm && userRole === "client" && (
   <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 min-h-screen">
     <div className="bg-white px-11 md:px-16 py-16 md:py-20 rounded-[30px] shadow-lg w-full max-w-[600px] h-full max-h-[350px] mx-auto">
@@ -638,10 +651,10 @@ else if (notification.title.includes("Feedback")) {
     </div>
   </div>
 )}
-
-
-</div>
+</>
+      )}
+    </div>
   );
-};
+}
 
 export default NotificationComponent;

@@ -74,6 +74,14 @@ export const SignUpFinal = (): JSX.Element => {
           createdAt: new Date().toISOString(),
           role: "client", // 🔹 Assign "client" role
         });
+      } else {
+        // 🔹 Ensure the role is set to "client" for existing documents
+        const userData = userDoc.data();
+        if (!userData.role) {
+          await updateDoc(userDocRef, {
+            role: "client",
+          });
+        }
       }
 
       // Update Firestore with the username
