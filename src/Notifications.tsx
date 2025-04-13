@@ -521,7 +521,7 @@ else if (notification.title.includes("Feedback")) {
       notifications.map((notif, index) => (
         <div key={notif.id}>
           <div
-            className={`flex items-start p-2 ${notif.isRead ? "bg-gray-100" : "bg-blue-100"} rounded cursor-pointer`}
+            className={`flex items-start p-3 ${notif.isRead ? "bg-gray-100" : "bg-blue-100"} rounded cursor-pointer`}
             onClick={() => handleNotificationClick(notif)}
           >
             <div className="relative w-[65px] h-[65px] md:w-[80px] md:h-[80px] mt-2 flex-shrink-0">
@@ -550,17 +550,6 @@ else if (notification.title.includes("Feedback")) {
                     dangerouslySetInnerHTML={{ __html: notif.message }}
                   />
                 )}
-
-                <small className="text-gray-500 text-xs">
-                  {new Date(notif.timestamp.seconds * 1000).toLocaleString("en-GB", {
-                    day: "2-digit",
-                    month: "2-digit",
-                    year: "numeric",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                    hour12: true,
-                  })}
-                </small>
               </div>
             </div>
             {index < notifications.length - 1 && <hr className="my-2 border-gray-500" />}

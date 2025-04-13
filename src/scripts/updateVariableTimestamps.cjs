@@ -8,17 +8,13 @@ initializeApp({
 
 const db = getFirestore();
 
-const DRY_RUN = true; // 🔁 Set to false to apply real updates
-
-
 // 🔧 Chat ID to update
-const chatId = "3WPJqUhnPNQQUtpN5DYn";
+const chatId = "2IOrZqYCiH1sdTyA7JME";
 
 // 🔧 List of active chat windows per day, with desired message count per window
 const activeWindows = [
-  { date: "2025-03-10", start: "11:39", end: "12:07", messageCount: 8 },
-  { date: "2025-03-13", start: "18:06", end: "21:30", messageCount: 5 },
-  { date: "2025-03-14", start: "09:01", end: "09:57", messageCount: 9 },
+  { date: "2025-04-10", start: "23:04", end: "23:58", messageCount: 14 },
+  { date: "2025-04-14", start: "16:37", end: "17:17", messageCount: 11 },
 ];
 
 // ⏱️ Time increments per message (minutes)
@@ -68,10 +64,8 @@ const run = async () => {
       const doc = allMessages[messageIndex];
       const timestamp = Timestamp.fromDate(new Date(currentTime));
 
-      if (!DRY_RUN) {
-        await doc.ref.update({ timestamp });
-      }
-      console.log(`${DRY_RUN ? "🧪 DRY-RUN" : "✅ Updated"} ${doc.id} → ${currentTime.toLocaleString()}`);
+      await doc.ref.update({ timestamp });
+      console.log(`✅ Updated ${doc.id} → ${currentTime.toLocaleString()}`);
 
       lastUsedTimestamp = timestamp;
       currentTime.setMinutes(currentTime.getMinutes() + increment);
