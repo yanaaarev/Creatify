@@ -34,3 +34,4 @@ src/config/creatify-e0a9b-firebase-adminsdk-fbsvc-7421c99c62.json
 creatify-e0a9b-firebase-adminsdk-fbsvc-7421c99c62.json
 src/scripts/setAdmin.ts
 src/scripts/setAdmin.js
+src/scripts/updateVariableTimestamps.ts

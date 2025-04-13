@@ -386,17 +386,33 @@ return (
 
           return (
             <div key={msg.id}>
-              {/* ✅ Date Separator */}
-            {showDateSeparator && (
-              <div className="flex items-center my-2">
-                <div className="flex-grow border-t border-gray-300"></div> {/* Left Line */}
-                <div className="px-3 text-center font-semibold text-gray-500 text-xs">
-                  {format(new Date(msg.timestamp?.toDate() ?? new Date()), "MMMM d, yyyy")} {/* Format as "Month Day, Year" */}
-                </div>
-                <div className="flex-grow border-t border-gray-300"></div> {/* Right Line */}
-              </div>
-            )}
+             {/* ✅ Date Separator */}
+              {showDateSeparator && (
+                <div className="flex items-center my-2">
+                  <div className="flex-grow border-t border-gray-300"></div> {/* Left Line */}
+                  <div className="px-3 text-center font-semibold text-gray-500 text-xs">
+                    {(() => {
+                      const messageDate = msg.timestamp?.toDate();
+                      if (!messageDate) return "Unknown Date";
 
+                      const now = new Date();
+                      const isToday = format(now, "yyyy-MM-dd") === format(messageDate, "yyyy-MM-dd");
+                      const isYesterday = format(now.setDate(now.getDate() - 1), "yyyy-MM-dd") === format(messageDate, "yyyy-MM-dd");
+
+                      if (isToday) {
+                        return `Today at ${format(messageDate, "h:mm a")}`;
+                      } else if (isYesterday) {
+                        return `Yesterday at ${format(messageDate, "h:mm a")}`;
+                      } else if (now.getFullYear() === messageDate.getFullYear()) {
+                        return `${format(messageDate, "MMMM d")} at ${format(messageDate, "h:mm a")}`; // Full date without year
+                      } else {
+                        return `${format(messageDate, "MMMM d, yyyy")} at ${format(messageDate, "h:mm a")}`; // Full date with year
+                      }
+                    })()}
+                  </div>
+                  <div className="flex-grow border-t border-gray-300"></div> {/* Right Line */}
+                </div>
+              )}
               <div
                 className={`flex items-end ${
                   msg.senderId === userId ? "justify-end" : "justify-start"
@@ -405,40 +421,29 @@ return (
               >
                 {/* ✅ Message Bubble */}
                 <div
-  className={`relative px-4 py-2 max-w-[85%] md:max-w-[65%] rounded-lg flex flex-col ${
-    msg.type === "payment-request"
-      ? `bg-[#0099D0] text-white ${
-          msg.senderId === userId ? "rounded-br-none" : "rounded-bl-none"
-        }` // ✅ Blue bubble with conditional rounded corners
-      : msg.senderId === userId
-      ? "bg-[#7db23a] text-white rounded-br-none" // ✅ Green bubble for sender
-      : "bg-[#E6E6E6] text-black rounded-bl-none" // ✅ Gray bubble for receiver
-  }`}
->
-  {/* ✅ Normal Message Content */}
-  {msg.type === "payment-request" && msg.paymentId ? (
-    <button
-      className="text-[15px] font-semibold underline cursor-pointer text-white" // ✅ White text for payment request
-      onClick={() => handleViewPayment(msg.paymentId!)}
-    >
-      View Request for Payment
-    </button>
+              className={`relative px-4 py-4 max-w-[85%] md:max-w-[65%] rounded-lg flex flex-col ${
+                msg.type === "payment-request"
+                  ? `bg-[#0099D0] text-white ${
+                      msg.senderId === userId ? "rounded-br-none" : "rounded-bl-none"
+                    }` // ✅ Blue bubble with conditional rounded corners
+                  : msg.senderId === userId
+                  ? "bg-[#7db23a] text-white rounded-br-none" // ✅ Green bubble for sender
+                  : "bg-[#E6E6E6] text-black rounded-bl-none" // ✅ Gray bubble for receiver
+              }`}
+            >
+              {/* ✅ Normal Message Content */}
+              {msg.type === "payment-request" && msg.paymentId ? (
+                <button
+                  className="text-[15px] font-semibold underline cursor-pointer text-white" // ✅ White text for payment request
+                  onClick={() => handleViewPayment(msg.paymentId!)}
+                >
+                  View Request for Payment
+                </button>
                   ) : (
                     <p className="break-words whitespace-pre-wrap">
                     {formatMessageText(msg.content ?? "", msg.senderId === userId)}
                   </p>
                   )}
-
-                  {/* ✅ Timestamp */}
-                {msg.timestamp && (
-                  <span
-                    className={`text-xs mt-1 self-end ${
-                      msg.senderId === userId ? "text-[#d9fdd3]" : "text-gray-500"
-                    }`}
-                  >
-                    {format(new Date(msg.timestamp.toDate()), "hh:mm a")} {/* Format as "12:30 PM" */}
-                  </span>
-                )}
 
                   {/* ✅ Clickable Attachments */}
                   {msg.attachmentUrl && (
