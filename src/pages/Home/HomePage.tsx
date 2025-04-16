@@ -108,7 +108,7 @@ export const HomePage = (): JSX.Element => {
 
         {/* Join Us Section */}
         <div
-          className="relative w-full h-[300px] md:min-h-screen bg-cover bg-center bg-no-repeat bg-no-save flex flex-col items-center justify-center pt-4 md:py-20 md:px-6"
+          className="relative w-full h-full bg-cover bg-center bg-no-repeat bg-no-save flex flex-col items-center justify-center md:py-20 md:px-6"
         >
           <img
             className="w-40 md:w-[350px] mb-4 md:mb-6"
@@ -129,10 +129,10 @@ export const HomePage = (): JSX.Element => {
 <div style={{ backgroundImage: "url('/images/ww-1.webp')", backgroundPosition: "center", backgroundRepeat: "no-repeat", backgroundSize: "cover"
            }}
            
-className="relative w-full h-[500px] md:min-h-screen flex flex-col items-center justify-center overflow-hidden">
+className="relative w-full h-full md:min-h-screen flex flex-col items-center justify-center py-60 md:py-0 md:px-6 overflow-hidden">
   {/* Backdrop and Title */}
   <div className="w-full px-4 md:px-10 text-center z-10">
-    <h1 className="text-white font-zenmaru font-bold text-6xl md:text-[200px] md:leading-[160px] relative z-10">
+    <h1 className="text-white font-Khula font-bold text-6xl md:text-[200px] md:leading-[160px] relative z-10">
       BEHIND THE VISUALS
     </h1>
   </div>
