@@ -21,7 +21,7 @@ export const HomePage = (): JSX.Element => {
       <div className="w-full flex-grow">
         {/* Hero Section */}
         <div className="relative w-full h-screen md:min-h-screen bg-[url('/images/bg.webp')] bg-cover bg-center bg-no-repeat bg-no-save flex flex-col items-center justify-center px-6 py-10 md:px-0 md:py-0 text-center">
-          <h1 className="text-white font-bold text-3xl md:text-5xl xl:text-6xl px-1 leading-snug max-w-[1000px] md:max-w-[1200px] mb-2">
+          <h1 className="text-white font-bold text-3xl md:text-6xl md:px-20 leading-snug mb-2">
             CREATE WITH OUR OUTSTANDING ARTISTS WHO CAN TURN YOUR IMAGINATION
             INTO REALITY.
           </h1>
