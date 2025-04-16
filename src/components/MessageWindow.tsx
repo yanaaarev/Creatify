@@ -374,7 +374,7 @@ const handleViewPayment = async (paymentId: string) => {
 };
 
 return (
-  <div className="max-w-full xl:w-[920px] h-full justify-self-center flex flex-col">
+  <div className="max-w-full h-full justify-self-center flex flex-col">
     <div className="flex-1 overflow-y-auto space-y-3 px-3 py-3">
       {messages.length > 0 ? (
         messages.map((msg, index) => {
