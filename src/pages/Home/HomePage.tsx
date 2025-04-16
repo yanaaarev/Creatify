@@ -110,7 +110,7 @@ export const HomePage = (): JSX.Element => {
         <div
           style={{ backgroundImage: "url('/images/ww-1.webp')", backgroundPosition: "center", backgroundRepeat: "no-repeat", backgroundSize: "cover"
            }}
-          className="relative w-full h-[300px] md:h-[1000px] bg-cover bg-center bg-no-repeat bg-no-save flex flex-col items-center justify-center pt-4 md:py-20 md:px-6"
+          className="relative w-full h-[300px] md:h-[1300px] bg-cover bg-center bg-no-repeat bg-no-save flex flex-col items-center justify-center pt-4 md:py-20 md:px-6"
         >
           <img
             className="w-40 md:w-[350px] mb-4 md:mb-6"
