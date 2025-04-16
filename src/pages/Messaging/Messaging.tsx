@@ -41,7 +41,7 @@ const goBack = () => {
         </div>
 
         {/* ✅ Right Side Messaging Window (Expands on Large Screens, Full-Screen on Mobile When Selected) */}
-        <div className={`flex-1 h-full bg-white rounded-none md:rounded-[30px] overflow-hidden px-6 py-10 ${selectedChat ? "block" : "hidden"} md:block`}>
+        <div className={`flex-1 w-full h-full bg-white rounded-none md:rounded-[30px] overflow-hidden ${selectedChat ? "block" : "hidden"} md:block`}>
           {selectedChat ? (
             <>
               {/* ✅ Back Button for Mobile */}
