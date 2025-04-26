@@ -14,7 +14,7 @@ export const SignUpEmail = (): JSX.Element => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error] = useState("");
-  const [message, setMessage] = useState(""); // For status messages
+  const [message] = useState(""); // For status messages
   const [isVerificationPending, setIsVerificationPending] = useState(false); // Verification state
   const [buttonLoading, setButtonLoading] = useState(false);
   const navigate = useNavigate();
@@ -26,8 +26,6 @@ export const SignUpEmail = (): JSX.Element => {
 
   // 🔥 Handle Sign-Up Process
   const handleContinue = async () => {
-    alert("");
-    setMessage("");
 
     if (!email || !password || !confirmPassword) {
       alert("Please fill in all fields.");
@@ -96,7 +94,7 @@ export const SignUpEmail = (): JSX.Element => {
       if (auth.currentUser) {
         await auth.currentUser.reload(); // Refresh user data
         if (auth.currentUser.emailVerified) {
-          setMessage("Email verified successfully! Proceeding...");
+          alert("Email verified successfully! Proceeding...");
           setButtonLoading(false);
           navigate("/signup-final", { state: { email, password } });
           window.location.reload();
