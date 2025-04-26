@@ -1,7 +1,7 @@
 import { IoChevronBackCircleOutline } from "react-icons/io5";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
 import { auth, db } from "../../config/firebaseConfig"; // Firebase config import
 import { doc, setDoc, serverTimestamp } from "firebase/firestore";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
@@ -15,7 +15,7 @@ export const SignUpEmail = (): JSX.Element => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error] = useState("");
   const [message, setMessage] = useState(""); // For status messages
-  const [isVerificationPending] = useState(false); // Verification state
+  const [isVerificationPending, setIsVerificationPending] = useState(false); // Verification state
   const [buttonLoading, setButtonLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -26,61 +26,63 @@ export const SignUpEmail = (): JSX.Element => {
 
   // 🔥 Handle Sign-Up Process
   const handleContinue = async () => {
+    alert("");
+    setMessage("");
+
     if (!email || !password || !confirmPassword) {
       alert("Please fill in all fields.");
       return;
     }
-  
+
     // 🔍 Validate Email Format
     if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
       alert("Please enter a valid email address.");
       return;
     }
-  
+
     // 🔍 Password Minimum Length Check
     if (password.length < 8) {
       alert("Password must be at least 8 characters.");
       return;
     }
-  
+
     // 🔍 Check if Passwords Match
     if (password !== confirmPassword) {
       alert("Passwords do not match.");
       return;
     }
-  
-    setButtonLoading(true);
-  
+
+  setButtonLoading(true);
+
     try {
       // ✅ Create User Account
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const { user } = userCredential;
-  
-      // Skip Email Verification for testing
-      // If you want to proceed directly without sending a verification email, skip the following line
-      // await sendEmailVerification(user);
-      
-      alert("Account created successfully!");
-  
+
+      // ✅ Send Email Verification
+      await sendEmailVerification(user);
+      alert("Verification email sent! Please verify your email before proceeding.");
+
       // ✅ Save User Info in Firestore
       await setDoc(doc(db, "users", user.uid), {
         email,
         password,
-        createdAt: serverTimestamp(),
+        createdAt: serverTimestamp(), // ✅ Store creation time
         agreedToTerms: true,
-        agreedAt: serverTimestamp(),
+        agreedAt: serverTimestamp(), // ✅ Store agreement status
       });
-  
+
+      setIsVerificationPending(true);
       setButtonLoading(false);
-      // Navigate to the next page immediately
-      navigate("/signup-final", { state: { email, password } });
     } catch (err: any) {
       setButtonLoading(false);
       console.error("Error saving user info:", err);
-  
+
       if (err.code === "auth/email-already-in-use") {
+        setButtonLoading(false);
         alert("This email is already in use. Please log in instead.");
       } else {
+        setButtonLoading(false);
         alert(err.message || "An error occurred. Please try again.");
       }
     }
