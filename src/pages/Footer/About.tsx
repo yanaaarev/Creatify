@@ -71,7 +71,7 @@ export const About = () => {
       </div>
 
       {/* About Text */}
-      <div className="max-w-5xl mx-auto font-khula text-sm md:text-xl leading-relaxed text-white text-left space-y-4 pb-20 md:pb-10 md:py-40 px-3 md:px-6">
+      <div className="max-w-5xl mx-auto font-khula text-sm md:text-xl leading-relaxed text-white text-left space-y-4 pb-16 md:pb-20 md:py-40 px-3 md:px-20">
         <p>
           <strong>Creatify</strong> is a <strong>web-based platform</strong> designed to promote and <strong>support local artists</strong> by connecting them directly with clients in need of creative services. Whether you're looking for a <strong>graphic designer, photographer, illustrator, or any creative professional</strong>—Creatify helps you find the right artist with ease.
         </p>
@@ -91,8 +91,8 @@ export const About = () => {
      
 
       {/* People Behind Creatify */}
-      <div className="pb-40 px-6 text-center">
-        <h2 className="text-7xl md:text-[180px] leading-[50px] md:leading-[140px] tracking-tighter font-khula font-bold mb-10 pt-20 md:py-40">PEOPLE BEHIND CREATIFY</h2>
+      <div className="py-16 md:py-40 px-6 text-center">
+        <h2 className="text-7xl md:text-[180px] leading-[50px] md:leading-[140px] tracking-tighter font-khula font-bold md:mt-10 mb-10 md:mb-40">PEOPLE BEHIND CREATIFY</h2>
         <div className="max-w-4xl mx-auto flex flex-col gap-16 md:gap-0">
         {[
   {
