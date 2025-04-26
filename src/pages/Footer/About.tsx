@@ -130,7 +130,7 @@ export const About = () => {
       index % 2 !== 0 ? "md:flex-row-reverse" : ""
     } items-center`}
   >
-    <img src={img} alt={name} className="w-[260px] md:w-[360px]" />
+    <img src={img} alt={name} className="w-[260px] md:w-[360px] hover:animate-pulse pointer-events-auto" />
     <div
       className={`max-w-xl ${
         index % 2 !== 0 ? "md:text-right" : "md:text-left"
